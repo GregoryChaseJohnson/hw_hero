@@ -17,6 +17,17 @@ class InsertionBlock:
         self.ride_along_end = None 
         self.ride_along_eligible = False 
 
+class PinkBlock:
+    def __init__(self, anchor_point):
+        self.type = 'pink'
+        self.anchor_point = anchor_point
+
+class SentenceEndBlock:
+    def __init__(self, anchor_point):
+        self.type = 'sentence_end'
+        self.anchor_point = anchor_point
+
+
 SENTENCE_END_PUNCTUATION = ['.', '!', '?', '...', '"', "'"]
 
 def is_sentence_end(tokens, index):
@@ -41,7 +52,7 @@ def create_blocks(tokens):
         tokens (List[Dict]): Tokenized text from the tokenizer.
 
     Returns:
-        List[Union[ReplacementBlock, InsertionBlock]]: List of created blocks.
+           List[Union[ReplacementBlock, InsertionBlock, PinkBlock]]: List of created blocks.
     """
 
     blocks = []
@@ -115,6 +126,25 @@ def create_blocks(tokens):
             # Insert a space at the original anchor point to maintain alignment
             tokens.insert(blue_start, {'index': blue_start, 'char': ' ', 'color': 'normal'})
 
+        elif tokens[i]['color'] == 'pink':
+            anchor_point = i
+            print(f"Starting pink block at index {anchor_point}")
+
+            # Skip over contiguous pink tokens
+            while i < len(tokens) and tokens[i]['color'] == 'pink':
+                i += 1
+
+            # Create a pink block
+            blocks.append(PinkBlock(anchor_point))
+            print(f"Created pink block: {vars(blocks[-1])}")
+
+        elif tokens[i]['char'] == '\n' and i + 1 < len(tokens) and tokens[i + 1]['char'] == '\n':
+            # Create a SentenceEndBlock instance
+            anchor_point = i
+            blocks.append(SentenceEndBlock(anchor_point))
+            print(f"Created sentence_end block: {vars(blocks[-1])}")
+            i += 2  # Skip both newline characters
+
         else:
             
             i += 1
@@ -131,8 +161,12 @@ def create_blocks(tokens):
         )
 
         # Measure distance from current_block_end to the next block's anchor_point
-        distance = next_block.anchor_point - current_block_end
-        print(f"Checking Block End={current_block_end}, Next Block Anchor={next_block.anchor_point}, Distance={distance}")
+        if hasattr(next_block, 'anchor_point'):
+            distance = next_block.anchor_point - current_block_end
+        else:
+            # Skip blocks without anchor_point (e.g., if any new block type is added without anchor_point)
+            continue
+
 
         # Ensure distance is more than 3 and less than or equal to 8
         if 3 < distance <= 19:
@@ -146,10 +180,6 @@ def create_blocks(tokens):
                 f"Distance too small: {distance}" if distance <= 3 else f"Distance too large: {distance}"
             )
             print(f"Not eligible: Block End={current_block_end}, Next Block Anchor={next_block.anchor_point}, Reason: {reason}")
-
-
-
-
 
     # Debug: Print created blocks
     print("\nCreated Blocks:")

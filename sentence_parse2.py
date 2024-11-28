@@ -102,15 +102,13 @@ def generate_report(original: str, corrected: str) -> str:
     return "\n\n".join(report)
 
 # Example usage
-original_text = """Why would it be more valuable to teach students practical subjects instead of theory subjects?
-
-
+original_text = """We learn practical course, practical skills, how to behave polite to elders in practical subjects, we use this in our real life, but except for the basis, students don't use many of theory subjects.
 """
-corrected_text = """ Why would it be more valuable to teach students practical subjects instead of theoretical subjects?
 
 
+corrected_text = """In practical courses, we learn practical skills, such as how to behave politely toward elders. We use these skills in our real lives, but aside from the basics, students don't often apply many theoretical subjects.
+ """
 
-"""
 
 report = generate_report(original_text, corrected_text)
 print(report)

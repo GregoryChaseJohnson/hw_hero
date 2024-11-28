@@ -10,7 +10,7 @@ from script_runner import generate_report_from_script
 ANSI_COLORS = {
     'normal': '\033[0m',
     'red': '\033[31m',
-    'green': '\033[92m',
+    'green': '\033[32m',
     'blue': '\033[34m',
     'pink': '\033[35m',
 }
@@ -61,43 +61,23 @@ def insert_ride_along(block, leading_edge, annotated_line, final_sentence):
     # Ride-along end is always defined in block metadata
     end = block.ride_along_end
 
-    # Extract ride-along text
+    # Extract ride-along
     cleaned_sentence = strip_ansi(final_sentence)
     ride_along_text = cleaned_sentence[start:end]
 
     # Debug: Show the extracted ride-along text
     print(f"DEBUG: Ride-Along Text for Block: '{ride_along_text}' (Start: {start}, End: {end})")
 
-    if annotated_line and annotated_line[-1] == " " and ride_along_text.startswith(" "):
-        ride_along_text = ride_along_text[1:]  # Trim the leading space from the ride-along
-
     # Append ride-along text to annotated_line
     while len(annotated_line) < leading_edge:
         annotated_line.append(" ")  # Ensure alignment
     for char in ride_along_text:
-        annotated_line.append(f"{ANSI_COLORS['green']}{char}\033[0m")
+        annotated_line.append(f"{ANSI_COLORS['pink']}{char}\033[0m")
 
     # Return the updated leading_edge
     return end
 
-def is_connected_to_previous_block(current_block, previous_block):
-    """
-    Determine if the current block is connected to the previous block.
 
-    Parameters:
-    - current_block: The block currently being processed.
-    - previous_block: The block processed previously.
-
-    Returns:
-    - bool: True if the blocks are connected, False otherwise.
-    """
-    if not previous_block:
-        return False  # No previous block, so not connected
-
-    prev_end = (
-        previous_block.red_end if previous_block.type == "replace" else previous_block.anchor_point
-    )
-    return prev_end + 2 == current_block.anchor_point
 
 
 def render_corrections(final_sentence, blocks):
@@ -111,20 +91,14 @@ def render_corrections(final_sentence, blocks):
     leading_edge = 0
 
     for idx, block in enumerate(blocks):
-
-        previous_block = blocks[idx - 1] if idx > 0 else None
-
-        if is_connected_to_previous_block(block, previous_block):
-            insertion_point = leading_edge  # Align with leading edge if connected
-        else:
         # Step 1: Calculate the modified anchor point for insert blocks
-            if block.type == "insert":
-                modified_anchor_point = block.anchor_point - 1  # Shift one position left
-                insertion_point = max(leading_edge, modified_anchor_point)
-            elif block.type == "replace":
-                insertion_point = max(leading_edge, block.anchor_point)
-            else:
-                continue
+        if block.type == "insert":
+            modified_anchor_point = block.anchor_point - 1  # Shift one position left
+            insertion_point = max(leading_edge, modified_anchor_point)
+        elif block.type == "replace":
+            insertion_point = max(leading_edge, block.anchor_point)
+        else:
+            continue
 
         # DEBUG: Check insertion point logic
         print(f"DEBUG: Block {idx}: Type={block.type}, Anchor={block.anchor_point}, "
