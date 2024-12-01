@@ -10,7 +10,7 @@ from script_runner import generate_report_from_script
 ANSI_COLORS = {
     'normal': '\033[0m',
     'red': '\033[31m',
-    'green': '\033[32m',
+    'green': '\033[92m',
     'blue': '\033[34m',
     'pink': '\033[35m',
 }
@@ -76,9 +76,35 @@ def insert_ride_along(block, leading_edge, annotated_line, final_sentence):
 
     # Return the updated leading_edge
     return end
+def find_last_pink_anchor(blocks):
+    """
+    Find the anchor point of the last pink block in the block list.
+
+    Parameters:
+    - blocks: List of all blocks.
+
+    Returns:
+    - The anchor point of the last pink block, or None if no pink block exists.
+    """
+    for block in reversed(blocks):
+        if block.type == "pink":
+            return block.anchor_point
+    return None
 
 
+def is_orphaned_insert(block, idx, blocks):
+    """
+    Check if an insert block is orphaned (occurs after a SentenceEndBlock).
 
+    Parameters:
+    - block: The block being checked.
+    - idx: Index of the current block in the block list.
+    - blocks: List of all blocks.
+
+    Returns:
+    - True if the block is an orphaned insert block, False otherwise.
+    """
+    return block.type == "insert" and idx > 0 and blocks[idx - 1].type == "sentence_end"
 
 def render_corrections(final_sentence, blocks):
     """
@@ -91,27 +117,43 @@ def render_corrections(final_sentence, blocks):
     leading_edge = 0
 
     for idx, block in enumerate(blocks):
-        # Step 1: Calculate the modified anchor point for insert blocks
-        if block.type == "insert":
-            modified_anchor_point = block.anchor_point - 1  # Shift one position left
-            insertion_point = max(leading_edge, modified_anchor_point)
-        elif block.type == "replace":
-            insertion_point = max(leading_edge, block.anchor_point)
-        else:
+        # Guard clause to skip processed blocks
+        if hasattr(block, "processed") and block.processed:
             continue
 
-        # DEBUG: Check insertion point logic
-        print(f"DEBUG: Block {idx}: Type={block.type}, Anchor={block.anchor_point}, "
-              f"Modified Anchor={modified_anchor_point if block.type == 'insert' else 'N/A'}, "
-              f"Insertion Point={insertion_point}, Leading Edge={leading_edge}")
-
-        # Step 2: Get corrected text and its color
-        if block.type == "replace":
-            corrected_text = block.replacement_text
-            color = ANSI_COLORS["green"]
-        elif block.type == "insert":
+        # Step 1: Calculate the modified anchor point for insert blocks
+        if block.type == "insert":
             corrected_text = block.insert_text
             color = ANSI_COLORS["blue"]
+
+            # Check if the insert block is orphaned
+            if is_orphaned_insert(block, idx, blocks):
+                # Use last pink anchor point if available
+                last_pink_anchor = find_last_pink_anchor(blocks)
+                if last_pink_anchor is not None:
+                    block.anchor_point = last_pink_anchor  # Update anchor point for clarity
+                insertion_point = max(leading_edge, block.anchor_point)
+                block.processed = True
+            else:
+                # Standard insert logic
+                modified_anchor_point = block.anchor_point - 1  # Shift one position left
+                insertion_point = max(leading_edge, modified_anchor_point)
+        elif block.type == "replace":
+            corrected_text = block.replacement_text
+            color = ANSI_COLORS["green"]
+            insertion_point = max(leading_edge, block.anchor_point)
+        else:
+            continue  # Skip unsupported block types
+
+        # DEBUG: Check block handling
+        if block.type == "insert":
+            modified_anchor_point = block.anchor_point - 1  # Shift one position left
+        else:
+            modified_anchor_point = None  # Fallback for non-insert blocks
+
+        print(f"DEBUG: Block {idx}: Type={block.type}, Anchor={block.anchor_point}, "
+              f"Modified Anchor={modified_anchor_point if modified_anchor_point is not None else 'N/A'}, "
+              f"Insertion Point={insertion_point}, Leading Edge={leading_edge}")
 
         # Step 3: Ensure enough space in the annotated line
         while len(annotated_line) < insertion_point:
@@ -125,13 +167,13 @@ def render_corrections(final_sentence, blocks):
         leading_edge = insertion_point + len(corrected_text)
         if leading_edge < len(final_sentence):
             annotated_line.append(" ")
-            leading_edge += 1 
-    
+            leading_edge += 1
+
         # Step 6: Debug print for ride-along
         ride_along_required = calculate_ride_along(block, leading_edge)
         print(
             f"DEBUG: Block {idx}: Type={block.type}, Anchor={block.anchor_point}, "
-            f"Modified Anchor={modified_anchor_point if block.type == 'insert' else 'N/A'}, "
+            f"Modified Anchor={modified_anchor_point if modified_anchor_point is not None else 'N/A'}, "
             f"Insertion Point={insertion_point}, Leading Edge={leading_edge}, "
             f"Red End={block.red_end if block.type == 'replace' else 'N/A'}, "
             f"Ride-Along End={block.ride_along_end if block.ride_along_eligible else 'N/A'}, "
@@ -140,17 +182,25 @@ def render_corrections(final_sentence, blocks):
 
         # Step 7: Insert ride-along text if required
         if ride_along_required:
-            # Gather the ride-along text
-            ride_along_text = final_sentence[block.red_end:block.ride_along_end]
+            # Gather the ride-along text based on block type
+            if block.type == "replace":
+                start = block.red_end
+            elif block.type == "insert":
+                start = block.anchor_point
+            else:
+                print(f"DEBUG: Skipping ride-along for unsupported block type {block.type}.")
+                continue
 
-            # Insert the ride-along text using the helper function
+    
+            end = block.ride_along_end
+
+            # Extract ride-along text and handle insertion
+            ride_along_text = final_sentence[start:end]
             leading_edge = insert_ride_along(
                 block, leading_edge, annotated_line, final_sentence
             )
 
-
     return "".join(annotated_line)
-
 
 def test_renderer():
     """

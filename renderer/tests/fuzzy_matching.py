@@ -45,7 +45,7 @@ def split_into_sentences(raw_text):
 
     return combined_sentences
 
-def find_best_matches_with_rules(ocr_sentences, corrected_sentences, min_score=50):
+def find_best_matches_with_rules(ocr_sentences, corrected_sentences, min_score=70):
     """
     Sequentially match OCR sentences to corrected sentences with rules for handling splits and merges.
     """
@@ -97,20 +97,30 @@ def find_best_matches_with_rules(ocr_sentences, corrected_sentences, min_score=5
     return matches
 
 # Example OCR output
-ocr_text = """Why would it be more valuable to teach students practical subjects instead of theory subjects?
+ocr_text = """Personal Perspective Essay
 
-We have a lot of information today and it is more important to experience something first than theoretical information. However, many schools believe theory subjects are more important than practical subjects, and there are more theory subjects than practical subjects, so many people don't care much about practical subjects.
+PE subjects are mandatory in Korean schools. Therefore, students are supposed to join the PE class whether they want to or not. Although physical activities are beneficial for some students, some students might think it is a waste of time and energy. Is it really right to force students to join PE classes?
 
-Teaching practical subjects is more valuable because it is easy to learn and understand how to do something. We learn practical course, practical skills, how to behave polite to elders in practical subjects, we use this in our real life, but except for the basis, students don't use many of theory subjects. In life, we only study theory subjects for tests and go to university. We can apply practical subjects to our everyday life. Except for math-related profession, most of the students don't use equations, factorization, intersection etc. before they die.
+I believe that sport classes should be optional in schools. I have two personal experiences that support my thought.
+
+First of all, sports have a high risk of injuries. In other terms, sports are not safe. When I was in the 4th grade, my friend hurt her back while doing an activity called "twimtaulthigi." She needed to jump over a stack of blocks called "twimtaul," but she was not a sport person, she fell on her back and got seriously injured. She couldn't come to school for the next three days. Is it right for schools to force students to do something not safe? I don't think so.
+
+Also, sports are not suitable for everyone. Of course, some students enjoy sports. But some students do not like sports and do not participate in the game well. Some lie to the teacher that they do not feel well, and others just stand in the middle of the game doing nothing. My best
 
 """
 
 # Corrected text
-corrected_text = """Why would it be more valuable to teach students practical subjects instead of theoretical subjects?
+corrected_text = """Personal Perspective Essay
 
-We have a lot of information today, and it is more important to experience something firsthand than to rely solely on theoretical information. However, many schools believe that theoretical subjects are more important than practical subjects, and there are more theoretical subjects than practical ones, so many people don't care much about practical subjects.
+PE subjects are mandatory in Korean schools. Therefore, students are supposed to join the PE class whether they want to or not. Although physical activities are beneficial for some students, others might think it is a waste of time and energy. Is it really right to force students to join PE classes?
 
-Teaching practical subjects is more valuable because it is easier to learn and understand how to do something. In practical courses, we learn practical skills, such as how to behave politely toward elders. We use these skills in our real lives, but aside from the basics, students don't often apply many theoretical subjects. In life, we primarily study theoretical subjects for tests and to gain admission to university. We can apply practical subjects to our everyday lives. Except for math-related professions, most students don't use equations, factorization, intersections, etc., before they die.
+I believe that sports classes should be optional in schools. I have two personal experiences that support my opinion.
+
+First of all, sports have a high risk of injuries. In other words, sports are not safe. When I was in the 4th grade, my friend hurt her back while doing an activity called "twimtaulthigi." She needed to jump over a stack of blocks called "twimtaul," but since she was not a sporty person, she fell on her back and got seriously injured. She couldn't come to school for the next three days. Is it right for schools to force students to do something that is not safe? I don't think so.
+
+Also, sports are not suitable for everyone. Of course, some students enjoy sports, but others do not like them and do not participate well in the games. Some lie to the teacher that they do not feel well, while others just stand in the middle of the game doing nothing. My best friend...
+
+
 
 """
 

@@ -102,13 +102,20 @@ def generate_report(original: str, corrected: str) -> str:
     return "\n\n".join(report)
 
 # Example usage
-original_text = """We learn practical course, practical skills, how to behave polite to elders in practical subjects, we use this in our real life, but except for the basis, students don't use many of theory subjects.
+original_text = """It can be the best time for most of the students, but however, there are some students which don’t want to exercise during P.E time.
+
+
+
+
+
 """
 
 
-corrected_text = """In practical courses, we learn practical skills, such as how to behave politely toward elders. We use these skills in our real lives, but aside from the basics, students don't often apply many theoretical subjects.
- """
+corrected_text = """It can be the best time for most students, but there are some students who don’t want to exercise during P.E.
 
+
+
+"""
 
 report = generate_report(original_text, corrected_text)
 print(report)

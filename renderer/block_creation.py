@@ -7,6 +7,8 @@ class ReplacementBlock:
         self.replacement_text = replacement_text  # Short correction
         self.ride_along_end = None 
         self.ride_along_eligible = False 
+        self.actual_start = None  # Added for tracking
+        self.actual_end = None    # Added for tracking
        
 
 class InsertionBlock:
@@ -16,6 +18,8 @@ class InsertionBlock:
         self.insert_text = insert_text  # Short correction
         self.ride_along_end = None 
         self.ride_along_eligible = False 
+        self.actual_start = None  # Added for tracking
+        self.actual_end = None    # Added for tracking
 
 class PinkBlock:
     def __init__(self, anchor_point):
