@@ -15,7 +15,7 @@ def save_to_json(file_path, data):
         json.dump(data, json_file, indent=4)
 
 # Path to your image
-image_path = "/home/keithuncouth/Downloads/IMG_1258.jpg"
+image_path = "/home/keithuncouth/Downloads/hwt_9.jpg"
 
 # Getting the base64 string
 base64_image = encode_image(image_path)
