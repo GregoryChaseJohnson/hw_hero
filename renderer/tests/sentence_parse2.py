@@ -1,5 +1,6 @@
 import re
 import difflib
+import json
 from typing import List, Tuple
 
 def split_into_sentences(text: str) -> List[str]:
@@ -101,21 +102,21 @@ def generate_report(original: str, corrected: str) -> str:
         report.append(highlighted)
     return "\n\n".join(report)
 
-# Example usage
-original_text = """It can be the best time for most of the students, but however, there are some students which don’t want to exercise during P.E time.
+# Load sentence pairs from JSON
+with open("sentence_pairs.json", "r", encoding="utf-8") as f:
+    sentence_pairs = json.load(f)
 
+fused_differences = []
 
+# Print only the fused differences for each sentence pair with separators
+for original, corrected in sentence_pairs:
+    fused_difference = highlight_changes(original, corrected)
+    fused_differences.append(fused_difference)  # Add to list
+    print(fused_difference)
+    print("-" * 40)  # Separator line
 
+# Save fused differences to JSON
+with open("fused_differences.json", "w", encoding="utf-8") as f:
+    json.dump(fused_differences, f, ensure_ascii=False, indent=4)
 
-
-"""
-
-
-corrected_text = """It can be the best time for most students, but there are some students who don’t want to exercise during P.E.
-
-
-
-"""
-
-report = generate_report(original_text, corrected_text)
-print(report)
+print("Fused differences saved to 'fused_differences.json'.")

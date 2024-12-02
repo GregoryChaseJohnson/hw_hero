@@ -1,7 +1,7 @@
 import sys
 import re 
 
-sys.path.append('/home/keithuncouth/red_pen_app/renderer')  # Adjust path to your `renderer` directory
+sys.path.append('/home/keithuncouth/red_pen_app/renderer/tests')  # Adjust path to your `renderer` directory
 
 from tokenizer import TextTokenizer
 from block_creation import create_blocks

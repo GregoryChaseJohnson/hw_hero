@@ -1,6 +1,6 @@
 import subprocess
 
-def generate_report_from_script(script_name="/home/keithuncouth/red_pen_app/sentence_parse2.py"):
+def generate_report_from_script(script_name="/home/keithuncouth/red_pen_app/tests/sentence_parse2.py"):
     """
     Calls the given script and returns its output.
     """

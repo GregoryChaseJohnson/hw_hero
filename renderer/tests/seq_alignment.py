@@ -1,5 +1,7 @@
 import re
 from fuzzywuzzy import fuzz
+import json
+
 
 def split_into_sentences(raw_text):
     """
@@ -107,34 +109,13 @@ def find_best_matches_bidirectional(ocr_sentences, corrected_sentences, min_scor
 
     return matches
 
+with open("ocr_output.json", "r") as f:
+    ocr_data = json.load(f)
+with open("corrected_text.json", "r") as f:
+    corrected_data = json.load(f)
 
-# Example OCR output
-ocr_text = """Recently, there are many music and K-pop singer coming out. Also, many people including youth are enjoying and affected by it. As the world keeps affected by K-pop, some people are concerned about K-pop music's bad influence because it can have the bad effect. But, for my opinion, I strongly believe that K-pop has more positive effect than harm on the youth.
-
-Firstly, it can inspire confidence and hope. In my life, I'm having hard time due to the homework and school test. But, I sometimes get rested by hearing K-pop music and getting hope by it. Also, during COVID-19 pandemic, I was having hard time by its regulation. But when BTS's song named 'Permission to Dance', I can feel the hope to end the pandemic.
-
-Secondly, it can make the whole culture more interest to youths. In my school, how many girl classmates gather and hang out to talk about their favorite K-pop singer or songs. Also, they collect their money or go to other place merchandise product of singer. This can trigger youths to make more friends and making them to be more socialized, which is important to later on the work.
-
-Third and lastly, it can make Korean youth to think again about their traditional culture and proud of. Like recent I heard many about the fusion.
-
-
-
-
-
-"""
-
-# Corrected text
-corrected_text = """Recently, there are many music and K-pop singers coming out. Also, many people, including youth, are enjoying it and being affected by it. As the world keeps being affected by K-pop, some people are concerned about its bad influence because it can have negative effects. But in my opinion, I strongly believe that K-pop has more positive effects than harm on the youth.
-
-Firstly, it can inspire confidence and hope. In my life, I'm having a hard time due to homework and school tests. But I sometimes get a break by listening to K-pop music and finding hope in it. Also, during the COVID-19 pandemic, I was having a tough time with the restrictions. But when I heard BTS's song "Permission to Dance," I felt hopeful about the end of the pandemic.
-
-Secondly, it can make the whole culture more interesting to youth. In my school, many of my girl classmates gather and hang out to talk about their favorite K-pop singers or songs. They also save their money or go to other places to buy merchandise from their favorite artists. This can encourage youth to make more friends and become more social, which is important for their future work.
-
-Third and lastly, it can make Korean youth think again about their traditional culture and feel proud of it. Like recently, I heard a lot about the fusion.
-
-
-
-"""
+ocr_text = ocr_data["ocr_text"]
+corrected_text = corrected_data["corrected_text"]
 
 # Step 1: Split both texts into sentences
 ocr_sentences = split_into_sentences(ocr_text)
@@ -143,6 +124,13 @@ corrected_sentences = split_into_sentences(corrected_text)
 # Step 2: Perform matching with rules
 # Step 2: Perform matching with rules
 matches = find_best_matches_bidirectional(ocr_sentences, corrected_sentences)
+
+# Step 3: Save sentence pairs to JSON
+with open("sentence_pairs.json", "w", encoding="utf-8") as f:
+    json.dump(matches, f, ensure_ascii=False, indent=4)
+
+print("Sentence pairs have been saved to 'sentence_pairs.json'.")
+
 
 # Step 3: Output sentence pairs
 for ocr_sentence, best_match in matches:
