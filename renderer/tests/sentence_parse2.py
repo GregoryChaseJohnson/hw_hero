@@ -89,7 +89,7 @@ def highlight_changes(original: str, corrected: str) -> str:
     else:
         orig_tokens = tokenize(original)
         corr_tokens = tokenize(corrected)
-        return align_and_highlight(orig_tokens, corr_tokens)
+        return align_and_highlight(orig_tokens, wcorr_tokens)
 
 def generate_report(original: str, corrected: str) -> str:
     """
