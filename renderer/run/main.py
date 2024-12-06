@@ -17,7 +17,7 @@ ANSI_COLORS = {
     'pink': '\033[35m',
 }
 
-image_path = "/home/keithuncouth/Downloads/hwt_9.jpeg"
+image_path = "/home/keithuncouth/Downloads/hwt_test2.jpeg"
 
 def main():
     # Step 1: Perform OCR

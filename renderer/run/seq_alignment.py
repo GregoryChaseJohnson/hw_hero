@@ -44,7 +44,7 @@ def split_into_sentences(raw_text):
 
     return combined_sentences
 
-def find_best_matches_bidirectional(ocr_sentences, corrected_sentences, min_score=60):
+def find_best_matches_bidirectional(ocr_sentences, corrected_sentences, min_score=50):
     """
     Match OCR sentences to corrected sentences, handling splits and merges bidirectionally.
     

@@ -42,7 +42,8 @@ def tokenize(text: str) -> List[str]:
     """
     Tokenize text into words, spaces, and punctuation separately.
     """
-    return re.findall(r"\w+(?:'\w+)?|\s+|[^\w\s]", text)
+    return re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)*(?:\.[A-Za-z]+)*(?:[.,!?;:]+)?|\s+|[^\w\s]", text)
+
 
 def align_and_highlight(original: List[str], corrected: List[str]) -> str:
     """
