@@ -44,46 +44,91 @@ def split_into_sentences(raw_text):
 
     return combined_sentences
 
-
-def find_best_matches_bidirectional(ocr_sentences, corrected_sentences, min_score=70):
+def find_best_matches_bidirectional(ocr_sentences, corrected_sentences, min_score=60):
     """
     Match OCR sentences to corrected sentences, handling splits and merges bidirectionally.
+    
+    Args:
+        ocr_sentences (List[str]): List of sentences obtained from OCR.
+        corrected_sentences (List[str]): List of corrected sentences.
+        min_score (int, optional): Minimum similarity score to consider a valid match. Defaults to 70.
+    
+    Returns:
+        List[Tuple[str, str]]: List of tuples containing OCR sentence and its best matched corrected sentence.
     """
     matches = []
-    corrected_index = 0  # Track the current corrected sentence index
-    skip_next_ocr = False  # Flag to skip the next OCR sentence if combined
+    ocr_index = 0
+    corrected_index = 0
 
-    for i, ocr_sentence in enumerate(ocr_sentences):
-        if skip_next_ocr:
-            skip_next_ocr = False
-            continue
-
-        if corrected_index >= len(corrected_sentences):
-            # If no more corrected sentences, append unmatched
-            matches.append((ocr_sentence, "NO GOOD MATCH"))
-            continue
-
-        # Initialize variables
+    while ocr_index < len(ocr_sentences) and corrected_index < len(corrected_sentences):
+        ocr_sentence = ocr_sentences[ocr_index]
         current_corrected = corrected_sentences[corrected_index]
         score_current = fuzz.ratio(ocr_sentence, current_corrected)
-        best_match = (current_corrected, score_current)
 
-        # Lookahead: Combine corrected sentences
-        score_combined_corrected = 0
+        # Initialize best match as current corrected sentence
+        best_candidate = current_corrected
+        max_score = score_current
+        increment_corrected = 1
+        increment_ocr = 1
+
+        # Attempt to combine with next corrected sentence
         if corrected_index + 1 < len(corrected_sentences):
-            combined_corrected = current_corrected + " " + corrected_sentences[corrected_index + 1]
+            next_corrected = corrected_sentences[corrected_index + 1]
+            combined_corrected = current_corrected + " " + next_corrected
             score_combined_corrected = fuzz.ratio(ocr_sentence, combined_corrected)
+            if score_combined_corrected > max_score and score_combined_corrected >= min_score:
+                best_candidate = combined_corrected
+                max_score = score_combined_corrected
+                increment_corrected = 2  # Skip next corrected sentence
 
-        # Determine the best match
-        if score_current >= min_score and score_current >= score_combined_corrected:
-            best_match = (current_corrected, score_current)
-            corrected_index += 1  # Advance to the next corrected sentence
-        elif score_combined_corrected >= min_score:
-            best_match = (combined_corrected, score_combined_corrected)
-            corrected_index += 2  # Skip the combined corrected sentences
+        # Attempt to combine with next OCR sentence
+        if ocr_index + 1 < len(ocr_sentences):
+            next_ocr = ocr_sentences[ocr_index + 1]
+            combined_ocr = ocr_sentence + " " + next_ocr
+            score_combined_ocr = fuzz.ratio(combined_ocr, current_corrected)
+            if score_combined_ocr > max_score and score_combined_ocr >= min_score:
+                best_candidate = current_corrected
+                max_score = score_combined_ocr
+                increment_corrected = 1
+                increment_ocr = 2  # Skip next OCR sentence
+
+        # Decide whether to match single or combined OCR sentence
+        if score_current >= min_score and score_current >= max(score_combined_corrected, score_combined_ocr):
+            # Match single OCR to single corrected
+            best_candidate = current_corrected
+            max_score = score_current
+            increment_corrected = 1
+            increment_ocr = 1
+        elif score_combined_corrected >= min_score and score_combined_corrected >= score_combined_ocr:
+            # Match single OCR to combined corrected
+            best_candidate = combined_corrected
+            max_score = score_combined_corrected
+            increment_corrected = 2
+            increment_ocr = 1
+        elif score_combined_ocr >= min_score and score_combined_ocr > max(score_current, score_combined_corrected):
+            # Match combined OCR to single corrected
+            best_candidate = current_corrected
+            max_score = score_combined_ocr
+            increment_corrected = 1
+            increment_ocr = 2
+        else:
+            # No good match found
+            best_candidate = "NO GOOD MATCH"
+            max_score = 0
+            increment_corrected = 1
+            increment_ocr = 1
 
         # Append the match
-        matches.append((ocr_sentence, best_match[0]))
+        matches.append((ocr_sentence, best_candidate))
+
+        # Increment indices based on the match type
+        ocr_index += increment_ocr
+        corrected_index += increment_corrected
+
+    # Handle any remaining OCR sentences without matches
+    while ocr_index < len(ocr_sentences):
+        matches.append((ocr_sentences[ocr_index], "NO GOOD MATCH"))
+        ocr_index += 1
 
     return matches
 

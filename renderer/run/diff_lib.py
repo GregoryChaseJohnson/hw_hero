@@ -1,5 +1,3 @@
-# diff_lib.py
-
 import re
 import difflib
 from typing import List, Tuple
@@ -44,7 +42,7 @@ def tokenize(text: str) -> List[str]:
     """
     Tokenize text into words, spaces, and punctuation separately.
     """
-    return re.findall(r'\w+|\s+|[^\w\s]', text)
+    return re.findall(r"\w+(?:'\w+)?|\s+|[^\w\s]", text)
 
 def align_and_highlight(original: List[str], corrected: List[str]) -> str:
     """
