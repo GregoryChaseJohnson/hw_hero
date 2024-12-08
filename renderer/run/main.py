@@ -1,8 +1,8 @@
 # main.py
 
 from openai_api_call import perform_ocr, correct_text
-from seq_alignment import align_sentences
-from diff_lib import generate_report, TextTokenizer, split_into_sentences
+from seq_alignment_reverse import align_sentences
+from diff_lib_test2 import generate_report
 from block_creation import create_blocks
 from data_loader import DataLoader
 from renderer import process_sentences
@@ -17,7 +17,7 @@ ANSI_COLORS = {
     'pink': '\033[35m',
 }
 
-image_path = "/home/keithuncouth/Downloads/hwt_test2.jpeg"
+image_path = "/home/keithuncouth/Downloads/hwt_9.jpeg"
 
 def main():
     # Step 1: Perform OCR
@@ -34,38 +34,34 @@ def main():
     matches = align_sentences(ocr_output, corrected_text)
 
     # Step 4: Generate a report of differences
-    report = generate_report(matches)
+    report, tokenized_output = generate_report(matches)  # Updated to unpack tokenized output
     print("\nGenerated Report:")
     print(report)
 
-    # Step 5: Split the report into sentences
-    sentences = split_into_sentences(report)
+    print("\nDebug: Tokenized Output from generate_report:")
+    for idx, tokens in enumerate(tokenized_output):
+        print(f"Sentence {idx + 1} Tokens:")
+        if isinstance(tokens, list):  # Ensure tokens is a list
+            for token in tokens:
+                print(token)  # Print each token dictionary
+        else:
+            print("Error: Tokens are not in the expected list format!")
+            print(tokens)  # Debug what tokens contain
+
 
     # Lists to hold final sentences with ANSI colors and their corresponding blocks
     final_sentences = []
     blocks_by_sentence = []
 
-    for idx, sentence in enumerate(sentences):
-        # Tokenize the sentence
-        tokenizer = TextTokenizer(sentence)
-        tokens = tokenizer.parse_text()
-
-        # Debug: Print the tokenized output
-        #print(f"Tokenized output for Sentence {idx + 1}:")
-        #for token in tokens:
-            #print(token)
+    # Step 5: Process tokenized sentences
+    for idx, sentence_tokens in enumerate(tokenized_output):
 
         # Create blocks from tokens
-        blocks = create_blocks(tokens)
-
-        # Debug: Print the created blocks
-        #print(f"Created blocks for Sentence {idx + 1}:")
-        #for block in blocks:
-            #zprint(vars(block))
+        blocks = create_blocks(sentence_tokens)
 
         # Construct the final sentence with ANSI colors
         final_sentence = ''.join(
-            f"{ANSI_COLORS.get(token['color'], '')}{token['char']}" for token in tokens
+            f"{ANSI_COLORS.get(token['color'], '')}{token['char']}" for token in sentence_tokens
         )
         final_sentence += ANSI_COLORS['normal']  # Reset color
 
