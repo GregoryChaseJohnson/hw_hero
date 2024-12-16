@@ -1,7 +1,7 @@
-# renderer_data_loader.py
-
+# renderer.py
+import pickle
 import re
-from block_creation import ReplacementBlock, PinkBlock, SentenceEndBlock
+from block_creation import ReplacementBlock, DeleteBlock, SentenceEndBlock
 
 ANSI_COLORS = {
     'normal': '\033[0m',
@@ -11,42 +11,68 @@ ANSI_COLORS = {
     'pink': '\033[35m',
 }
 
-
-
 def calculate_ride_along(block, leading_edge):
     if not block.ride_along_eligible:
         return False
     required_threshold = block.ride_along_end
     return leading_edge >= required_threshold
 
-def insert_ride_along(block, leading_edge, annotated_line, final_sentence):
-    if isinstance(block, ReplacementBlock):
-        start = block.red_end + 1
-    else:
-        raise ValueError(f"Unsupported block type: {block.type}")
+def apply_colors(tokens):
+    """
+    After all logic, we apply ANSI codes based on token['color'].
+    """
+    colored_output = []
+    for token in tokens:
+        c = token['char']
+        col = token.get('color', 'normal')
 
+        if col == 'replacement':
+            colored_output.append(f"{ANSI_COLORS['green']}{c}{ANSI_COLORS['normal']}")
+        elif col == 'red':
+            colored_output.append(f"{ANSI_COLORS['red']}{c}{ANSI_COLORS['normal']}")
+        elif col == 'pink':
+            colored_output.append(f"{ANSI_COLORS['red']}{c}{ANSI_COLORS['normal']}")
+        else:
+            # normal or any other defaults to normal
+            colored_output.append(f"{ANSI_COLORS['normal']}{c}")
+    return "".join(colored_output)
+
+def insert_ride_along(block, leading_edge, annotated_line, tokens, original_sentence_str):
+    """
+    Insert ride-along text into the annotated line (green) and mark it as red in the final sentence tokens.
+    """
+    if not isinstance(block, ReplacementBlock):
+        raise ValueError("Unsupported block type for ride-along")
+
+    start = block.red_end + 1
     end = block.ride_along_end
 
-    ride_along_text = final_sentence[start:end]
+    # Extract the ride-along text
+    ride_along_text = original_sentence_str[start:end]
 
-    # Append ride-along text to annotated_line
+    # Remove leading spaces from ride-along text and adjust start index
+    while ride_along_text and ride_along_text[0].isspace():
+        ride_along_text = ride_along_text[1:]
+        start += 1  # Adjust start index to match trimmed text
+
+    # Ensure the annotated_line is long enough
     while len(annotated_line) < leading_edge:
-        annotated_line.append(" ")
+        annotated_line.append({'char': ' ', 'color': 'normal'})
+
+    # Add ride-along text to annotated_line (green for annotations above)
     for char in ride_along_text:
-        annotated_line.append(f"{ANSI_COLORS['pink']}{char}\033[0m")
+        annotated_line.append({'char': char, 'color': 'replacement'})
 
-    return end
+    # Mark the ride-along text as red (incorrect) in the final sentence tokens
+    for i in range(start, start + len(ride_along_text)):
+        tokens[i]['color'] = 'red'
 
-#def find_last_pink_anchor(blocks):
-    #for block in reversed(blocks):
-        #if isinstance(block, PinkBlock):
-            #return block.anchor_point
-    #return None
+    # Update leading_edge
+    leading_edge += len(ride_along_text)
+    return leading_edge
 
-#def is_orphaned_insert(block, idx, blocks):
-    #return isinstance(block, InsertionBlock) and idx > 0 and isinstance(blocks[idx - 1], #SentenceEndBlock)
-
-def render_corrections(final_sentence, blocks):
+def render_corrections(tokens, blocks):
+    original_sentence_str = "".join(t['char'] for t in tokens)
     annotated_line = []
     leading_edge = 0
 
@@ -54,66 +80,93 @@ def render_corrections(final_sentence, blocks):
         if hasattr(block, "processed") and block.processed:
             continue
 
-        #if isinstance(block, InsertionBlock):
-            #corrected_text = block.insert_text
-            #color = ANSI_COLORS["blue"]
-
-            #if is_orphaned_insert(block, idx, blocks):
-                #last_pink_anchor = find_last_pink_anchor(blocks)
-                #if last_pink_anchor is not None:
-                    #block.anchor_point = last_pink_anchor
-                #insertion_point = max(leading_edge, block.anchor_point)
-                #block.processed = True
-            #else:
-                #modified_anchor_point = block.anchor_point - 1
-                #insertion_point = max(leading_edge, modified_anchor_point)
-        elif isinstance(block, ReplacementBlock):
+        if isinstance(block, ReplacementBlock):
             corrected_text = block.replacement_text
-            color = ANSI_COLORS["green"]
-            insertion_point = max(leading_edge, block.anchor_point)
-        else:
-            continue  # Skip unsupported block types
+            insertion_point = max(leading_edge, block.red_start)
 
-        #if isinstance(block, InsertionBlock):
-            #modified_anchor_point = block.anchor_point - 1
-        #else:
-            #modified_anchor_point = None
+            # Ensure annotated_line is long enough
+            while len(annotated_line) < insertion_point:
+                annotated_line.append({'char': ' ', 'color': 'normal'})
 
-        # Ensure enough space in the annotated line
-        while len(annotated_line) < insertion_point:
-            annotated_line.append(" ")
+            # Insert corrected text as replacement tokens
+            for char in corrected_text:
+                annotated_line.append({'char': char, 'color': 'replacement'})
 
-        # Add corrected text
-        for char in corrected_text:
-            annotated_line.append(f"{color}{char}\033[0m")
+            # Update leading_edge
+            leading_edge = insertion_point + len(corrected_text)
 
-        # Update leading edge
-        leading_edge = insertion_point + len(corrected_text)
-        if leading_edge < len(final_sentence):
-            annotated_line.append(" ")
-            leading_edge += 1
 
-        # Determine if ride-along text should be inserted
-        ride_along_required = calculate_ride_along(block, leading_edge)
+            # Debug print: show substring from red_end to annotated_end
 
-        if ride_along_required:
-            ride_along_text = final_sentence[block.red_end + 1:block.ride_along_end] if isinstance(block, ReplacementBlock) else final_sentence[block.anchor_point:block.ride_along_end]
-            leading_edge = insert_ride_along(block, leading_edge, annotated_line, final_sentence)
 
-    return "".join(annotated_line)
+            # If needed, add a space after corrected text if not at sentence end
+            if leading_edge < len(original_sentence_str):
+                if original_sentence_str[leading_edge:leading_edge+1] not in ["\n"]:
+                    annotated_line.append({'char': ' ', 'color': 'normal'})
+                    leading_edge += 1
+
+            # Check ride-along
+            ride_along_required = calculate_ride_along(block, leading_edge)
+            if ride_along_required:
+                leading_edge = insert_ride_along(block, leading_edge, annotated_line, tokens, original_sentence_str)
+                block.annotated_end = None  # Reset annotated_end if ride-along was inserted
+
+        elif isinstance(block, DeleteBlock):
+            # If you want pink tokens in the final sentence, mark them here
+            tokens[block.pink_start]['color'] = 'pink'
+
+    # Apply colors to annotated line
+    annotated_line_colored = apply_colors(annotated_line)
+
+    # Apply colors to final sentence tokens
+    final_sentence_colored = apply_colors(tokens)
+
+    return annotated_line, tokens
+
+def save_renderer_output(annotated_lines, final_sentences, blocks_by_sentence):
+    """
+    Cache renderer outputs for post-processing.
+    """
+    with open("renderer_output.pkl", "wb") as f:
+        pickle.dump({
+            "annotated_lines": annotated_lines,
+            "final_sentences": final_sentences,
+            "blocks_by_sentence": blocks_by_sentence
+        }, f)
 
 def process_sentences(data_loader):
-    """
-    Process and render multiple tokenized sentences and their blocks.
-
-    Parameters:
-    - data_loader: An instance of DataLoader providing sentences and blocks.
-    """
     sentence_count = 1
-    for final_sentence, blocks in data_loader:
-        print(f"Sentence {sentence_count}:")
-        annotated_line = render_corrections(final_sentence, blocks)
-        print(annotated_line)               # Rendered corrections above
-        print(final_sentence)   # Original sentence below
-        print()                              # Blank line for separation
+    all_annotated_lines = []
+    all_final_sentences = []
+    all_blocks = []
+
+    for tokens, blocks in data_loader:
+        annotated_line, final_sentence = render_corrections(tokens, blocks)
+        
+
+        # Collect outputs
+        all_annotated_lines.append(annotated_line)
+        all_final_sentences.append(final_sentence)
+        all_blocks.append(blocks)
+
+        # Apply colors (for display purposes)
+        annotated_line_colored = apply_colors(annotated_line)
+        final_sentence_colored = apply_colors(final_sentence)
+
+        # Print the full final outputs as before
+        print(annotated_line_colored)
+        print(final_sentence_colored)
+        print()
+
         sentence_count += 1
+
+    # Cache the outputs for post-processing
+    save_renderer_output(all_annotated_lines, all_final_sentences, all_blocks)
+
+    print("All sentences processed and cached.")
+    return all_annotated_lines, all_final_sentences
+
+if __name__ == "__main__":
+    # If needed, we can place code here to run process_sentences
+    # with a given data_loader or just leave it empty.
+    pass

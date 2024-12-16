@@ -1,44 +1,59 @@
 import re
 from fuzzywuzzy import fuzz
 
+def number_ocr_sentences(ocr_sentences):
+    """
+    Assigns a numerical index to each OCR sentence.
+
+    Args:
+        ocr_sentences (list[str]): A list of OCR sentences.
+
+    Returns:
+        list[tuple[int, str]]: A list of tuples, where each tuple contains:
+            - An index representing the order of the sentence.
+            - The sentence itself.
+    """
+    return [(index, sentence) for index, sentence in enumerate(ocr_sentences)]
+
 # Define a unique marker to indicate sentence combinations
 COMBINATION_MARKER = "^**^"
 
+import re
 
 def split_into_sentences(raw_text):
-    """
-    Split text into sentences while handling edge cases,
-    such as abbreviations (e.g., 'etc.', 'e.g.') and periods followed by commas.
-    """
-    # Step 1: Normalize apostrophes
     def normalize_apostrophes(text):
-        return text.replace('‘', "'").replace('’', "'").replace('‛', "'").replace('`', "'").replace('´', "'")
-    
-    text = normalize_apostrophes(raw_text)    
+        return (text.replace('‘', "'")
+                    .replace('’', "'")
+                    .replace('‛', "'")
+                    .replace('`', "'")
+                    .replace('´', "'"))
 
+    text = normalize_apostrophes(raw_text)
+    text = re.sub(r'\s+', ' ', text)
 
-    text = re.sub(r'\s+', ' ', raw_text)
-    abbreviations = r'\b(?:etc|e\.g|i\.e|vs|Dr|Mr|Mrs|Ms|Prof|Jr|Sr)\.'
-    text = re.sub(fr'({abbreviations})', r'\1<PERIOD>', text)
-    sentences = re.split(r'([.!?]["\']?\s+)', text)
-    combined_sentences = []
-    buffer = ""
+    abbreviations = r'\b(?:etc|e\.g|i\.e|vs|Dr|Mr|Mrs|Ms|Prof|Jr|Sr|P\.E)'
+    # Replacing only the trailing period, not within the abbreviation
+    text = re.sub(fr'({abbreviations})\.', r'\1<PERIOD>', text)
 
-    for segment in sentences:
-        if re.match(r'[.!?]["\']?\s+', segment):
-            buffer += segment
-            combined_sentences.append(buffer.strip())
-            buffer = ""
-        else:
-            buffer += segment
+    # Preprocessing "P.E." if followed by capital letter
+    text = re.sub(r'(P\.E<PERIOD>)\s+(?=[A-Z])', r'\1\n', text)
 
-    if buffer.strip():
-        combined_sentences.append(buffer.strip())
+    sentence_split_pattern = r'(?<=[.!?])\s+(?=[A-Z])'
 
-    combined_sentences = [
-        s.replace('<PERIOD>', '.').strip() for s in combined_sentences
-    ]
-    return combined_sentences
+    text = text.replace('\n', '. ')
+    sentences = re.split(sentence_split_pattern, text)
+
+    # Restore <PERIOD> to '.'
+    sentences = [s.replace('<PERIOD>', '.').strip() for s in sentences]
+
+    # Final cleanup step to remove unintended double periods
+    cleaned_sentences = []
+    for s in sentences:
+        # Replace multiple consecutive periods with a single period
+        s = re.sub(r'\.(\s*\.)+', '.', s)
+        cleaned_sentences.append(s)
+
+    return cleaned_sentences
 
 def insert_marker_in_combination(first_sentence, marker=COMBINATION_MARKER):
     """
@@ -46,120 +61,96 @@ def insert_marker_in_combination(first_sentence, marker=COMBINATION_MARKER):
     """
     return first_sentence.strip() + marker
 
-
-
-def find_best_matches_bidirectional(ocr_sentences, corrected_sentences, min_score=50):
+def find_best_matches_simplified(ocr_sentences, corrected_sentences, min_score=50):
+    """
+    Matches OCR sentences with corrected sentences using simplified logic:
+    1. Single OCR sentence vs single corrected sentence.
+    2. Single OCR sentence vs two corrected sentences combined.
+    3. Two OCR sentences combined vs single corrected sentence.
+    """
     matches = []
     ocr_index = 0
     corrected_index = 0
 
     while ocr_index < len(ocr_sentences) and corrected_index < len(corrected_sentences):
         ocr_sentence = ocr_sentences[ocr_index]
-        current_corrected = corrected_sentences[corrected_index]
-        score_current = fuzz.ratio(ocr_sentence, current_corrected)
-
-        best_candidate = current_corrected
-        max_score = score_current
-        increment_corrected = 1
+        corrected_sentence = corrected_sentences[corrected_index]
+        
+        # Compare single vs single
+        score_single = fuzz.ratio(ocr_sentence, corrected_sentence)
+        best_score = score_single
+        best_match = (ocr_sentence, corrected_sentence)
         increment_ocr = 1
+        increment_corrected = 1
 
-        score_combined_corrected = 0
-        score_combined_ocr = 0
-
-        # Check if combining corrected sentences improves score
+        # Compare single OCR vs two corrected combined
         if corrected_index + 1 < len(corrected_sentences):
-            next_corrected = corrected_sentences[corrected_index + 1]
-            combined_corrected = current_corrected + " " + next_corrected
-            score_combined_corrected = fuzz.ratio(ocr_sentence, combined_corrected)
-            if score_combined_corrected > max_score and score_combined_corrected >= min_score:
-                best_candidate = combined_corrected
-                max_score = score_combined_corrected
+            corrected_combined = corrected_sentence + " " + corrected_sentences[corrected_index + 1]
+            score_combined_corrected = fuzz.ratio(ocr_sentence, corrected_combined)
+            if score_combined_corrected > best_score and score_combined_corrected >= min_score:
+                best_score = score_combined_corrected
+                # Insert marker in the first corrected sentence before combining
+                corrected_combined = insert_marker_in_combination(corrected_sentence) + " " + corrected_sentences[corrected_index + 1]
+                best_match = (ocr_sentence, corrected_combined)
                 increment_corrected = 2
 
-        # Check if combining OCR sentences improves score
+        # Compare two OCR combined vs single corrected
         if ocr_index + 1 < len(ocr_sentences):
-            next_ocr = ocr_sentences[ocr_index + 1]
-            combined_ocr = ocr_sentence + " " + next_ocr
-            score_combined_ocr = fuzz.ratio(combined_ocr, current_corrected)
-            if score_combined_ocr > max_score and score_combined_ocr >= min_score:
-                best_candidate = current_corrected
-                max_score = score_combined_ocr
-                increment_corrected = 1
+            ocr_combined = ocr_sentence + " " + ocr_sentences[ocr_index + 1]
+            score_combined_ocr = fuzz.ratio(ocr_combined, corrected_sentence)
+            if score_combined_ocr > best_score and score_combined_ocr >= min_score:
+                best_score = score_combined_ocr
+                # Insert marker in the first OCR sentence before combining
+                ocr_combined = insert_marker_in_combination(ocr_sentence) + " " + ocr_sentences[ocr_index + 1]
+                best_match = (ocr_combined, corrected_sentence)
                 increment_ocr = 2
+                # Revert to single increment for corrected since two-ocr scenario is chosen
+                increment_corrected = 1
 
-        # Unified marker insertion logic:
-        # If two OCR sentences combined
-        if increment_ocr == 2:
-            # Insert marker at the end of the first OCR sentence
-            next_ocr = ocr_sentences[ocr_index + 1]
-            ocr_sentence = insert_marker_in_combination(ocr_sentence) + " " + next_ocr
-
-        # If two corrected sentences combined
-        elif increment_corrected == 2:
-            # Insert marker at the end of the first corrected sentence
-            # Since we have best_candidate = current_corrected + " " + next_corrected
-            # We know the first sentence is current_corrected
-            first_corrected = current_corrected
-            second_corrected = corrected_sentences[corrected_index + 1]
-            best_candidate = insert_marker_in_combination(first_corrected) + " " + second_corrected
-
-        matches.append((ocr_sentence.strip(), best_candidate.strip()))
+        matches.append(best_match)
         ocr_index += increment_ocr
         corrected_index += increment_corrected
 
     # Handle remaining unmatched OCR sentences
     while ocr_index < len(ocr_sentences):
-        matches.append((ocr_sentences[ocr_index], "NO GOOD MATCH"))
+        matches.append((ocr_sentences[ocr_index], "NO MATCH"))
         ocr_index += 1
 
     return matches
 
-
-def resolve_conflicts(forward_matches, reverse_matches):
-    """
-    Resolve conflicts between forward and reverse matches.
-    """
-    forward_dict = {(o, c): fuzz.ratio(o, c) for o, c in forward_matches}
-    reverse_dict = {(o, c): fuzz.ratio(c, o) for c, o in reverse_matches}
-
-    resolved = []
-    for key in set(forward_dict) | set(reverse_dict):
-        forward_score = forward_dict.get(key, 0)
-        reverse_score = reverse_dict.get(key, 0)
-        if forward_score > reverse_score:
-            resolved.append(key)
-        elif reverse_score > forward_score:
-            resolved.append(key)
-        else:
-            resolved.append(key)
-    return resolved
-
-def find_best_matches_bidirectional_reverse(ocr_sentences, corrected_sentences, min_score=50):
-    """
-    Perform bidirectional matching and conflict resolution.
-    """
-    forward_matches = find_best_matches_bidirectional(ocr_sentences, corrected_sentences, min_score)
-    reverse_matches = find_best_matches_bidirectional(corrected_sentences, ocr_sentences, min_score)
-    combined_matches = resolve_conflicts(forward_matches, reverse_matches)
-    return combined_matches
-
 def align_sentences(ocr_text, corrected_text):
     """
-    Align OCR text with corrected text.
+    Align OCR text with corrected text using simplified logic with combination marker.
     """
     ocr_sentences = split_into_sentences(ocr_text)
     corrected_sentences = split_into_sentences(corrected_text)
-    matches = find_best_matches_bidirectional_reverse(ocr_sentences, corrected_sentences, min_score=50)
+    print("Corrected Text Sentences:", corrected_sentences)
+
+    matches = find_best_matches_simplified(ocr_sentences, corrected_sentences, min_score=50)
     return matches
 
 if __name__ == "__main__":
     example_ocr_text = """
-      Actually when I was touring around Southeast Asia, I didn't have enough time and money so I couldn't go to Bali.
+      What is your favorite subject in your school? If I ask this to my friends most of them says that it is P.E class. P.E class is the only time for students to exercise and play around during school time. It can be the best time for most of the students, but however, there are some students which don't want to exercise during P.E time. They don't want to move their body or have physical disadvantages. However, many schools are still requiring P.E and sports time. So, should sports should be required in school? I believe that it should be not required, but should be optional.
+
+First, we should respect students' opinions. Some students want sports time. But some does not. We can't require even one side's opinion. In my school, we have selected-subject time. We can choose the class which I wants and we could also choose what sports class I could attend. And to respect each students our school made the board game class. And we could be able to just relax or play board games during sports time.
+
+Second, it can make dark history to some students. If we play any sports, sometimes we make mistakes. But most of the students criticize the student which made a mistake. And some even bullies. When I was in middle school first grade, I was playing soccer with my classmates. I was playing as goalkeeper. But I made a mistake, and we lose one goal. Then, one of my classmate which is bully and said "Are you out of mind? Saving
     """
-    example_corrected_text = """ When I was touring around Southeast Asia, I didn’t have enough time or money. So I couldn’t go to Bali.
+    example_corrected_text = """What is your favorite subject in school? If I ask my friends, most of them say it's P.E. P.E. class is the only time for students to exercise and have fun during school. It can be the best time for many students, but there are some who don’t want to exercise during P.E. They don’t want to move their bodies or may have physical challenges. Still, many schools require P.E. and sports time. So, should sports be required in school? I believe it shouldn’t be required but should be optional.
+
+First, we should respect students' opinions. Some students want sports time, but some don’t. We can’t force one side’s opinion. In my school, we have selected-subject time. We can choose the classes we want, including which sports class to attend. To respect all students, our school even created a board game class, so we can relax or play board games during sports time.
+
+Second, sports can bring up bad memories for some students. When we play sports, we sometimes make mistakes. But many students criticize those who mess up, and some even bully them. When I was in first grade in middle school, I was playing soccer with my classmates. I was the goalkeeper, but I made a mistake and we let in a goal. Then, one of my classmates, who was a bully, said, "Are you out of your mind? Saving...
 """
 
     aligned_pairs = align_sentences(example_ocr_text, example_corrected_text)
+
+    split_sentences = split_into_sentences(example_ocr_text)
+    list_ocr_sentences = number_ocr_sentences(split_sentences)
+    for sentence in list_ocr_sentences:
+        print(f"listed sentences: {sentence}")
+
     for ocr_sentence, corrected_sentence in aligned_pairs:
         print(f"OCR Sentence: {ocr_sentence}")
         print(f"Corrected Sentence: {corrected_sentence}")
