@@ -14,40 +14,25 @@ class DeleteBlock:
         self.type = 'pink'
         self.pink_start = pink_start
 
-class SentenceEndBlock:
-    def __init__(self, red_start):
-        self.type = 'sentence_end'
-        self.red_start = red_start
-
-SENTENCE_END_PUNCTUATION = ['.', '!', '?', '...', '"', "'"]
-
-def is_sentence_end(tokens, index):
-    """Check if the current token marks the end of a sentence."""
-    if index + 2 >= len(tokens):
-        return False
-    return (
-        tokens[index + 1]['char'] in SENTENCE_END_PUNCTUATION
-        and tokens[index + 2]['char'] == '\n'
-        and tokens[index + 1]['color'] == 'normal'
-        and tokens[index + 2]['color'] == 'normal'
-    )
-
 def create_blocks(tokens):
     """
-    Create blocks from tokenized text, handling only replacement and pink blocks.
+    Create blocks from tokenized text for a single sentence.
+    This function:
+    - Identifies red and green segments, and deletes green tokens after reading them, finalizing corrected text.
+    - Identifies pink (delete) segments.
+    - Returns a list of blocks describing replacements and deletions.
+
+    The tokens are modified in-place by removing green tokens.
     """
     blocks = []
     i = 0
 
     while i < len(tokens):
-        # Handle replacement blocks
         if tokens[i]['color'] == 'red':
             red_start = i
             red_text = ""
             replacement_text = ""
             red_end = None
-
-            print(f"Starting replacement block at index {red_start}")
 
             # Collect red text
             while i < len(tokens) and tokens[i]['color'] == 'red':
@@ -55,63 +40,81 @@ def create_blocks(tokens):
                 red_end = i
                 i += 1
 
-            # Collect green text (replacement)
+            # Collect green text (replacement) and remove it
             if i < len(tokens) and tokens[i]['color'] == 'green':
                 green_start = i
                 while i < len(tokens) and tokens[i]['color'] == 'green':
                     replacement_text += tokens[i]['char']
                     i += 1
 
-                print(f"Collected green text: '{replacement_text}'")
-
+                # Remove green segment to finalize corrected text
                 del tokens[green_start:i]
-                i = green_start  # Reset i to account for removed tokens
+                i = green_start  # Reset i after removal
 
-            # Create replacement block
+            # Create a ReplacementBlock
             blocks.append(ReplacementBlock(red_start, red_end, red_text, replacement_text))
 
-        # Handle pink blocks
-        elif tokens[i]['color'] == 'pink':
+        elif i < len(tokens) and tokens[i]['color'] == 'pink':
+            # Handle pink (deletion) blocks
             pink_start = i
-            print(f"Starting pink block at index {pink_start}")
-
-            # Skip over contiguous pink tokens
             while i < len(tokens) and tokens[i]['color'] == 'pink':
                 i += 1
-
             blocks.append(DeleteBlock(pink_start))
 
-        # Handle sentence-end blocks
-        elif is_sentence_end(tokens, i):
-            red_start = i
-            print(f"Creating sentence end block at index {red_start}")
-            blocks.append(SentenceEndBlock(red_start))
-            i += 2  # Skip punctuation and newline
-
         else:
-            i += 1  # Ensure consistent incrementation
+            i += 1
 
     # Adjust ride-along logic
     for j in range(len(blocks) - 1):
         current_block = blocks[j]
         next_block = blocks[j + 1]
 
-        current_block_end = current_block.red_end if hasattr(current_block, 'red_end') else current_block.pink_start
+        current_block_end = getattr(current_block, 'red_end', getattr(current_block, 'pink_start', None))
+        next_block_start = getattr(next_block, 'red_start', None)
 
-        if hasattr(next_block, 'red_start'):
-            distance = next_block.red_start - current_block_end
-        else:
-            continue
-
-        if 3 < distance <= 19:
-            current_block.ride_along_eligible = True
-            current_block.ride_along_end = next_block.red_start
-            print(f"Ride-along eligible: Block End={current_block_end}, RideAlongEnd={current_block.ride_along_end}")
-        else:
-            print(f"Not eligible: Block End={current_block_end}, Next Block Anchor={next_block.red_start}")
-
-    print("\nCreated Blocks with Adjacency:")
-    for block in blocks:
-        print(vars(block))
+        if current_block_end is not None and next_block_start is not None:
+            distance = next_block_start - current_block_end
+            if 3 < distance <= 19:
+                current_block.ride_along_eligible = True
+                current_block.ride_along_end = next_block_start
 
     return blocks
+
+def process_tokens_to_blocks(tokenized_output):
+    """
+    Given tokenized_output from diff_lib_test2.py (a list of token lists, one per sentence),
+    process each sentence through create_blocks, resulting in final corrected tokens and blocks.
+
+    Returns:
+        final_tokens_by_sentence: The corrected tokens for each sentence after green removal.
+        blocks_by_sentence: The blocks (ReplacementBlock, DeleteBlock) for each sentence.
+    """
+    final_tokens_by_sentence = []
+    blocks_by_sentence = []
+
+    for sentence_tokens in tokenized_output:
+        # Make a copy if desired, or work directly since we want final_tokens_by_sentence updated
+        # Direct modification is okay as we only do it here.
+        blocks = create_blocks(sentence_tokens)
+
+        # After create_blocks, sentence_tokens now reflects corrected text (green removed)
+        final_tokens_by_sentence.append(sentence_tokens)
+        blocks_by_sentence.append(blocks)
+
+    return final_tokens_by_sentence, blocks_by_sentence
+
+if __name__ == "__main__":
+    # Standalone mode: load tokenized_output and produce blocks_output
+    import pickle
+    with open("tokenized_output.pkl", "rb") as f:
+        tokenized_output = pickle.load(f)
+
+    final_tokens_by_sentence, blocks_by_sentence = process_tokens_to_blocks(tokenized_output)
+
+    with open("blocks_output.pkl", "wb") as f:
+        pickle.dump({
+            "final_tokens_by_sentence": final_tokens_by_sentence,
+            "blocks_by_sentence": blocks_by_sentence
+        }, f)
+
+    print("Blocks successfully saved to blocks_output.pkl")

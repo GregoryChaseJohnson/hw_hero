@@ -1,7 +1,12 @@
+    # renderer.py
+    
 # renderer.py
+
 import pickle
 import re
-from block_creation import ReplacementBlock, DeleteBlock, SentenceEndBlock
+from block_creation import ReplacementBlock, DeleteBlock
+
+
 
 ANSI_COLORS = {
     'normal': '\033[0m',
@@ -32,8 +37,10 @@ def apply_colors(tokens):
             colored_output.append(f"{ANSI_COLORS['red']}{c}{ANSI_COLORS['normal']}")
         elif col == 'pink':
             colored_output.append(f"{ANSI_COLORS['red']}{c}{ANSI_COLORS['normal']}")
-        else:
-            # normal or any other defaults to normal
+        elif col == 'blue':
+            colored_output.append(f"{ANSI_COLORS['blue']}{c}{ANSI_COLORS['normal']}")
+       
+        else:       
             colored_output.append(f"{ANSI_COLORS['normal']}{c}")
     return "".join(colored_output)
 

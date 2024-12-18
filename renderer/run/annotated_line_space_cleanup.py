@@ -1,5 +1,6 @@
 from block_creation import ReplacementBlock
 from renderer import apply_colors, render_corrections
+import pickle
 
 class Block:
     """
@@ -195,7 +196,7 @@ def post_process(annotated_lines, final_sentences, blocks_by_sentence):
             "blocks_by_sentence": blocks_by_sentence
         }
 
-        with open("post_processed_output.pkl", "wb") as f:
+        with open("annotated_line_space_cleanup_output.pkl", "wb") as f:
             pickle.dump(updated_data, f)
 
         print("Updated data written to post_processed_output.pkl")
@@ -209,7 +210,6 @@ def post_process(annotated_lines, final_sentences, blocks_by_sentence):
         print(apply_colors(final_sentence))
 
 if __name__ == "__main__":
-    import pickle
     # Load data from renderer_output.pkl without changes
     with open("renderer_output.pkl", "rb") as f:
         data = pickle.load(f)

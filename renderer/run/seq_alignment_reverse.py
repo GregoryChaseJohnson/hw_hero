@@ -27,8 +27,16 @@ def split_into_sentences(raw_text):
                     .replace('‛', "'")
                     .replace('`', "'")
                     .replace('´', "'"))
+    
+    def normalize_quotes(text):
+        # Convert curly double quotes to straight double quotes
+        text = text.replace('“', '"').replace('”', '"')
+        # Convert single quotes to double quotes for consistency
+        text = text.replace("'", '"')
+        return text
 
     text = normalize_apostrophes(raw_text)
+    text = normalize_quotes(text)
     text = re.sub(r'\s+', ' ', text)
 
     abbreviations = r'\b(?:etc|e\.g|i\.e|vs|Dr|Mr|Mrs|Ms|Prof|Jr|Sr|P\.E)'
@@ -38,7 +46,8 @@ def split_into_sentences(raw_text):
     # Preprocessing "P.E." if followed by capital letter
     text = re.sub(r'(P\.E<PERIOD>)\s+(?=[A-Z])', r'\1\n', text)
 
-    sentence_split_pattern = r'(?<=[.!?])\s+(?=[A-Z])'
+    sentence_split_pattern = r'(?<=[.!?])["\'“”‘’]?\s+(?=[A-Z])'
+
 
     text = text.replace('\n', '. ')
     sentences = re.split(sentence_split_pattern, text)

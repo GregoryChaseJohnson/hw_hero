@@ -2,6 +2,7 @@ import re
 import difflib
 from typing import List, Tuple
 from seq_alignment_reverse import align_sentences
+import pickle
 
 ANSI_COLORS = {
     'normal': '\033[0m',
@@ -47,7 +48,8 @@ def tokenize(text: str) -> List[str]:
     Tokenize text into words, spaces, and punctuation.
     """
 
-    return re.findall(r"[A-Za-z]+(?:'[A-Za-z]+)*(?:\.[A-Za-z]+)*(?:[.,!?;:]+)?|\s+|[^\w\s]", text)
+    return re.findall(r"[A-Za-z0-9]+(?:'[A-Za-z0-9]+)*|\.\w+|[.,!?;:]+|\s+|[^\w\s]", text)
+
 
 
 def align_and_highlight(original: List[str], corrected: List[str]) -> str:
@@ -201,18 +203,21 @@ def generate_report(matches: List[Tuple[str, str]]) -> Tuple[str, List[dict]]:
 
 # Core processing functions
 def process_text(ocr_text: str, corrected_text: str):
-    """
-    Process text using seq_alignment output and generate a report.
-    """
     print("Aligning sentences...")
     matches = align_sentences(ocr_text, corrected_text)
 
     print("\nGenerating report...")
-    formatted_report, _ = generate_report(matches)  # Unpack the tuple to get only the formatted report
+    formatted_report, tokenized_output = generate_report(matches)  # Get tokenized_output here
     print("\nFormatted Report:")
     print(formatted_report)
 
-    return formatted_report  # Return only the formatted report if that's desired
+    # Add this block
+
+    with open("tokenized_output.pkl", "wb") as f:
+        pickle.dump(tokenized_output, f)
+    print("tokenized_output saved to tokenized_output.pkl")
+
+    return formatted_report
 
 
 if __name__ == "__main__":
