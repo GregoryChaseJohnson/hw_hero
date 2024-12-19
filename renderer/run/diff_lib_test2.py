@@ -183,6 +183,11 @@ def generate_report(matches: List[Tuple[str, str]]) -> Tuple[str, List[dict]]:
         tokenizer = TextTokenizer(highlighted)
         tokens = tokenizer.parse_text()
 
+        print(f"--- Debug Tokens for Sentence {num} ---")
+        for i, t in enumerate(tokens):
+            print(f"  {i}: {t}")
+
+
         # Remove the combination marker from tokens
         filtered_tokens = remove_combination_marker(tokens, COMBINATION_MARKER)
 

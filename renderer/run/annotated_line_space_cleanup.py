@@ -1,5 +1,6 @@
 from block_creation import ReplacementBlock
-from renderer import apply_colors, render_corrections
+from utils import apply_colors
+from renderer import render_corrections
 import pickle
 
 class Block:
@@ -33,7 +34,8 @@ class Block:
 
 def find_red_blocks(final_sentence):
     def is_red(token):
-        return token['color'] == 'red'
+        return token.get('type', 'equal') == 'replace'
+
     
     def is_space_char(token):
         return token['char'] == ' '
@@ -108,13 +110,13 @@ def insert_transformed_segment(new_annotated_line, red_start, transformed_segmen
 
 
     for i, token in enumerate(new_annotated_line[:red_start+20]):  # Show up to 20 chars after red_start
-        print(f"  {i}: char='{token['char']}', color='{token['color']}'")
+        print(f"  {i}: char='{token['char']}', type='{token['type']}'")
     print("[DEBUG] Transformed segment to insert:", ''.join([t['char'] for t in transformed_segment]))
 
     # Extend line if needed
     if current_length < required_length:
         extension_size = required_length - current_length
-        new_annotated_line.extend([{'char': ' ', 'color': 'normal'}] * extension_size)
+        new_annotated_line.extend([{'char': ' ', 'type': 'equal'}] * extension_size)
         print(f"[DEBUG] Extended line by {extension_size} spaces. New length={len(new_annotated_line)}")
 
     # Perform insertion
@@ -164,7 +166,7 @@ def process_sentence(annotated_line, final_sentence):
         # Print the final rebuilt line for debugging
         print("[DEBUG] Final Rebuilt Annotated Line Tokens:")
         for i, t in enumerate(new_annotated_line):
-            print(f"  {i}: char='{t['char']}', color='{t['color']}'")
+            print(f"  {i}: char='{t['char']}', type='{t['type']}'")
 
         annotated_line = new_annotated_line
 
@@ -180,12 +182,12 @@ def post_process(annotated_lines, final_sentences, blocks_by_sentence):
         # Print final sentence tokens before processing
         print("Final Sentence Tokens:")
         for idx, t in enumerate(final_sentence):
-            print(f"  {idx}: char='{t['char']}', color='{t['color']}'")
+            print(f"  {idx}: char='{t['char']}', type='{t['type']}'")
 
         # Print annotated line tokens before transformations
         print("Annotated Tokens Before:")
         for idx, t in enumerate(annotated_line):
-            print(f"  {idx}: char='{t['char']}', color='{t['color']}'")
+            print(f"  {idx}: char='{t['char']}', type='{t['type']}'")
 
         # Process the sentence with the new method
         annotated_line = process_sentence(annotated_line, final_sentence)

@@ -1,5 +1,5 @@
 import pickle
-from renderer import apply_colors
+from utils import apply_colors
 
 class Block:
     """
@@ -31,7 +31,7 @@ def identify_red_blocks(final_sentence):
     More than one consecutive space or a non-red, non-space token ends the block.
     """
     def is_red(token):
-        return token.get('color', 'normal') == 'red'
+        return token.get('type', 'equal') == 'replace'
     def is_space_char(token):
         return token['char'].isspace()
 
@@ -87,13 +87,13 @@ def extract_replacement_text(annotated_line, red_blocks, block_index):
     consecutive_spaces = 0
 
     for token in segment:
-        col = token.get('color', 'normal')
+        col = token.get('type', 'equal')
         ch = token['char']
 
-        if col == 'replacement':
+        if col == 'corrected':
             consecutive_spaces = 0
             collected.append(token)
-        elif col == 'normal' and ch.isspace():
+        elif col == 'equal' and ch.isspace():
             if collected:
                 consecutive_spaces += 1
                 if consecutive_spaces == 1:
@@ -140,7 +140,7 @@ def insert_spaces(final_sentence, blocks):
 
             # Insert spaces if a valid space is found
             if insertion_point < len(final_sentence) and final_sentence[insertion_point]['char'].isspace():
-                spaces = [{'char': ' ', 'color': 'normal'}] * overhang
+                spaces = [{'char': ' ', 'type': 'equal'}] * overhang
                 final_sentence = final_sentence[:insertion_point + 1] + spaces + final_sentence[insertion_point + 1:]
 
                 # Shift subsequent blocks
@@ -150,54 +150,61 @@ def insert_spaces(final_sentence, blocks):
 
     return final_sentence
 
-def place_replacement_text(blocks, annotated_line_length):
+def place_replacement_text(blocks, final_sentence):
     """
     Place replacement text on the annotated line, dynamically extending it as needed.
-    After placing all replacement text, if the annotated line extends beyond the end of 
-    the sentence, add a period at the end. If the last character is a quote, place the 
-    period before the quote.
+    Add a period to the replacement text if it logically ends the sentence.
     """
-    annotated_line = [{'char': ' ', 'color': 'normal'} for _ in range(annotated_line_length)]
+    annotated_line = []
+    max_replaced_idx = -1
 
+    # Step 1: Place all replacement text and track the farthest extent
     for block in blocks:
+        replacement_length = len(block.replacement_text)
+        original_length = block.red_end - block.red_start + 1
+
+        # Ensure annotated_line is long enough before placement
+        required_length = block.red_start + replacement_length
+        if len(annotated_line) < required_length:
+            annotated_line.extend([{'char': ' ', 'type': 'equal'}] * (required_length - len(annotated_line)))
+
+        # Place the replacement text
         for idx, token in enumerate(block.replacement_text):
             target_idx = block.red_start + idx
-
-            # Extend if needed
-            if target_idx >= len(annotated_line):
-                annotated_line.extend([{'char': ' ', 'color': 'normal'}] * (target_idx - len(annotated_line) + 1))
-
             annotated_line[target_idx] = token
+            # Track the farthest replaced character
+            max_replaced_idx = max(max_replaced_idx, target_idx)
 
-    # Now, check if we extended beyond the original sentence length
-    if len(annotated_line) > annotated_line_length:
-        # Identify the last non-space token
-        last_non_space_idx = len(annotated_line) - 1
+    # Step 2: Determine the last meaningful position in the final sentence
+    last_meaningful_idx = len(final_sentence) - 1
+    while last_meaningful_idx >= 0 and final_sentence[last_meaningful_idx]['char'].isspace():
+        last_meaningful_idx -= 1
+
+    # Step 3: Check if the replaced text logically ends the sentence
+    if max_replaced_idx >= last_meaningful_idx:
+        # Find the last non-space character in the annotated line
+        last_non_space_idx = max_replaced_idx
         while last_non_space_idx >= 0 and annotated_line[last_non_space_idx]['char'].isspace():
             last_non_space_idx -= 1
 
+        # Add a period if the replacement text ends the sentence
         if last_non_space_idx >= 0:
             last_char = annotated_line[last_non_space_idx]['char']
-            # If last char is a quote, place period before it
             if last_char in ['"', '”', '“', '‘', '’', "'"]:
-                # Insert period before this quote character
-                annotated_line.insert(last_non_space_idx, {'char': '.', 'color': 'normal'})
+                # Insert period before the quote
+                annotated_line.insert(last_non_space_idx, {'char': '.', 'type': 'equal'})
             else:
-                # Otherwise, place period at the end
-                # If the last char is non-space token and not quote, just append a period
+                # Append period at the end or insert after replacement text
                 if last_non_space_idx == len(annotated_line) - 1:
-                    annotated_line.append({'char': '.', 'color': 'replacement'})
+                    annotated_line.append({'char': '.', 'type': 'corrected'})
                 else:
-                    # If there are trailing spaces after the last token, put the period after the token
-                    # but before any trailing spaces
                     insert_idx = last_non_space_idx + 1
-                    # Move forward over spaces to keep period right after the token
                     while insert_idx < len(annotated_line) and annotated_line[insert_idx]['char'].isspace():
                         insert_idx += 1
-                    # Insert period at the token boundary before trailing spaces
-                    annotated_line.insert(insert_idx, {'char': '.', 'replacement': 'normal'})
+                    annotated_line.insert(insert_idx, {'char': '.', 'type': 'equal'})
 
     return annotated_line
+
 
 
 def finalize_transformation(annotated_lines, final_sentences):
@@ -236,7 +243,8 @@ def finalize_transformation(annotated_lines, final_sentences):
             print("Overhang:", block.compute_overhang())
 
         # Place replacement text after adjusting positions
-        annotated_line = place_replacement_text(blocks, len(final_sentence))
+        annotated_line = place_replacement_text(blocks, final_sentence)
+
 
         # Print results
         print("\nFinal Annotated Line (Colored):")
@@ -244,10 +252,24 @@ def finalize_transformation(annotated_lines, final_sentences):
         # Print final sentence tokens in colored form
         print(apply_colors(final_sentence))
 
+        annotated_lines[i] = annotated_line
+        final_sentences[i] = final_sentence
+
+    return annotated_lines, final_sentences
+
 if __name__ == "__main__":
     with open("annotated_line_space_cleanup_output.pkl", "rb") as f:
         data = pickle.load(f)
         annotated_lines = data["annotated_lines"]
         final_sentences = data["final_sentences"]
 
-    finalize_transformation(annotated_lines, final_sentences)
+    # Run the final transformation and get updated data
+    updated_annotated_lines, updated_final_sentences = finalize_transformation(annotated_lines, final_sentences)
+
+    # Save the updated data to a new pickle file
+    with open("final_output.pkl", "wb") as f:
+        pickle.dump({
+            "annotated_lines": updated_annotated_lines,
+            "final_sentences": updated_final_sentences
+        }, f)
+    print("Final processed data saved to final_output.pkl")

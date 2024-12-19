@@ -7,15 +7,6 @@ import re
 from block_creation import ReplacementBlock, DeleteBlock
 
 
-
-ANSI_COLORS = {
-    'normal': '\033[0m',
-    'red': '\033[31m',
-    'green': '\033[92m',
-    'blue': '\033[34m',
-    'pink': '\033[35m',
-}
-
 def calculate_ride_along(block, leading_edge):
     if not block.ride_along_eligible:
         return False
@@ -24,25 +15,26 @@ def calculate_ride_along(block, leading_edge):
 
 def apply_colors(tokens):
     """
-    After all logic, we apply ANSI codes based on token['color'].
+    After all logic, we apply ANSI codes based on token['type'].
     """
+    # Updated ANSI_COLORS mapping for the new types
+    ANSI_COLORS = {
+        'equal': '\033[0m',      # previously normal
+        'replace': '\033[91m',   # previously red
+        'corrected': '\033[92m', # previously replacement/green
+        'insert': '\033[94m',    # previously blue
+        'delete': '\033[95;1m',  # previously pink
+    }
+
     colored_output = []
     for token in tokens:
         c = token['char']
-        col = token.get('color', 'normal')
-
-        if col == 'replacement':
-            colored_output.append(f"{ANSI_COLORS['green']}{c}{ANSI_COLORS['normal']}")
-        elif col == 'red':
-            colored_output.append(f"{ANSI_COLORS['red']}{c}{ANSI_COLORS['normal']}")
-        elif col == 'pink':
-            colored_output.append(f"{ANSI_COLORS['red']}{c}{ANSI_COLORS['normal']}")
-        elif col == 'blue':
-            colored_output.append(f"{ANSI_COLORS['blue']}{c}{ANSI_COLORS['normal']}")
-       
-        else:       
-            colored_output.append(f"{ANSI_COLORS['normal']}{c}")
+        typ = token.get('type', 'equal')
+        color_code = ANSI_COLORS.get(typ, ANSI_COLORS['equal'])
+        # Reset to normal after each character
+        colored_output.append(f"{color_code}{c}{ANSI_COLORS['equal']}")
     return "".join(colored_output)
+
 
 def insert_ride_along(block, leading_edge, annotated_line, tokens, original_sentence_str):
     """
@@ -64,15 +56,15 @@ def insert_ride_along(block, leading_edge, annotated_line, tokens, original_sent
 
     # Ensure the annotated_line is long enough
     while len(annotated_line) < leading_edge:
-        annotated_line.append({'char': ' ', 'color': 'normal'})
+        annotated_line.append({'char': ' ', 'type': 'equal'})
 
     # Add ride-along text to annotated_line (green for annotations above)
     for char in ride_along_text:
-        annotated_line.append({'char': char, 'color': 'replacement'})
+        annotated_line.append({'char': char, 'type': 'corrected'})
 
     # Mark the ride-along text as red (incorrect) in the final sentence tokens
     for i in range(start, start + len(ride_along_text)):
-        tokens[i]['color'] = 'red'
+        tokens[i]['type'] = 'replace'
 
     # Update leading_edge
     leading_edge += len(ride_along_text)
@@ -93,23 +85,19 @@ def render_corrections(tokens, blocks):
 
             # Ensure annotated_line is long enough
             while len(annotated_line) < insertion_point:
-                annotated_line.append({'char': ' ', 'color': 'normal'})
+                annotated_line.append({'char': ' ', 'type': 'equal'})
 
-            # Insert corrected text as replacement tokens
+            # Insert corrected text as corrected tokens
             for char in corrected_text:
-                annotated_line.append({'char': char, 'color': 'replacement'})
+                annotated_line.append({'char': char, 'type': 'corrected'})
 
             # Update leading_edge
             leading_edge = insertion_point + len(corrected_text)
 
-
-            # Debug print: show substring from red_end to annotated_end
-
-
             # If needed, add a space after corrected text if not at sentence end
             if leading_edge < len(original_sentence_str):
                 if original_sentence_str[leading_edge:leading_edge+1] not in ["\n"]:
-                    annotated_line.append({'char': ' ', 'color': 'normal'})
+                    annotated_line.append({'char': ' ', 'type': 'equal'})
                     leading_edge += 1
 
             # Check ride-along
@@ -120,7 +108,7 @@ def render_corrections(tokens, blocks):
 
         elif isinstance(block, DeleteBlock):
             # If you want pink tokens in the final sentence, mark them here
-            tokens[block.pink_start]['color'] = 'pink'
+            tokens[block.delete_start]['type'] = 'delete'
 
     # Apply colors to annotated line
     annotated_line_colored = apply_colors(annotated_line)

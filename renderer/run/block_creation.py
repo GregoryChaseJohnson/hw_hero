@@ -10,9 +10,9 @@ class ReplacementBlock:
         self.adjacent_to_next = False  # Will be set later if needed
 
 class DeleteBlock:
-    def __init__(self, pink_start):
-        self.type = 'pink'
-        self.pink_start = pink_start
+    def __init__(self, delete_start):
+        self.type = 'delete'
+        self.delete_start = delete_start
 
 def create_blocks(tokens):
     """
@@ -28,38 +28,39 @@ def create_blocks(tokens):
     i = 0
 
     while i < len(tokens):
-        if tokens[i]['color'] == 'red':
+        if tokens[i]['type'] == 'replace':
             red_start = i
             red_text = ""
             replacement_text = ""
             red_end = None
 
-            # Collect red text
-            while i < len(tokens) and tokens[i]['color'] == 'red':
+            # Collect replace-type text
+            while i < len(tokens) and tokens[i]['type'] == 'replace':
                 red_text += tokens[i]['char']
                 red_end = i
                 i += 1
 
-            # Collect green text (replacement) and remove it
-            if i < len(tokens) and tokens[i]['color'] == 'green':
-                green_start = i
-                while i < len(tokens) and tokens[i]['color'] == 'green':
+            # If corrected tokens follow, collect them and remove after
+            if i < len(tokens) and tokens[i]['type'] == 'corrected':
+                corrected_start = i
+                while i < len(tokens) and tokens[i]['type'] == 'corrected':
                     replacement_text += tokens[i]['char']
                     i += 1
 
-                # Remove green segment to finalize corrected text
-                del tokens[green_start:i]
-                i = green_start  # Reset i after removal
+                # Remove corrected segment to finalize corrected text
+                del tokens[corrected_start:i]
+                i = corrected_start  # Reset i after removal
 
             # Create a ReplacementBlock
             blocks.append(ReplacementBlock(red_start, red_end, red_text, replacement_text))
 
-        elif i < len(tokens) and tokens[i]['color'] == 'pink':
-            # Handle pink (deletion) blocks
-            pink_start = i
-            while i < len(tokens) and tokens[i]['color'] == 'pink':
+        # Look for a delete-type segment (previously 'pink')
+        elif i < len(tokens) and tokens[i]['type'] == 'delete':
+            delete_start = i
+            # Skip all continuous delete-type tokens
+            while i < len(tokens) and tokens[i]['type'] == 'delete':
                 i += 1
-            blocks.append(DeleteBlock(pink_start))
+            blocks.append(DeleteBlock(delete_start))
 
         else:
             i += 1
@@ -69,7 +70,7 @@ def create_blocks(tokens):
         current_block = blocks[j]
         next_block = blocks[j + 1]
 
-        current_block_end = getattr(current_block, 'red_end', getattr(current_block, 'pink_start', None))
+        current_block_end = getattr(current_block, 'red_end', getattr(current_block, 'delete_start', None))
         next_block_start = getattr(next_block, 'red_start', None)
 
         if current_block_end is not None and next_block_start is not None:

@@ -1,13 +1,13 @@
 import pickle
 from openai_api_call import perform_ocr, correct_text
 from seq_alignment_reverse import align_sentences
-from diff_lib_test2 import generate_report
+from diff_lib_refactor import generate_report # type: ignore
 from block_creation import create_blocks
 from data_loader import DataLoader
 from renderer import process_sentences
 from annotated_line_space_cleanup import post_process
 from align_overhang import finalize_transformation
-use_test_data = False
+use_test_data = True
 
 test_ocr_text = """Recently, there are many music and K-pop singer coming out. Also, many people including youth are enjoying and affected by it. As the world keeps affected by K-pop, some people are concerned about K-pop music's bad influence because it can have the bad effect. But, for my opinion, I strongly believe that K-pop has more positive effect than harm on the youth.
 
