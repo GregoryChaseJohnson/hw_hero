@@ -4,10 +4,10 @@ from seq_alignment_reverse import align_sentences
 from diff_lib_refactor import generate_report # type: ignore
 from block_creation import create_blocks
 from data_loader import DataLoader
-from renderer import process_sentences
+from renderer import process_sentences, save_renderer_output
 from annotated_line_space_cleanup import post_process
 from align_overhang import finalize_transformation
-use_test_data = True
+use_test_data = False
 
 test_ocr_text = """Recently, there are many music and K-pop singer coming out. Also, many people including youth are enjoying and affected by it. As the world keeps affected by K-pop, some people are concerned about K-pop music's bad influence because it can have the bad effect. But, for my opinion, I strongly believe that K-pop has more positive effect than harm on the youth.
 
@@ -25,7 +25,7 @@ Secondly, it can make the whole culture more interesting to young people. In my 
 
 Lastly, it can make Korean youth rethink their traditional culture and feel proud of it. Recently, I've heard a lot about Pusion.
 """
-image_path = "/home/keithuncouth/Downloads/hwt_5.jpeg"
+image_path = "/home/keithuncouth/Downloads/hwt_1.jpeg"
 
 def main():
     # Steps 1 & 2: OCR and correct
@@ -55,34 +55,31 @@ def main():
     # Step 5: Create blocks
     final_tokens_by_sentence = []
     blocks_by_sentence = []
-    for idx, sentence_tokens in enumerate(tokenized_output):
+    for sentence_tokens in tokenized_output:
         blocks = create_blocks(sentence_tokens)
         final_tokens_by_sentence.append(sentence_tokens)
         blocks_by_sentence.append(blocks)
 
-    # Step 6: Load into DataLoader and render
-    data_loader = DataLoader(final_tokens_by_sentence, blocks_by_sentence)
-    process_sentences(data_loader)
+    # Step 6: Render and CAPTURE the returned lines:
+    all_annotated_lines, all_final_sentences = process_sentences(
+        final_tokens_by_sentence, blocks_by_sentence
+    )
 
-    # Step 7: Now that rendering is done, load renderer output
-    with open("renderer_output.pkl", "rb") as f:
-        data = pickle.load(f)
-        annotated_lines = data["annotated_lines"]
-        final_sentences = data["final_sentences"]
-        blocks_by_sentence = data["blocks_by_sentence"]
+    # Now 'all_annotated_lines' actually contains the annotated lines from the renderer
+    annotated_lines = all_annotated_lines
+    final_sentences = all_final_sentences
 
-    # Step 8: Post-process after rendering
-    print("\nRunning Post-Process Stage...")
-    post_process(annotated_lines, final_sentences, blocks_by_sentence)
+    # Step 7: Post-process
+    annotated_lines, final_sentences, blocks_by_sentence = post_process(
+        annotated_lines, final_sentences, blocks_by_sentence
+    )
 
-    with open("annotated_line_space_cleanup_output.pkl", "rb") as f:
-        updated_data = pickle.load(f)
-        annotated_lines = updated_data["annotated_lines"]
-        final_sentences = updated_data["final_sentences"]
-        blocks_by_sentence = updated_data["blocks_by_sentence"]  # If needed
+    save_renderer_output(annotated_lines, final_sentences, blocks_by_sentence)
 
+    # Step 8: Final transformation
     print("\nRunning Final Transformation Stage...")
-    finalize_transformation(annotated_lines, final_sentences)
+    annotated_lines, final_sentences = finalize_transformation(annotated_lines, final_sentences)
+
 
 if __name__ == "__main__":
     main()

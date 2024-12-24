@@ -1,3 +1,5 @@
+#annotated_line_space_cleanup.py
+
 from block_creation import ReplacementBlock
 from utils import apply_colors
 from renderer import render_corrections
@@ -192,24 +194,14 @@ def post_process(annotated_lines, final_sentences, blocks_by_sentence):
         # Process the sentence with the new method
         annotated_line = process_sentence(annotated_line, final_sentence)
 
-        updated_data = {
-            "annotated_lines": annotated_lines,
-            "final_sentences": final_sentences,
-            "blocks_by_sentence": blocks_by_sentence
-        }
+        annotated_lines[i] = annotated_line
 
-        with open("annotated_line_space_cleanup_output.pkl", "wb") as f:
-            pickle.dump(updated_data, f)
-
-        print("Updated data written to post_processed_output.pkl")
-
-        # Print the updated annotated line (colored)
-        print("Updated Annotated Line (Colored):")
         print(apply_colors(annotated_line))
 
         # Print the final sentence (colored)
-        
         print(apply_colors(final_sentence))
+
+    return annotated_lines, final_sentences, blocks_by_sentence
 
 if __name__ == "__main__":
     # Load data from renderer_output.pkl without changes
@@ -232,5 +224,32 @@ if __name__ == "__main__":
         for idx, token in enumerate(sentence):
             print(f"  {idx}: {token}")
 
-    # Now call post_process as before
-    post_process(annotated_lines, final_sentences, blocks_by_sentence)
+    updated_annotated_lines, updated_final_sentences, updated_blocks = post_process(
+    annotated_lines, final_sentences, blocks_by_sentence
+    )
+
+    updated_data = {
+       "annotated_lines": updated_annotated_lines,
+       "final_sentences": updated_final_sentences,
+       "blocks_by_sentence": updated_blocks
+    }
+
+
+    # Debug print: Show the final tokens before writing to pickle
+    print("\n[DEBUG] Tokens about to be saved to annotated_line_space_cleanup_output.pkl:")
+
+    for i, line in enumerate(updated_data["annotated_lines"]):
+        print(f"\n--- Annotated Line {i} ---")
+        for idx, token in enumerate(line):
+            print(f"  {idx}: char='{token['char']}', type='{token['type']}'")
+
+    for i, sentence in enumerate(updated_data["final_sentences"]):
+        print(f"\n--- Final Sentence {i} ---")
+        for idx, token in enumerate(sentence):
+            print(f"  {idx}: char='{token['char']}', type='{token['type']}'")
+
+    # Now actually write to disk
+    with open("annotated_line_space_cleanup_output.pkl", "wb") as f:
+        pickle.dump(updated_data, f)
+
+    print("Updated data written to annotated_line_space_cleanup_output.pkl")

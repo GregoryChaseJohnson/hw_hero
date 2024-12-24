@@ -1,10 +1,9 @@
-    # renderer.py
-    
-# renderer.py
+ # renderer.py
 
 import pickle
 import re
 from block_creation import ReplacementBlock, DeleteBlock
+from utils import apply_colors
 
 
 def calculate_ride_along(block, leading_edge):
@@ -12,28 +11,6 @@ def calculate_ride_along(block, leading_edge):
         return False
     required_threshold = block.ride_along_end
     return leading_edge >= required_threshold
-
-def apply_colors(tokens):
-    """
-    After all logic, we apply ANSI codes based on token['type'].
-    """
-    # Updated ANSI_COLORS mapping for the new types
-    ANSI_COLORS = {
-        'equal': '\033[0m',      # previously normal
-        'replace': '\033[91m',   # previously red
-        'corrected': '\033[92m', # previously replacement/green
-        'insert': '\033[94m',    # previously blue
-        'delete': '\033[95;1m',  # previously pink
-    }
-
-    colored_output = []
-    for token in tokens:
-        c = token['char']
-        typ = token.get('type', 'equal')
-        color_code = ANSI_COLORS.get(typ, ANSI_COLORS['equal'])
-        # Reset to normal after each character
-        colored_output.append(f"{color_code}{c}{ANSI_COLORS['equal']}")
-    return "".join(colored_output)
 
 
 def insert_ride_along(block, leading_edge, annotated_line, tokens, original_sentence_str):
@@ -129,13 +106,13 @@ def save_renderer_output(annotated_lines, final_sentences, blocks_by_sentence):
             "blocks_by_sentence": blocks_by_sentence
         }, f)
 
-def process_sentences(data_loader):
+def process_sentences(final_tokens_by_sentence, blocks_by_sentence):
     sentence_count = 1
     all_annotated_lines = []
     all_final_sentences = []
     all_blocks = []
 
-    for tokens, blocks in data_loader:
+    for tokens, blocks in zip(final_tokens_by_sentence, blocks_by_sentence):
         annotated_line, final_sentence = render_corrections(tokens, blocks)
         
 

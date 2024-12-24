@@ -54,15 +54,6 @@ def align_and_tokenize(original: List[str], corrected: List[str]) -> List[Dict[s
     """
     Align tokens between original and corrected sentences and assign types:
     - 'equal', 'replace', 'corrected', 'delete', 'insert'
-
-    Possible Improvements:
-    - Rename highlight_changes to something more explicit, like get_aligned_tokens_with_types(), 
-      if you feel it's unclear that this function returns typed tokens rather than already colored or highlighted text.
-    - Add more docstring details: For example, specify what tokenize() returns (list of strings) 
-      and how align_and_tokenize() uses them. tokenize() typically returns a list of tokens (words, punctuation, spaces).
-      align_and_tokenize() then compares these token lists to generate a typed sequence of tokens.
-    - Inline Comments: Adding brief comments explaining each branch in align_and_tokenize 
-      (e.g., # Original and corrected are identical in this range) can help beginners understand it at a glance.
     """
     sm = difflib.SequenceMatcher(None, original, corrected)
     word_level_tokens = []

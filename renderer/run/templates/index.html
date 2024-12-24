@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pixel-Perfect Annotated Sentences</title>
+  <style>
+    body {
+      background-color: #222;
+      color: #ddd;
+      font-family: monospace;
+      margin: 20px;
+    }
+
+    .sentence-container {
+      position: relative;
+      margin-bottom: 2rem; /* Space between sentences */
+    }
+
+    .final-line {
+      display: inline-block;
+      white-space: nowrap;
+      position: relative;
+      font-family: monospace; /* Force consistent monospace */
+    }
+
+    .annotated-line {
+      position: absolute;
+      top: -1rem; /* Align annotated line closer to final line */
+      left: 0;
+      white-space: nowrap;
+      font-family: monospace; /* Force consistent monospace */
+    }
+
+    .token {
+      white-space: pre;
+      margin-right: 0.1rem;
+      font-family: monospace; /* Force consistency */
+    }
+
+    .equal { color: #fff; }
+    .replace, .delete { color: #ff4c4c; }
+    .corrected, .insert { color: #4cff4c; }
+
+    .corrected-block {
+      position: absolute;
+      white-space: pre;     /* preserve internal spaces for corrected text */
+      color: #4cff4c;
+      font-family: monospace; /* Consistent font for corrected text */
+    }
+  </style>
+</head>
+<body>
+  <h1>Pixel-Perfect Annotated Sentences</h1>
+  <div id="app"></div>
+
+  <script>
+    // 1) Fetch data from /data.json
+    async function fetchData() {
+      const response = await fetch("/data.json");
+      if (!response.ok) {
+        console.error("Failed to fetch data.json");
+        return null;
+      }
+      return await response.json();
+    }
+
+    // 2) Render a single sentence
+    function renderSentence(sentence) {
+      const container = document.createElement("div");
+      container.className = "sentence-container";
+
+      // Final line container
+      const finalLine = document.createElement("div");
+      finalLine.className = "final-line";
+
+      // Annotated line container
+      const annotatedLine = document.createElement("div");
+      annotatedLine.className = "annotated-line";
+
+      container.appendChild(finalLine);
+      container.appendChild(annotatedLine);
+
+      // Render final sentence tokens
+      sentence.final_sentence_tokens.forEach((token) => {
+        const span = document.createElement("span");
+        span.className = `token ${token.type}`;
+        // Convert spaces to non-breaking spaces
+        span.textContent = (token.char === ' ') ? '\u00A0' : token.char;
+        span.dataset.index = token.index;
+        finalLine.appendChild(span);
+      });
+
+      // 3) Position corrected blocks after the DOM paints
+      requestAnimationFrame(() => {
+        const tokenElements = finalLine.querySelectorAll(".token");
+        const rects = Array.from(tokenElements).map(el => el.getBoundingClientRect());
+        const containerRect = container.getBoundingClientRect();
+
+        // For each block, create a single .corrected-block <div>
+        sentence.blocks.forEach((block) => {
+          const startBox = rects[block.final_start];
+          const endBox = rects[block.final_end];
+
+          const correctedElement = document.createElement("div");
+          correctedElement.className = "corrected-block corrected";
+          // Also convert any spaces in corrected_text
+          correctedElement.textContent = block.corrected_text.replace(/ /g, '\u00A0');
+
+          // Calculate corrected block's left and width dynamically
+          // 1) Minimum width is the replaced token's bounding width
+          // 2) Or an approximation based on corrected_text length
+          const startWidth = startBox.width || 8; // fallback
+          const approxCorrectedWidth = block.corrected_text.length * startWidth;
+
+          const replacedWidth = endBox.right - startBox.left;
+          const correctedWidth = Math.max(replacedWidth, approxCorrectedWidth);
+
+          // Positioning
+          correctedElement.style.left = `${startBox.left - containerRect.left}px`;
+          correctedElement.style.top  = `${startBox.top - containerRect.top - 10}px`;
+          correctedElement.style.width = `${correctedWidth}px`;
+
+          annotatedLine.appendChild(correctedElement);
+        });
+      });
+
+      return container;
+    }
+
+    // 4) Render all sentences from data
+    async function renderApp() {
+      const app = document.getElementById("app");
+      app.innerHTML = ""; // Clear previous content
+
+      const data = await fetchData();
+      if (!data) return;
+
+      data.sentences.forEach((sentence) => {
+        const sentenceContainer = renderSentence(sentence);
+        app.appendChild(sentenceContainer);
+      });
+    }
+
+    // 5) Initial render and re-render on window resize
+    renderApp();
+    window.addEventListener("resize", renderApp);
+  </script>
+</body>
+</html>

@@ -1,3 +1,5 @@
+# align_overhang.py
+
 import pickle
 from utils import apply_colors
 
@@ -68,7 +70,8 @@ def identify_red_blocks(final_sentence):
 
 def get_green_search_area(red_blocks, current_block_index, annotated_line_length):
     """
-    Determine the search area for a given red block.
+    Determine the search area for a given red
+     block.
     """
     search_start = red_blocks[current_block_index]['block_start']
     if current_block_index + 1 < len(red_blocks):
@@ -205,8 +208,6 @@ def place_replacement_text(blocks, final_sentence):
 
     return annotated_line
 
-
-
 def finalize_transformation(annotated_lines, final_sentences):
     """
     Perform the final transformation for each sentence.
@@ -221,12 +222,6 @@ def finalize_transformation(annotated_lines, final_sentences):
 
         # Define blocks and associate replacement text
         blocks = define_blocks(annotated_line, final_sentence)
-
-        # Print initial block information and overhang
-        print("Initial Blocks and Overhang:")
-        for block in blocks:
-            print(block)
-            print("Overhang:", block.compute_overhang())
 
         # Insert spaces based on overhang
         final_sentence = insert_spaces(final_sentence, blocks)
@@ -245,11 +240,9 @@ def finalize_transformation(annotated_lines, final_sentences):
         # Place replacement text after adjusting positions
         annotated_line = place_replacement_text(blocks, final_sentence)
 
-
         # Print results
         print("\nFinal Annotated Line (Colored):")
         print(apply_colors(annotated_line))
-        # Print final sentence tokens in colored form
         print(apply_colors(final_sentence))
 
         annotated_lines[i] = annotated_line
@@ -258,18 +251,31 @@ def finalize_transformation(annotated_lines, final_sentences):
     return annotated_lines, final_sentences
 
 if __name__ == "__main__":
+    # 1. Load data
     with open("annotated_line_space_cleanup_output.pkl", "rb") as f:
         data = pickle.load(f)
         annotated_lines = data["annotated_lines"]
         final_sentences = data["final_sentences"]
 
-    # Run the final transformation and get updated data
-    updated_annotated_lines, updated_final_sentences = finalize_transformation(annotated_lines, final_sentences)
+    # 2. Print s
+    for i, (annotated_line, final_sentence) in enumerate(zip(annotated_lines, final_sentences)):
+        print(f"\n=== RAW TOKENS BEFORE TRANSFORMATION - Sentence {i+1} ===")
+        print("Annotated Line (Raw Tokens):")
+        for idx, token in enumerate(annotated_line):
+            print(f"  {idx}: {token}")
+        print("\nFinal Sentence (Raw Tokens):")
+        for idx, token in enumerate(final_sentence):
+            print(f"  {idx}: {token}")
 
-    # Save the updated data to a new pickle file
+    # 3. Run the finalize transformation, which also prints colorized output
+    updated_annotated_lines, updated_final_sentences = finalize_transformation(
+        annotated_lines, final_sentences
+    )
+
+    # 4. (Optionally) save the updated data
     with open("final_output.pkl", "wb") as f:
         pickle.dump({
             "annotated_lines": updated_annotated_lines,
             "final_sentences": updated_final_sentences
         }, f)
-    print("Final processed data saved to final_output.pkl")
+    print("\nFinal processed data saved to final_output.pkl")
