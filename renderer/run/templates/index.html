@@ -2,12 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Pixel-Perfect Annotated Sentences</title>
   <style>
+    /* 1) Force a specific monospace font, consistent size, line-height */
     body {
-      background-color: #222;
-      color: #ddd;
-      font-family: monospace;
+      background-color: hsl(36, 14%, 10%);
+      color: #d9e4ee;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 16px;
+      line-height: 1.2;
       margin: 20px;
     }
 
@@ -20,37 +22,44 @@
       display: inline-block;
       white-space: nowrap;
       position: relative;
-      font-family: monospace; /* Force consistent monospace */
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
     }
 
     .annotated-line {
       position: absolute;
-      top: -1rem; /* Align annotated line closer to final line */
+      top: -1rem;  /* Position annotated text just above the final line */
       left: 0;
       white-space: nowrap;
-      font-family: monospace; /* Force consistent monospace */
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
     }
 
     .token {
       white-space: pre;
       margin-right: 0.1rem;
-      font-family: monospace; /* Force consistency */
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
     }
 
-    .equal { color: #fff; }
-    .replace, .delete { color: #ff4c4c; }
-    .corrected, .insert { color: #4cff4c; }
+    .equal { color: #fdf8f8f3; }
+    .replace, .delete { color: #f781fe; }
+    .corrected, .insert { color: #00cc7a; }
 
-    .corrected-block {
-      position: absolute;
-      white-space: pre;     /* preserve internal spaces for corrected text */
-      color: #4cff4c;
-      font-family: monospace; /* Consistent font for corrected text */
+    .corrected-char {
+      position: absolute; /* We'll position each char individually */
+      white-space: pre;
+      color: #28ffa5;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
     }
   </style>
 </head>
 <body>
-  <h1>Pixel-Perfect Annotated Sentences</h1>
   <div id="app"></div>
 
   <script>
@@ -58,90 +67,103 @@
     async function fetchData() {
       const response = await fetch("/data.json");
       if (!response.ok) {
-        console.error("Failed to fetch data.json");
+        console.error("Failed to fetch /data.json");
         return null;
       }
       return await response.json();
     }
 
-    // 2) Render a single sentence
+    /**
+     * Render a single sentence:
+     *   - "final_sentence_tokens" is an array of tokens for the bottom line.
+     *   - "blocks" is an array of objects each containing:
+     *        final_start, final_end, replaced_text,
+     *        annotated_start, annotated_end, corrected_text, etc.
+     */
     function renderSentence(sentence) {
       const container = document.createElement("div");
       container.className = "sentence-container";
 
-      // Final line container
       const finalLine = document.createElement("div");
       finalLine.className = "final-line";
 
-      // Annotated line container
       const annotatedLine = document.createElement("div");
       annotatedLine.className = "annotated-line";
 
       container.appendChild(finalLine);
       container.appendChild(annotatedLine);
 
-      // Render final sentence tokens
+      // 2) Render the bottom (final) line tokens
       sentence.final_sentence_tokens.forEach((token) => {
         const span = document.createElement("span");
         span.className = `token ${token.type}`;
-        // Convert spaces to non-breaking spaces
+        // Convert ASCII space to non-breaking space for visual alignment
         span.textContent = (token.char === ' ') ? '\u00A0' : token.char;
         span.dataset.index = token.index;
         finalLine.appendChild(span);
       });
 
-      // 3) Position corrected blocks after the DOM paints
+      // After finalLine is in the DOM, measure each token's bounding box
       requestAnimationFrame(() => {
-        const tokenElements = finalLine.querySelectorAll(".token");
-        const rects = Array.from(tokenElements).map(el => el.getBoundingClientRect());
+        // DOM nodes for final tokens
+        const tokenEls = finalLine.querySelectorAll(".token");
+        const rects = Array.from(tokenEls).map(el => el.getBoundingClientRect());
         const containerRect = container.getBoundingClientRect();
 
-        // For each block, create a single .corrected-block <div>
+        /*
+         * 3) Render each block's corrected text per character:
+         *    We assume the length of corrected_text is about the same
+         *    or less/more than the replaced region, so we match them
+         *    character-by-character as best we can.
+         */
         sentence.blocks.forEach((block) => {
-          const startBox = rects[block.final_start];
-          const endBox = rects[block.final_end];
+          const correctedString = block.corrected_text || "";
+          const correctedChars = correctedString.split("");
 
-          const correctedElement = document.createElement("div");
-          correctedElement.className = "corrected-block corrected";
-          // Also convert any spaces in corrected_text
-          correctedElement.textContent = block.corrected_text.replace(/ /g, '\u00A0');
+          // For each character in "corrected_text", we attempt to place it
+          // above the corresponding final token [final_start + i].
+          correctedChars.forEach((char, i) => {
+            // The final index we want to align with:
+            const finalIdx = block.final_start + i;
 
-          // Calculate corrected block's left and width dynamically
-          // 1) Minimum width is the replaced token's bounding width
-          // 2) Or an approximation based on corrected_text length
-          const startWidth = startBox.width || 8; // fallback
-          const approxCorrectedWidth = block.corrected_text.length * startWidth;
+            // If finalIdx is out of range, we might skip or do fallback logic
+            if (!rects[finalIdx]) {
+              return; // or handle leftover chars differently
+            }
 
-          const replacedWidth = endBox.right - startBox.left;
-          const correctedWidth = Math.max(replacedWidth, approxCorrectedWidth);
+            const finalTokenBox = rects[finalIdx];
 
-          // Positioning
-          correctedElement.style.left = `${startBox.left - containerRect.left}px`;
-          correctedElement.style.top  = `${startBox.top - containerRect.top - 10}px`;
-          correctedElement.style.width = `${correctedWidth}px`;
+            const correctedSpan = document.createElement("span");
+            correctedSpan.className = "corrected-char";
+            correctedSpan.textContent = (char === ' ') ? '\u00A0' : char;
 
-          annotatedLine.appendChild(correctedElement);
+            // Position precisely above the final token
+            correctedSpan.style.left = `${finalTokenBox.left - containerRect.left}px`;
+            correctedSpan.style.top  = `${finalTokenBox.top  - containerRect.top  - 8}px`;
+
+            annotatedLine.appendChild(correctedSpan);
+          });
         });
       });
 
       return container;
     }
 
-    // 4) Render all sentences from data
+    // 4) Render all sentences
     async function renderApp() {
       const app = document.getElementById("app");
-      app.innerHTML = ""; // Clear previous content
+      app.innerHTML = ""; // Clear
 
       const data = await fetchData();
       if (!data) return;
 
-      data.sentences.forEach((sentence) => {
-        const sentenceContainer = renderSentence(sentence);
-        app.appendChild(sentenceContainer);
+      // Suppose data has "sentences"
+      data.sentences.forEach(sentence => {
+        const sentenceEl = renderSentence(sentence);
+        app.appendChild(sentenceEl);
       });
     }
 
-    // 5) Initial render and re-render on window resize
     renderApp();
     window.addEventListener("resize", renderApp);
   </script>
