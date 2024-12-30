@@ -3,24 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <style>
-    /* 1) Force a specific monospace font, consistent size, line-height */
     body {
-      background-color: hsl(36, 14%, 10%);
-      color: #d9e4ee;
       font-family: "Courier New", Courier, monospace;
       font-size: 16px;
       line-height: 1.2;
       margin: 20px;
+      overflow: visible; /* Ensure the body doesn't clip content */
     }
 
     .sentence-container {
       position: relative;
-      margin-bottom: 2rem; /* Space between sentences */
+      margin-bottom: 2rem;
+      display: inline-block; /* We'll explicitly set width via container_length */
+      width: auto;
+      /* Optional for debugging: background-color: rgba(255,0,0,0.1); */
     }
 
     .final-line {
       display: inline-block;
-      white-space: nowrap;
+      white-space: nowrap; /* Keep final line on a single line */
       position: relative;
       font-family: inherit;
       font-size: inherit;
@@ -29,29 +30,26 @@
 
     .annotated-line {
       position: absolute;
-      top: -1rem;  /* Position annotated text just above the final line */
+      top: -0.6rem;
       left: 0;
-      white-space: nowrap;
+      white-space: nowrap; /* No wrapping for the annotated line */
       font-family: inherit;
       font-size: inherit;
       line-height: inherit;
+      z-index: 10;
     }
 
     .token {
-      white-space: pre;
+      white-space: normal;
       margin-right: 0.1rem;
       font-family: inherit;
       font-size: inherit;
       line-height: inherit;
     }
 
-    .equal { color: #fdf8f8f3; }
-    .replace, .delete { color: #f781fe; }
-    .corrected, .insert { color: #00cc7a; }
-
     .corrected-char {
-      position: absolute; /* We'll position each char individually */
-      white-space: pre;
+      position: absolute;
+      white-space: pre; /* Maintain exact spacing */
       color: #28ffa5;
       font-family: inherit;
       font-size: inherit;
@@ -63,8 +61,32 @@
   <div id="app"></div>
 
   <script>
-    // 1) Fetch data from /data.json
+    const themes = {
+      theme1: {
+        bgColor: "hsl(43, 6%, 10%)",
+        textColor: "#d9e4ee",
+        equalColor: "#f4f7ffe0",
+        replaceColor: "#f781fe",
+        deleteColor: "#f781fe",
+        corrected: "#28ffa5"
+      }
+    };
+
+    function applyTheme(themeName) {
+      const theme = themes[themeName];
+      if (!theme) return;
+      document.body.style.backgroundColor = theme.bgColor;
+      document.body.style.color = theme.textColor;
+
+      // Color-coded classes
+      document.querySelectorAll(".equal").forEach(el => el.style.color = theme.equalColor);
+      document.querySelectorAll(".replace, .delete").forEach(el => el.style.color = theme.replaceColor);
+      document.querySelectorAll(".corrected, .insert, .corrected-char")
+        .forEach(el => el.style.color = theme.corrected);
+    }
+
     async function fetchData() {
+      // Fetch JSON from your backend
       const response = await fetch("/data.json");
       if (!response.ok) {
         console.error("Failed to fetch /data.json");
@@ -73,17 +95,19 @@
       return await response.json();
     }
 
-    /**
-     * Render a single sentence:
-     *   - "final_sentence_tokens" is an array of tokens for the bottom line.
-     *   - "blocks" is an array of objects each containing:
-     *        final_start, final_end, replaced_text,
-     *        annotated_start, annotated_end, corrected_text, etc.
-     */
     function renderSentence(sentence) {
+      // Create the container
       const container = document.createElement("div");
       container.className = "sentence-container";
 
+      // 1) Enforce container_length from the backend
+      //    This ensures the container is wide enough for the annotated line,
+      //    even if it extends beyond the final line's last token.
+      if (typeof sentence.container_length === "number") {
+        container.style.width = sentence.container_length + "ch";
+      }
+
+      // Build final & annotated lines
       const finalLine = document.createElement("div");
       finalLine.className = "final-line";
 
@@ -93,54 +117,42 @@
       container.appendChild(finalLine);
       container.appendChild(annotatedLine);
 
-      // 2) Render the bottom (final) line tokens
-      sentence.final_sentence_tokens.forEach((token) => {
+      // 2) Render bottom line (final_line) tokens
+      sentence.final_sentence_tokens.forEach(token => {
         const span = document.createElement("span");
         span.className = `token ${token.type}`;
-        // Convert ASCII space to non-breaking space for visual alignment
-        span.textContent = (token.char === ' ') ? '\u00A0' : token.char;
+        // Use non-breaking space if char === ' '
+        span.textContent = token.char === " " ? "\u00A0" : token.char;
         span.dataset.index = token.index;
         finalLine.appendChild(span);
       });
 
-      // After finalLine is in the DOM, measure each token's bounding box
+      // 3) Position corrected text:
+      //    We still measure bounding boxes for each final token to absolutely
+      //    overlay the corrected characters in .annotated-line. However, we do
+      //    NOT use these measurements to resize container width.
       requestAnimationFrame(() => {
-        // DOM nodes for final tokens
         const tokenEls = finalLine.querySelectorAll(".token");
+        // Precompute each token's bounding box
         const rects = Array.from(tokenEls).map(el => el.getBoundingClientRect());
         const containerRect = container.getBoundingClientRect();
 
-        /*
-         * 3) Render each block's corrected text per character:
-         *    We assume the length of corrected_text is about the same
-         *    or less/more than the replaced region, so we match them
-         *    character-by-character as best we can.
-         */
-        sentence.blocks.forEach((block) => {
-          const correctedString = block.corrected_text || "";
-          const correctedChars = correctedString.split("");
+        // For each block, overlay corrected characters at the right place
+        (sentence.blocks || []).forEach(block => {
+          const correctedStr = block.corrected_text || "";
+          const chars = correctedStr.split("");
 
-          // For each character in "corrected_text", we attempt to place it
-          // above the corresponding final token [final_start + i].
-          correctedChars.forEach((char, i) => {
-            // The final index we want to align with:
+          chars.forEach((char, i) => {
             const finalIdx = block.final_start + i;
+            if (!rects[finalIdx]) return; // Skip if out of range
 
-            // If finalIdx is out of range, we might skip or do fallback logic
-            if (!rects[finalIdx]) {
-              return; // or handle leftover chars differently
-            }
-
-            const finalTokenBox = rects[finalIdx];
-
+            const finalBox = rects[finalIdx];
             const correctedSpan = document.createElement("span");
             correctedSpan.className = "corrected-char";
-            correctedSpan.textContent = (char === ' ') ? '\u00A0' : char;
+            correctedSpan.textContent = (char === " ") ? "\u00A0" : char;
 
-            // Position precisely above the final token
-            correctedSpan.style.left = `${finalTokenBox.left - containerRect.left}px`;
-            correctedSpan.style.top  = `${finalTokenBox.top  - containerRect.top  - 8}px`;
-
+            correctedSpan.style.left = `${finalBox.left - containerRect.left}px`;
+            correctedSpan.style.top  = `${finalBox.top  - containerRect.top - 8}px`;
             annotatedLine.appendChild(correctedSpan);
           });
         });
@@ -149,22 +161,26 @@
       return container;
     }
 
-    // 4) Render all sentences
     async function renderApp() {
       const app = document.getElementById("app");
-      app.innerHTML = ""; // Clear
+      app.innerHTML = "";
 
       const data = await fetchData();
       if (!data) return;
 
-      // Suppose data has "sentences"
+      // For each sentence, we rely on "container_length" from the backend
       data.sentences.forEach(sentence => {
         const sentenceEl = renderSentence(sentence);
         app.appendChild(sentenceEl);
       });
+
+      // Apply a theme if desired
+      applyTheme("theme1");
     }
 
     renderApp();
+    // If you want to re-measure token bounding boxes on resize,
+    // you can keep this. But note it won't recalc container width.
     window.addEventListener("resize", renderApp);
   </script>
 </body>

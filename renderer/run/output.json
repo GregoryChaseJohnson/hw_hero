@@ -84,41 +84,53 @@
                     "type": "replace"
                 },
                 {
-                    "index": 20,
+                    "index": 16,
                     "char": " ",
                     "type": "equal"
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 18
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 18
                 },
                 {
-                    "index": 21,
+                    "index": 19,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 22,
+                    "index": 20,
                     "char": "h",
                     "type": "equal"
                 },
                 {
-                    "index": 23,
+                    "index": 21,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 24,
+                    "index": 22,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 25,
+                    "index": 23,
                     "char": "s",
+                    "type": "equal"
+                },
+                {
+                    "index": 24,
+                    "char": "t",
+                    "type": "equal"
+                },
+                {
+                    "index": 25,
+                    "char": "a",
                     "type": "equal"
                 },
                 {
@@ -128,12 +140,12 @@
                 },
                 {
                     "index": 27,
-                    "char": "a",
+                    "char": "e",
                     "type": "equal"
                 },
                 {
                     "index": 28,
-                    "char": "t",
+                    "char": "m",
                     "type": "equal"
                 },
                 {
@@ -143,67 +155,67 @@
                 },
                 {
                     "index": 30,
-                    "char": "m",
+                    "char": "n",
                     "type": "equal"
                 },
                 {
                     "index": 31,
-                    "char": "e",
-                    "type": "equal"
-                },
-                {
-                    "index": 32,
-                    "char": "n",
-                    "type": "equal"
-                },
-                {
-                    "index": 33,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 34,
+                    "index": 32,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 35,
+                    "index": 33,
                     "char": "\"",
                     "type": "equal"
                 },
                 {
-                    "index": 36,
+                    "index": 34,
                     "char": "P",
                     "type": "equal"
                 },
                 {
-                    "index": 37,
+                    "index": 35,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 38,
+                    "index": 36,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 39,
+                    "index": 37,
                     "char": "y",
                     "type": "equal"
                 },
                 {
-                    "index": 40,
+                    "index": 38,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 41,
+                    "index": 39,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 42,
+                    "index": 40,
                     "char": "g",
+                    "type": "equal"
+                },
+                {
+                    "index": 41,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 42,
+                    "char": "a",
                     "type": "equal"
                 },
                 {
@@ -213,161 +225,151 @@
                 },
                 {
                     "index": 44,
-                    "char": "a",
-                    "type": "equal"
-                },
-                {
-                    "index": 45,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 46,
                     "char": "g",
                     "type": "equal"
                 },
                 {
-                    "index": 47,
+                    "index": 45,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 48,
+                    "index": 46,
                     "char": "m",
                     "type": "equal"
                 },
                 {
-                    "index": 49,
+                    "index": 47,
                     "char": "e",
+                    "type": "equal"
+                },
+                {
+                    "index": 48,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 49,
+                    "char": "i",
                     "type": "equal"
                 },
                 {
                     "index": 50,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 51,
-                    "char": "i",
-                    "type": "equal"
-                },
-                {
-                    "index": 52,
                     "char": "s",
                     "type": "equal"
                 },
                 {
-                    "index": 53,
+                    "index": 51,
                     "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 52,
+                    "char": "o",
+                    "type": "equal"
+                },
+                {
+                    "index": 53,
+                    "char": "n",
                     "type": "equal"
                 },
                 {
                     "index": 54,
-                    "char": "o",
-                    "type": "equal"
-                },
-                {
-                    "index": 55,
-                    "char": "n",
-                    "type": "equal"
-                },
-                {
-                    "index": 56,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 57,
+                    "index": 55,
                     "char": "y",
                     "type": "equal"
                 },
                 {
-                    "index": 58,
+                    "index": 56,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 59,
+                    "index": 57,
                     "char": "f",
                     "type": "equal"
                 },
                 {
-                    "index": 60,
+                    "index": 58,
                     "char": "u",
+                    "type": "equal"
+                },
+                {
+                    "index": 59,
+                    "char": "n",
+                    "type": "equal"
+                },
+                {
+                    "index": 60,
+                    "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 61,
-                    "char": "n",
+                    "char": "w",
                     "type": "equal"
                 },
                 {
                     "index": 62,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 63,
-                    "char": "w",
-                    "type": "equal"
-                },
-                {
-                    "index": 64,
                     "char": "h",
                     "type": "equal"
                 },
                 {
-                    "index": 65,
+                    "index": 63,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 66,
+                    "index": 64,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 67,
+                    "index": 65,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 68,
+                    "index": 66,
                     "char": "y",
                     "type": "equal"
                 },
                 {
-                    "index": 69,
+                    "index": 67,
                     "char": "o",
                     "type": "equal"
                 },
                 {
-                    "index": 70,
+                    "index": 68,
                     "char": "u",
                     "type": "equal"
                 },
                 {
-                    "index": 71,
+                    "index": 69,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 72,
+                    "index": 70,
                     "char": "w",
                     "type": "equal"
                 },
                 {
-                    "index": 73,
+                    "index": 71,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 74,
+                    "index": 72,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 75,
+                    "index": 73,
                     "char": ".",
                     "type": "equal"
                 }
@@ -382,7 +384,8 @@
                     "annotated_end": 17,
                     "corrected_text": "with"
                 }
-            ]
+            ],
+            "container_length": 74
         },
         {
             "sentence_index": 1,
@@ -488,164 +491,274 @@
                     "type": "replace"
                 },
                 {
-                    "index": 24,
+                    "index": 20,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 25,
+                    "index": 21,
                     "char": "v",
                     "type": "replace"
                 },
                 {
-                    "index": 26,
+                    "index": 22,
                     "char": "a",
                     "type": "replace"
                 },
                 {
-                    "index": 27,
+                    "index": 23,
                     "char": "r",
                     "type": "replace"
                 },
                 {
-                    "index": 28,
+                    "index": 24,
                     "char": "i",
                     "type": "replace"
                 },
                 {
-                    "index": 29,
+                    "index": 25,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 30,
+                    "index": 26,
                     "char": "u",
                     "type": "replace"
                 },
                 {
-                    "index": 31,
+                    "index": 27,
                     "char": "s",
                     "type": "replace"
                 },
                 {
-                    "index": 35,
+                    "index": 28,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 36,
+                    "index": 29,
                     "char": "k",
                     "type": "equal"
                 },
                 {
-                    "index": 37,
+                    "index": 30,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 38,
+                    "index": 31,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 39,
+                    "index": 32,
                     "char": "d",
                     "type": "equal"
                 },
                 {
-                    "index": 40,
+                    "index": 33,
                     "char": "s",
                     "type": "equal"
                 },
                 {
-                    "index": 41,
+                    "index": 34,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 42,
+                    "index": 35,
                     "char": "o",
                     "type": "equal"
                 },
                 {
-                    "index": 43,
+                    "index": 36,
                     "char": "f",
                     "type": "equal"
                 },
                 {
-                    "index": 44,
+                    "index": 37,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 45,
+                    "index": 38,
                     "char": "s",
                     "type": "replace"
                 },
                 {
-                    "index": 46,
+                    "index": 39,
                     "char": "i",
                     "type": "replace"
                 },
                 {
-                    "index": 47,
+                    "index": 40,
                     "char": "t",
                     "type": "replace"
                 },
                 {
-                    "index": 48,
+                    "index": 41,
                     "char": "u",
                     "type": "replace"
                 },
                 {
-                    "index": 49,
+                    "index": 42,
                     "char": "a",
                     "type": "replace"
                 },
                 {
-                    "index": 50,
+                    "index": 43,
                     "char": "t",
                     "type": "replace"
                 },
                 {
-                    "index": 51,
+                    "index": 44,
                     "char": "i",
                     "type": "replace"
                 },
                 {
-                    "index": 52,
+                    "index": 45,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 53,
+                    "index": 46,
                     "char": "n",
                     "type": "replace"
                 },
                 {
-                    "index": 64,
+                    "index": 47,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 65,
+                    "index": 48,
                     "char": "t",
                     "type": "replace"
                 },
                 {
-                    "index": 66,
+                    "index": 49,
                     "char": "h",
                     "type": "replace"
                 },
                 {
-                    "index": 67,
+                    "index": 50,
                     "char": "a",
                     "type": "replace"
                 },
                 {
-                    "index": 68,
+                    "index": 51,
                     "char": "t",
                     "type": "replace"
+                },
+                {
+                    "index": 52,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "char": " ",
+                    "type": "equal",
+                    "index": 54
+                },
+                {
+                    "char": " ",
+                    "type": "equal",
+                    "index": 54
+                },
+                {
+                    "index": 55,
+                    "char": "w",
+                    "type": "equal"
+                },
+                {
+                    "index": 56,
+                    "char": "e",
+                    "type": "equal"
+                },
+                {
+                    "index": 57,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 58,
+                    "char": "l",
+                    "type": "replace"
+                },
+                {
+                    "index": 59,
+                    "char": "o",
+                    "type": "replace"
+                },
+                {
+                    "index": 60,
+                    "char": "s",
+                    "type": "replace"
+                },
+                {
+                    "index": 61,
+                    "char": "e",
+                    "type": "replace"
+                },
+                {
+                    "index": 62,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 63,
+                    "char": "o",
+                    "type": "replace"
+                },
+                {
+                    "index": 64,
+                    "char": "r",
+                    "type": "replace"
+                },
+                {
+                    "index": 65,
+                    "char": " ",
+                    "type": "replace"
+                },
+                {
+                    "index": 66,
+                    "char": "w",
+                    "type": "replace"
+                },
+                {
+                    "index": 67,
+                    "char": "i",
+                    "type": "replace"
+                },
+                {
+                    "index": 68,
+                    "char": "n",
+                    "type": "replace"
+                },
+                {
+                    "index": 69,
+                    "char": ".",
+                    "type": "equal"
+                },
+                {
+                    "index": 70,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 71,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 72,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 73,
+                    "char": " ",
+                    "type": "equal"
                 },
                 {
                     "index": 74,
@@ -653,86 +766,13 @@
                     "type": "equal"
                 },
                 {
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
                     "index": 75,
-                    "char": "w",
+                    "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 76,
-                    "char": "e",
-                    "type": "equal"
-                },
-                {
-                    "index": 77,
                     "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 78,
-                    "char": "l",
-                    "type": "replace"
-                },
-                {
-                    "index": 79,
-                    "char": "o",
-                    "type": "replace"
-                },
-                {
-                    "index": 80,
-                    "char": "s",
-                    "type": "replace"
-                },
-                {
-                    "index": 81,
-                    "char": "e",
-                    "type": "replace"
-                },
-                {
-                    "index": 92,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 93,
-                    "char": "o",
-                    "type": "replace"
-                },
-                {
-                    "index": 94,
-                    "char": "r",
-                    "type": "replace"
-                },
-                {
-                    "index": 95,
-                    "char": " ",
-                    "type": "replace"
-                },
-                {
-                    "index": 96,
-                    "char": "w",
-                    "type": "replace"
-                },
-                {
-                    "index": 97,
-                    "char": "i",
-                    "type": "replace"
-                },
-                {
-                    "index": 98,
-                    "char": "n",
-                    "type": "replace"
-                },
-                {
-                    "index": 103,
-                    "char": ".",
                     "type": "equal"
                 }
             ],
@@ -764,7 +804,8 @@
                     "annotated_end": 76,
                     "corrected_text": "either win or lose."
                 }
-            ]
+            ],
+            "container_length": 77
         },
         {
             "sentence_index": 2,
@@ -815,94 +856,114 @@
                     "type": "replace"
                 },
                 {
+                    "index": 9,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 10,
+                    "char": "t",
+                    "type": "equal"
+                },
+                {
+                    "index": 11,
+                    "char": "w",
+                    "type": "equal"
+                },
+                {
+                    "index": 12,
+                    "char": "o",
+                    "type": "equal"
+                },
+                {
                     "index": 13,
                     "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 14,
-                    "char": "t",
-                    "type": "equal"
-                },
-                {
-                    "index": 15,
-                    "char": "w",
-                    "type": "equal"
-                },
-                {
-                    "index": 16,
-                    "char": "o",
-                    "type": "equal"
-                },
-                {
-                    "index": 17,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 18,
                     "char": "r",
                     "type": "equal"
                 },
                 {
-                    "index": 19,
+                    "index": 15,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 20,
+                    "index": 16,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 21,
+                    "index": 17,
                     "char": "s",
                     "type": "equal"
                 },
                 {
-                    "index": 22,
+                    "index": 18,
                     "char": "o",
                     "type": "equal"
                 },
                 {
-                    "index": 23,
+                    "index": 19,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 24,
+                    "index": 20,
                     "char": "s",
                     "type": "equal"
                 },
                 {
-                    "index": 25,
+                    "index": 21,
                     "char": " ",
                     "type": "delete"
                 },
                 {
-                    "index": 26,
+                    "index": 22,
                     "char": "a",
                     "type": "delete"
                 },
                 {
-                    "index": 27,
+                    "index": 23,
                     "char": "b",
                     "type": "delete"
                 },
                 {
-                    "index": 28,
+                    "index": 24,
                     "char": "o",
                     "type": "delete"
                 },
                 {
-                    "index": 29,
+                    "index": 25,
                     "char": "u",
                     "type": "delete"
                 },
                 {
-                    "index": 30,
+                    "index": 26,
                     "char": "t",
                     "type": "delete"
+                },
+                {
+                    "index": 27,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 28,
+                    "char": "w",
+                    "type": "equal"
+                },
+                {
+                    "index": 29,
+                    "char": "h",
+                    "type": "equal"
+                },
+                {
+                    "index": 30,
+                    "char": "y",
+                    "type": "equal"
                 },
                 {
                     "index": 31,
@@ -911,37 +972,37 @@
                 },
                 {
                     "index": 32,
-                    "char": "w",
-                    "type": "equal"
-                },
-                {
-                    "index": 33,
-                    "char": "h",
-                    "type": "equal"
-                },
-                {
-                    "index": 34,
-                    "char": "y",
-                    "type": "equal"
-                },
-                {
-                    "index": 35,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 36,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 37,
+                    "index": 33,
                     "char": "o",
                     "type": "equal"
                 },
                 {
-                    "index": 38,
+                    "index": 34,
                     "char": "s",
+                    "type": "equal"
+                },
+                {
+                    "index": 35,
+                    "char": "i",
+                    "type": "equal"
+                },
+                {
+                    "index": 36,
+                    "char": "n",
+                    "type": "equal"
+                },
+                {
+                    "index": 37,
+                    "char": "g",
+                    "type": "equal"
+                },
+                {
+                    "index": 38,
+                    "char": " ",
                     "type": "equal"
                 },
                 {
@@ -956,140 +1017,121 @@
                 },
                 {
                     "index": 41,
-                    "char": "g",
+                    "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 42,
-                    "char": " ",
+                    "char": "a",
                     "type": "equal"
                 },
                 {
                     "index": 43,
-                    "char": "i",
+                    "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 44,
-                    "char": "n",
-                    "type": "equal"
-                },
-                {
-                    "index": 45,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 46,
-                    "char": "a",
-                    "type": "equal"
-                },
-                {
-                    "index": 47,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 48,
                     "char": "g",
                     "type": "equal"
                 },
                 {
-                    "index": 49,
+                    "index": 45,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 50,
+                    "index": 46,
                     "char": "m",
                     "type": "equal"
                 },
                 {
-                    "index": 51,
+                    "index": 47,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 52,
+                    "index": 48,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 53,
+                    "index": 49,
                     "char": "i",
                     "type": "replace"
                 },
                 {
-                    "index": 54,
+                    "index": 50,
                     "char": "s",
                     "type": "replace"
                 },
                 {
-                    "index": 58,
+                    "index": 51,
                     "char": " ",
                     "type": "equal"
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 52
                 },
                 {
-                    "index": 59,
+                    "index": 53,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 60,
+                    "index": 54,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 61,
+                    "index": 55,
                     "char": "s",
                     "type": "equal"
                 },
                 {
-                    "index": 62,
+                    "index": 56,
                     "char": "o",
                     "type": "equal"
                 },
                 {
-                    "index": 63,
+                    "index": 57,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 64,
+                    "index": 58,
                     "char": "b",
                     "type": "insert"
                 },
                 {
-                    "index": 65,
+                    "index": 59,
                     "char": "e",
                     "type": "insert"
                 },
                 {
-                    "index": 66,
+                    "index": 60,
                     "char": " ",
                     "type": "insert"
                 },
                 {
-                    "index": 67,
+                    "index": 61,
                     "char": "f",
                     "type": "equal"
                 },
                 {
-                    "index": 68,
+                    "index": 62,
                     "char": "u",
                     "type": "equal"
                 },
                 {
-                    "index": 69,
+                    "index": 63,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 70,
+                    "index": 64,
                     "char": ".",
                     "type": "equal"
                 }
@@ -1113,7 +1155,8 @@
                     "annotated_end": 51,
                     "corrected_text": "can"
                 }
-            ]
+            ],
+            "container_length": 65
         },
         {
             "sentence_index": 3,
@@ -1289,7 +1332,8 @@
                     "type": "equal"
                 }
             ],
-            "blocks": []
+            "blocks": [],
+            "container_length": 34
         },
         {
             "sentence_index": 4,
@@ -1335,221 +1379,222 @@
                     "type": "replace"
                 },
                 {
-                    "index": 11,
+                    "index": 8,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 12,
+                    "index": 9,
                     "char": "c",
+                    "type": "replace"
+                },
+                {
+                    "index": 10,
+                    "char": "a",
+                    "type": "replace"
+                },
+                {
+                    "index": 11,
+                    "char": "n",
+                    "type": "replace"
+                },
+                {
+                    "index": 12,
+                    "char": "n",
                     "type": "replace"
                 },
                 {
                     "index": 13,
-                    "char": "a",
-                    "type": "replace"
-                },
-                {
-                    "index": 14,
-                    "char": "n",
-                    "type": "replace"
-                },
-                {
-                    "index": 15,
-                    "char": "n",
-                    "type": "replace"
-                },
-                {
-                    "index": 16,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 17,
+                    "index": 14,
                     "char": "t",
                     "type": "replace"
                 },
                 {
-                    "index": 30,
+                    "index": 15,
                     "char": " ",
                     "type": "equal"
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 16
                 },
                 {
-                    "index": 31,
+                    "index": 17,
                     "char": "w",
                     "type": "equal"
                 },
                 {
-                    "index": 32,
+                    "index": 18,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 33,
+                    "index": 19,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 34,
+                    "index": 20,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 35,
+                    "index": 21,
                     "char": "i",
                     "type": "delete"
                 },
                 {
-                    "index": 36,
+                    "index": 22,
                     "char": "n",
                     "type": "delete"
                 },
                 {
-                    "index": 37,
+                    "index": 23,
                     "char": " ",
                     "type": "delete"
                 },
                 {
-                    "index": 38,
+                    "index": 24,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 39,
+                    "index": 25,
                     "char": "v",
                     "type": "equal"
                 },
                 {
-                    "index": 40,
+                    "index": 26,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 41,
+                    "index": 27,
                     "char": "r",
                     "type": "equal"
                 },
                 {
-                    "index": 42,
+                    "index": 28,
                     "char": "y",
                     "type": "equal"
                 },
                 {
-                    "index": 43,
+                    "index": 29,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 44,
+                    "index": 30,
                     "char": "c",
                     "type": "replace"
                 },
                 {
-                    "index": 45,
+                    "index": 31,
                     "char": "h",
                     "type": "replace"
                 },
                 {
-                    "index": 46,
+                    "index": 32,
                     "char": "a",
                     "type": "replace"
                 },
                 {
-                    "index": 47,
+                    "index": 33,
                     "char": "n",
                     "type": "replace"
                 },
                 {
-                    "index": 48,
+                    "index": 34,
                     "char": "c",
                     "type": "replace"
                 },
                 {
-                    "index": 49,
+                    "index": 35,
                     "char": "e",
                     "type": "replace"
                 },
                 {
-                    "index": 50,
+                    "index": 36,
                     "char": "s",
                     "type": "replace"
                 },
                 {
-                    "index": 55,
+                    "index": 37,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 56,
+                    "index": 38,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 57,
+                    "index": 39,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 58,
+                    "index": 40,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 59,
+                    "index": 41,
                     "char": "t",
                     "type": "delete"
                 },
                 {
-                    "index": 60,
+                    "index": 42,
                     "char": "h",
                     "type": "delete"
                 },
                 {
-                    "index": 61,
+                    "index": 43,
                     "char": "e",
                     "type": "delete"
                 },
                 {
-                    "index": 62,
+                    "index": 44,
                     "char": "i",
                     "type": "delete"
                 },
                 {
-                    "index": 63,
+                    "index": 45,
                     "char": "r",
                     "type": "delete"
                 },
                 {
-                    "index": 64,
+                    "index": 46,
                     "char": " ",
                     "type": "delete"
                 },
                 {
-                    "index": 65,
+                    "index": 47,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 66,
+                    "index": 48,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 67,
+                    "index": 49,
                     "char": "f",
                     "type": "equal"
                 },
                 {
-                    "index": 68,
+                    "index": 50,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 69,
+                    "index": 51,
                     "char": ".",
                     "type": "equal"
                 }
@@ -1573,7 +1618,8 @@
                     "annotated_end": 33,
                     "corrected_text": "time"
                 }
-            ]
+            ],
+            "container_length": 52
         },
         {
             "sentence_index": 5,
@@ -1659,53 +1705,83 @@
                     "type": "replace"
                 },
                 {
-                    "index": 26,
+                    "index": 16,
                     "char": " ",
                     "type": "equal"
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 21
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 21
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 21
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 21
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 21
                 },
                 {
-                    "index": 27,
+                    "index": 22,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 28,
+                    "index": 23,
                     "char": "o",
                     "type": "equal"
                 },
                 {
-                    "index": 29,
+                    "index": 24,
                     "char": "s",
                     "type": "equal"
                 },
                 {
-                    "index": 30,
+                    "index": 25,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 31,
+                    "index": 26,
                     "char": "n",
+                    "type": "equal"
+                },
+                {
+                    "index": 27,
+                    "char": "g",
+                    "type": "equal"
+                },
+                {
+                    "index": 28,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 29,
+                    "char": "t",
+                    "type": "equal"
+                },
+                {
+                    "index": 30,
+                    "char": "o",
+                    "type": "equal"
+                },
+                {
+                    "index": 31,
+                    "char": " ",
                     "type": "equal"
                 },
                 {
@@ -1715,17 +1791,17 @@
                 },
                 {
                     "index": 33,
-                    "char": " ",
+                    "char": "r",
                     "type": "equal"
                 },
                 {
                     "index": 34,
-                    "char": "t",
+                    "char": "o",
                     "type": "equal"
                 },
                 {
                     "index": 35,
-                    "char": "o",
+                    "char": "w",
                     "type": "equal"
                 },
                 {
@@ -1735,42 +1811,42 @@
                 },
                 {
                     "index": 37,
-                    "char": "g",
-                    "type": "equal"
-                },
-                {
-                    "index": 38,
-                    "char": "r",
-                    "type": "equal"
-                },
-                {
-                    "index": 39,
-                    "char": "o",
-                    "type": "equal"
-                },
-                {
-                    "index": 40,
-                    "char": "w",
-                    "type": "equal"
-                },
-                {
-                    "index": 41,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 42,
                     "char": "o",
                     "type": "delete"
                 },
                 {
-                    "index": 43,
+                    "index": 38,
                     "char": "u",
                     "type": "delete"
                 },
                 {
-                    "index": 44,
+                    "index": 39,
                     "char": "r",
+                    "type": "delete"
+                },
+                {
+                    "index": 40,
+                    "char": "s",
+                    "type": "delete"
+                },
+                {
+                    "index": 41,
+                    "char": "e",
+                    "type": "delete"
+                },
+                {
+                    "index": 42,
+                    "char": "l",
+                    "type": "delete"
+                },
+                {
+                    "index": 43,
+                    "char": "v",
+                    "type": "delete"
+                },
+                {
+                    "index": 44,
+                    "char": "e",
                     "type": "delete"
                 },
                 {
@@ -1780,28 +1856,28 @@
                 },
                 {
                     "index": 46,
-                    "char": "e",
+                    "char": " ",
                     "type": "delete"
                 },
                 {
                     "index": 47,
-                    "char": "l",
-                    "type": "delete"
+                    "char": "i",
+                    "type": "equal"
                 },
                 {
                     "index": 48,
-                    "char": "v",
-                    "type": "delete"
+                    "char": "n",
+                    "type": "equal"
                 },
                 {
                     "index": 49,
-                    "char": "e",
-                    "type": "delete"
+                    "char": "t",
+                    "type": "equal"
                 },
                 {
                     "index": 50,
-                    "char": "s",
-                    "type": "delete"
+                    "char": "o",
+                    "type": "equal"
                 },
                 {
                     "index": 51,
@@ -1810,106 +1886,81 @@
                 },
                 {
                     "index": 52,
-                    "char": "i",
-                    "type": "equal"
-                },
-                {
-                    "index": 53,
-                    "char": "n",
-                    "type": "equal"
-                },
-                {
-                    "index": 54,
-                    "char": "t",
-                    "type": "equal"
-                },
-                {
-                    "index": 55,
-                    "char": "o",
-                    "type": "equal"
-                },
-                {
-                    "index": 56,
-                    "char": " ",
-                    "type": "delete"
-                },
-                {
-                    "index": 57,
                     "char": "a",
                     "type": "delete"
                 },
                 {
-                    "index": 58,
+                    "index": 53,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 59,
+                    "index": 54,
                     "char": "b",
                     "type": "equal"
                 },
                 {
-                    "index": 60,
+                    "index": 55,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 61,
+                    "index": 56,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 62,
+                    "index": 57,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 63,
+                    "index": 58,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 64,
+                    "index": 59,
                     "char": "r",
                     "type": "equal"
                 },
                 {
-                    "index": 65,
+                    "index": 60,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 66,
+                    "index": 61,
                     "char": "p",
                     "type": "replace"
                 },
                 {
-                    "index": 67,
+                    "index": 62,
                     "char": "e",
                     "type": "replace"
                 },
                 {
-                    "index": 68,
+                    "index": 63,
                     "char": "r",
                     "type": "replace"
                 },
                 {
-                    "index": 69,
+                    "index": 64,
                     "char": "s",
                     "type": "replace"
                 },
                 {
-                    "index": 70,
+                    "index": 65,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 71,
+                    "index": 66,
                     "char": "n",
                     "type": "replace"
                 },
                 {
-                    "index": 78,
+                    "index": 67,
                     "char": ".",
                     "type": "equal"
                 }
@@ -1933,7 +1984,8 @@
                     "annotated_end": 66,
                     "corrected_text": "people"
                 }
-            ]
+            ],
+            "container_length": 68
         },
         {
             "sentence_index": 6,
@@ -2044,102 +2096,158 @@
                     "type": "replace"
                 },
                 {
-                    "index": 27,
+                    "index": 21,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 28,
+                    "index": 22,
                     "char": "\"",
                     "type": "equal"
                 },
                 {
-                    "index": 29,
+                    "index": 23,
                     "char": "r",
                     "type": "equal"
                 },
                 {
-                    "index": 30,
+                    "index": 24,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 31,
+                    "index": 25,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 32,
+                    "index": 26,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 33,
+                    "index": 27,
                     "char": "\"",
                     "type": "equal"
                 },
                 {
-                    "index": 34,
+                    "index": 28,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 35,
+                    "index": 29,
                     "char": "a",
                     "type": "replace"
                 },
                 {
-                    "index": 36,
+                    "index": 30,
                     "char": "d",
                     "type": "replace"
                 },
                 {
-                    "index": 37,
+                    "index": 31,
                     "char": "u",
                     "type": "replace"
                 },
                 {
-                    "index": 38,
+                    "index": 32,
                     "char": "l",
                     "type": "replace"
                 },
                 {
-                    "index": 39,
+                    "index": 33,
                     "char": "t",
                     "type": "replace"
                 },
                 {
-                    "index": 46,
+                    "index": 34,
                     "char": ",",
                     "type": "equal"
                 },
                 {
-                    "index": 47,
+                    "index": 35,
                     "char": " ",
                     "type": "equal"
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 36
                 },
                 {
-                    "index": 48,
+                    "index": 37,
                     "char": "I",
                     "type": "equal"
                 },
                 {
-                    "index": 49,
+                    "index": 38,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 50,
+                    "index": 39,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 51,
+                    "index": 40,
                     "char": "h",
+                    "type": "equal"
+                },
+                {
+                    "index": 41,
+                    "char": "i",
+                    "type": "equal"
+                },
+                {
+                    "index": 42,
+                    "char": "n",
+                    "type": "equal"
+                },
+                {
+                    "index": 43,
+                    "char": "k",
+                    "type": "equal"
+                },
+                {
+                    "index": 44,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 45,
+                    "char": "l",
+                    "type": "equal"
+                },
+                {
+                    "index": 46,
+                    "char": "o",
+                    "type": "equal"
+                },
+                {
+                    "index": 47,
+                    "char": "s",
+                    "type": "equal"
+                },
+                {
+                    "index": 48,
+                    "char": "i",
+                    "type": "equal"
+                },
+                {
+                    "index": 49,
+                    "char": "n",
+                    "type": "equal"
+                },
+                {
+                    "index": 50,
+                    "char": "g",
+                    "type": "equal"
+                },
+                {
+                    "index": 51,
+                    "char": " ",
                     "type": "equal"
                 },
                 {
@@ -2149,172 +2257,121 @@
                 },
                 {
                     "index": 53,
-                    "char": "n",
+                    "char": "s",
                     "type": "equal"
                 },
                 {
                     "index": 54,
-                    "char": "k",
+                    "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 55,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 56,
-                    "char": "l",
-                    "type": "equal"
-                },
-                {
-                    "index": 57,
-                    "char": "o",
-                    "type": "equal"
-                },
-                {
-                    "index": 58,
-                    "char": "s",
-                    "type": "equal"
-                },
-                {
-                    "index": 59,
-                    "char": "i",
-                    "type": "equal"
-                },
-                {
-                    "index": 60,
-                    "char": "n",
-                    "type": "equal"
-                },
-                {
-                    "index": 61,
-                    "char": "g",
-                    "type": "equal"
-                },
-                {
-                    "index": 62,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 63,
-                    "char": "i",
-                    "type": "equal"
-                },
-                {
-                    "index": 64,
-                    "char": "s",
-                    "type": "equal"
-                },
-                {
-                    "index": 65,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 66,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 67,
+                    "index": 56,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 68,
+                    "index": 57,
                     "char": "g",
                     "type": "replace"
                 },
                 {
-                    "index": 69,
+                    "index": 58,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 70,
+                    "index": 59,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 71,
+                    "index": 60,
                     "char": "d",
                     "type": "replace"
                 },
                 {
-                    "index": 80,
+                    "index": 61,
                     "char": " ",
                     "type": "equal"
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 65
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 65
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 65
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 65
                 },
                 {
-                    "index": 81,
+                    "index": 66,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 82,
+                    "index": 67,
                     "char": "x",
                     "type": "equal"
                 },
                 {
-                    "index": 83,
+                    "index": 68,
                     "char": "p",
                     "type": "equal"
                 },
                 {
-                    "index": 84,
+                    "index": 69,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 85,
+                    "index": 70,
                     "char": "r",
                     "type": "equal"
                 },
                 {
-                    "index": 86,
+                    "index": 71,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 87,
+                    "index": 72,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 88,
+                    "index": 73,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 89,
+                    "index": 74,
                     "char": "c",
                     "type": "equal"
                 },
                 {
-                    "index": 90,
+                    "index": 75,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 91,
+                    "index": 76,
                     "char": ".",
                     "type": "equal"
                 }
@@ -2347,7 +2404,8 @@
                     "annotated_end": 64,
                     "corrected_text": "valuable"
                 }
-            ]
+            ],
+            "container_length": 77
         },
         {
             "sentence_index": 7,
@@ -2458,32 +2516,53 @@
                     "type": "replace"
                 },
                 {
-                    "index": 26,
+                    "index": 21,
                     "char": " ",
                     "type": "equal"
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 22
                 },
                 {
-                    "index": 27,
+                    "index": 23,
                     "char": "b",
                     "type": "equal"
                 },
                 {
-                    "index": 28,
+                    "index": 24,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 29,
+                    "index": 25,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 30,
+                    "index": 26,
                     "char": "t",
+                    "type": "equal"
+                },
+                {
+                    "index": 27,
+                    "char": "e",
+                    "type": "equal"
+                },
+                {
+                    "index": 28,
+                    "char": "r",
+                    "type": "equal"
+                },
+                {
+                    "index": 29,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 30,
+                    "char": "r",
                     "type": "equal"
                 },
                 {
@@ -2493,52 +2572,52 @@
                 },
                 {
                     "index": 32,
-                    "char": "r",
-                    "type": "equal"
-                },
-                {
-                    "index": 33,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 34,
-                    "char": "r",
-                    "type": "equal"
-                },
-                {
-                    "index": 35,
-                    "char": "e",
-                    "type": "equal"
-                },
-                {
-                    "index": 36,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 37,
+                    "index": 33,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 38,
+                    "index": 34,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 39,
+                    "index": 35,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 40,
+                    "index": 36,
                     "char": "o",
                     "type": "equal"
                 },
                 {
-                    "index": 41,
+                    "index": 37,
                     "char": "n",
+                    "type": "equal"
+                },
+                {
+                    "index": 38,
+                    "char": "s",
+                    "type": "equal"
+                },
+                {
+                    "index": 39,
+                    "char": "h",
+                    "type": "equal"
+                },
+                {
+                    "index": 40,
+                    "char": "i",
+                    "type": "equal"
+                },
+                {
+                    "index": 41,
+                    "char": "p",
                     "type": "equal"
                 },
                 {
@@ -2548,26 +2627,6 @@
                 },
                 {
                     "index": 43,
-                    "char": "h",
-                    "type": "equal"
-                },
-                {
-                    "index": 44,
-                    "char": "i",
-                    "type": "equal"
-                },
-                {
-                    "index": 45,
-                    "char": "p",
-                    "type": "equal"
-                },
-                {
-                    "index": 46,
-                    "char": "s",
-                    "type": "equal"
-                },
-                {
-                    "index": 47,
                     "char": ".",
                     "type": "equal"
                 }
@@ -2582,7 +2641,8 @@
                     "annotated_end": 21,
                     "corrected_text": "build"
                 }
-            ]
+            ],
+            "container_length": 44
         },
         {
             "sentence_index": 8,
@@ -2653,6 +2713,31 @@
                     "type": "replace"
                 },
                 {
+                    "index": 13,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 14,
+                    "char": "b",
+                    "type": "equal"
+                },
+                {
+                    "index": 15,
+                    "char": "a",
+                    "type": "equal"
+                },
+                {
+                    "index": 16,
+                    "char": "d",
+                    "type": "equal"
+                },
+                {
+                    "index": 17,
+                    "char": ",",
+                    "type": "equal"
+                },
+                {
                     "index": 18,
                     "char": " ",
                     "type": "equal"
@@ -2664,162 +2749,142 @@
                 },
                 {
                     "index": 20,
-                    "char": "a",
-                    "type": "equal"
-                },
-                {
-                    "index": 21,
-                    "char": "d",
-                    "type": "equal"
-                },
-                {
-                    "index": 22,
-                    "char": ",",
-                    "type": "equal"
-                },
-                {
-                    "index": 23,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 24,
-                    "char": "b",
-                    "type": "equal"
-                },
-                {
-                    "index": 25,
                     "char": "u",
                     "type": "equal"
                 },
                 {
-                    "index": 26,
+                    "index": 21,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 27,
+                    "index": 22,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 28,
+                    "index": 23,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 29,
+                    "index": 24,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 30,
+                    "index": 25,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 31,
+                    "index": 26,
                     "char": "m",
                     "type": "replace"
                 },
                 {
-                    "index": 32,
+                    "index": 27,
                     "char": "a",
                     "type": "replace"
                 },
                 {
-                    "index": 33,
+                    "index": 28,
                     "char": "y",
                     "type": "replace"
                 },
                 {
-                    "index": 37,
+                    "index": 29,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 38,
+                    "index": 30,
                     "char": "b",
                     "type": "equal"
                 },
                 {
-                    "index": 39,
+                    "index": 31,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 40,
+                    "index": 32,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 41,
+                    "index": 33,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 42,
+                    "index": 34,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 43,
+                    "index": 35,
                     "char": "b",
                     "type": "equal"
                 },
                 {
-                    "index": 44,
+                    "index": 36,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 45,
+                    "index": 37,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 46,
+                    "index": 38,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 47,
+                    "index": 39,
                     "char": "a",
                     "type": "replace"
                 },
                 {
-                    "index": 48,
+                    "index": 40,
                     "char": "n",
                     "type": "replace"
                 },
                 {
-                    "index": 49,
+                    "index": 41,
                     "char": "n",
                     "type": "replace"
                 },
                 {
-                    "index": 50,
+                    "index": 42,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 51,
+                    "index": 43,
                     "char": "y",
                     "type": "replace"
                 },
                 {
-                    "index": 52,
+                    "index": 44,
                     "char": "e",
                     "type": "replace"
                 },
                 {
-                    "index": 53,
+                    "index": 45,
                     "char": "d",
                     "type": "replace"
                 },
                 {
-                    "index": 62,
+                    "index": 46,
                     "char": ".",
+                    "type": "equal"
+                },
+                {
+                    "index": 47,
+                    "char": " ",
                     "type": "equal"
                 }
             ],
@@ -2851,7 +2916,8 @@
                     "annotated_end": 47,
                     "corrected_text": "annoying."
                 }
-            ]
+            ],
+            "container_length": 48
         },
         {
             "sentence_index": 9,
@@ -3007,213 +3073,238 @@
                     "type": "replace"
                 },
                 {
-                    "index": 31,
+                    "index": 30,
                     "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 31,
+                    "char": "f",
                     "type": "equal"
                 },
                 {
                     "index": 32,
-                    "char": "f",
-                    "type": "equal"
-                },
-                {
-                    "index": 33,
                     "char": "r",
                     "type": "equal"
                 },
                 {
-                    "index": 34,
+                    "index": 33,
                     "char": "i",
+                    "type": "equal"
+                },
+                {
+                    "index": 34,
+                    "char": "e",
                     "type": "equal"
                 },
                 {
                     "index": 35,
-                    "char": "e",
+                    "char": "n",
                     "type": "equal"
                 },
                 {
                     "index": 36,
-                    "char": "n",
+                    "char": "d",
                     "type": "equal"
                 },
                 {
                     "index": 37,
-                    "char": "d",
+                    "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 38,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 39,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 40,
+                    "index": 39,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 41,
+                    "index": 40,
                     "char": "d",
                     "type": "equal"
                 },
                 {
-                    "index": 42,
+                    "index": 41,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 43,
+                    "index": 42,
                     "char": "y",
                     "type": "delete"
                 },
                 {
-                    "index": 44,
+                    "index": 43,
                     "char": "o",
                     "type": "delete"
                 },
                 {
-                    "index": 45,
+                    "index": 44,
                     "char": "u",
                     "type": "delete"
                 },
                 {
-                    "index": 46,
+                    "index": 45,
                     "char": " ",
                     "type": "delete"
                 },
                 {
-                    "index": 47,
+                    "index": 46,
                     "char": "g",
                     "type": "delete"
                 },
                 {
-                    "index": 48,
+                    "index": 47,
                     "char": "e",
+                    "type": "delete"
+                },
+                {
+                    "index": 48,
+                    "char": "t",
                     "type": "delete"
                 },
                 {
                     "index": 49,
-                    "char": "t",
+                    "char": " ",
                     "type": "delete"
                 },
                 {
                     "index": 50,
-                    "char": " ",
+                    "char": "t",
                     "type": "delete"
                 },
                 {
                     "index": 51,
-                    "char": "t",
+                    "char": "o",
                     "type": "delete"
                 },
                 {
                     "index": 52,
-                    "char": "o",
+                    "char": " ",
                     "type": "delete"
                 },
                 {
                     "index": 53,
-                    "char": " ",
-                    "type": "delete"
+                    "char": "l",
+                    "type": "equal"
                 },
                 {
                     "index": 54,
-                    "char": "l",
+                    "char": "o",
                     "type": "equal"
                 },
                 {
                     "index": 55,
-                    "char": "o",
+                    "char": "s",
                     "type": "equal"
                 },
                 {
                     "index": 56,
-                    "char": "s",
+                    "char": "e",
                     "type": "equal"
                 },
                 {
                     "index": 57,
-                    "char": "e",
+                    "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 58,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 59,
                     "char": "l",
                     "type": "replace"
                 },
                 {
-                    "index": 60,
+                    "index": 59,
                     "char": "o",
+                    "type": "replace"
+                },
+                {
+                    "index": 60,
+                    "char": "t",
                     "type": "replace"
                 },
                 {
                     "index": 61,
-                    "char": "t",
+                    "char": "s",
                     "type": "replace"
                 },
                 {
                     "index": 62,
-                    "char": "s",
-                    "type": "replace"
-                },
-                {
-                    "index": 64,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 65,
+                    "index": 63,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 66,
+                    "index": 64,
                     "char": "f",
                     "type": "replace"
                 },
                 {
-                    "index": 67,
+                    "index": 65,
                     "char": " ",
                     "type": "replace"
                 },
                 {
-                    "index": 68,
+                    "index": 66,
                     "char": "t",
                     "type": "replace"
                 },
                 {
-                    "index": 69,
+                    "index": 67,
                     "char": "i",
                     "type": "replace"
                 },
                 {
-                    "index": 70,
+                    "index": 68,
                     "char": "m",
                     "type": "replace"
                 },
                 {
-                    "index": 71,
+                    "index": 69,
                     "char": "e",
                     "type": "replace"
                 },
                 {
-                    "index": 72,
+                    "index": 70,
                     "char": "s",
                     "type": "replace"
                 },
                 {
-                    "index": 76,
+                    "index": 71,
                     "char": ",",
+                    "type": "equal"
+                },
+                {
+                    "index": 72,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 73,
+                    "char": "y",
+                    "type": "equal"
+                },
+                {
+                    "index": 74,
+                    "char": "o",
+                    "type": "equal"
+                },
+                {
+                    "index": 75,
+                    "char": "u",
+                    "type": "equal"
+                },
+                {
+                    "index": 76,
+                    "char": "r",
                     "type": "equal"
                 },
                 {
@@ -3223,322 +3314,301 @@
                 },
                 {
                     "index": 78,
-                    "char": "y",
+                    "char": "f",
                     "type": "equal"
                 },
                 {
                     "index": 79,
-                    "char": "o",
+                    "char": "r",
                     "type": "equal"
                 },
                 {
                     "index": 80,
-                    "char": "u",
+                    "char": "i",
                     "type": "equal"
                 },
                 {
                     "index": 81,
-                    "char": "r",
+                    "char": "e",
                     "type": "equal"
                 },
                 {
                     "index": 82,
-                    "char": " ",
+                    "char": "n",
                     "type": "equal"
                 },
                 {
                     "index": 83,
-                    "char": "f",
-                    "type": "equal"
-                },
-                {
-                    "index": 84,
-                    "char": "r",
-                    "type": "equal"
-                },
-                {
-                    "index": 85,
-                    "char": "i",
-                    "type": "equal"
-                },
-                {
-                    "index": 86,
-                    "char": "e",
-                    "type": "equal"
-                },
-                {
-                    "index": 87,
-                    "char": "n",
-                    "type": "equal"
-                },
-                {
-                    "index": 88,
                     "char": "d",
                     "type": "equal"
                 },
                 {
-                    "index": 89,
+                    "index": 84,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 90,
+                    "index": 85,
                     "char": "m",
                     "type": "replace"
                 },
                 {
-                    "index": 91,
+                    "index": 86,
                     "char": "a",
                     "type": "replace"
                 },
                 {
-                    "index": 92,
+                    "index": 87,
                     "char": "y",
                     "type": "replace"
                 },
                 {
-                    "index": 98,
+                    "index": 88,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 99,
+                    "index": 89,
                     "char": "b",
                     "type": "replace"
                 },
                 {
-                    "index": 100,
+                    "index": 90,
                     "char": "e",
                     "type": "replace"
                 },
                 {
-                    "index": 105,
+                    "index": 91,
                     "char": " ",
                     "type": "equal"
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 95
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 95
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 95
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 95
                 },
                 {
-                    "index": 106,
+                    "index": 96,
                     "char": "h",
                     "type": "equal"
                 },
                 {
-                    "index": 107,
+                    "index": 97,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 108,
+                    "index": 98,
                     "char": "p",
                     "type": "equal"
+                },
+                {
+                    "index": 99,
+                    "char": "p",
+                    "type": "equal"
+                },
+                {
+                    "index": 100,
+                    "char": "i",
+                    "type": "equal"
+                },
+                {
+                    "index": 101,
+                    "char": "e",
+                    "type": "equal"
+                },
+                {
+                    "index": 102,
+                    "char": "r",
+                    "type": "equal"
+                },
+                {
+                    "index": 103,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 104,
+                    "char": "t",
+                    "type": "replace"
+                },
+                {
+                    "index": 105,
+                    "char": "o",
+                    "type": "replace"
+                },
+                {
+                    "index": 106,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 107,
+                    "char": "w",
+                    "type": "replace"
+                },
+                {
+                    "index": 108,
+                    "char": "i",
+                    "type": "replace"
                 },
                 {
                     "index": 109,
-                    "char": "p",
-                    "type": "equal"
+                    "char": "n",
+                    "type": "replace"
                 },
                 {
                     "index": 110,
-                    "char": "i",
+                    "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 111,
-                    "char": "e",
-                    "type": "equal"
-                },
-                {
-                    "index": 112,
-                    "char": "r",
-                    "type": "equal"
-                },
-                {
-                    "index": 113,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 114,
-                    "char": "t",
-                    "type": "replace"
-                },
-                {
-                    "index": 115,
-                    "char": "o",
-                    "type": "replace"
-                },
-                {
-                    "index": 123,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 124,
-                    "char": "w",
-                    "type": "replace"
-                },
-                {
-                    "index": 125,
-                    "char": "i",
-                    "type": "replace"
-                },
-                {
-                    "index": 126,
-                    "char": "n",
-                    "type": "replace"
-                },
-                {
-                    "index": 134,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 135,
                     "char": "y",
                     "type": "replace"
                 },
                 {
-                    "index": 136,
+                    "index": 112,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 137,
+                    "index": 113,
                     "char": "u",
                     "type": "replace"
                 },
                 {
-                    "index": 138,
+                    "index": 114,
                     "char": " ",
                     "type": "replace"
                 },
                 {
-                    "index": 139,
+                    "index": 115,
                     "char": "l",
                     "type": "replace"
                 },
                 {
-                    "index": 140,
+                    "index": 116,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 141,
+                    "index": 117,
                     "char": "t",
                     "type": "replace"
                 },
                 {
-                    "index": 142,
+                    "index": 118,
                     "char": "s",
                     "type": "replace"
                 },
                 {
-                    "index": 143,
+                    "index": 119,
                     "char": " ",
                     "type": "replace"
                 },
                 {
-                    "index": 144,
+                    "index": 120,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 145,
+                    "index": 121,
                     "char": "f",
                     "type": "replace"
                 },
                 {
-                    "index": 146,
+                    "index": 122,
                     "char": " ",
                     "type": "replace"
                 },
                 {
-                    "index": 147,
+                    "index": 123,
                     "char": "t",
                     "type": "replace"
                 },
                 {
-                    "index": 148,
+                    "index": 124,
                     "char": "i",
                     "type": "replace"
                 },
                 {
-                    "index": 149,
+                    "index": 125,
                     "char": "m",
                     "type": "replace"
                 },
                 {
-                    "index": 150,
+                    "index": 126,
                     "char": "e",
                     "type": "replace"
                 },
                 {
-                    "index": 151,
+                    "index": 127,
                     "char": "s",
                     "type": "replace"
                 },
                 {
-                    "index": 152,
+                    "index": 128,
                     "char": " ",
                     "type": "replace"
                 },
                 {
-                    "index": 153,
+                    "index": 129,
                     "char": "i",
                     "type": "replace"
                 },
                 {
-                    "index": 154,
+                    "index": 130,
                     "char": "n",
                     "type": "replace"
                 },
                 {
-                    "index": 155,
+                    "index": 131,
                     "char": " ",
                     "type": "replace"
                 },
                 {
-                    "index": 156,
+                    "index": 132,
                     "char": "a",
                     "type": "replace"
                 },
                 {
-                    "index": 157,
+                    "index": 133,
                     "char": " ",
                     "type": "replace"
                 },
                 {
-                    "index": 158,
+                    "index": 134,
                     "char": "r",
                     "type": "replace"
                 },
                 {
-                    "index": 159,
+                    "index": 135,
                     "char": "o",
                     "type": "replace"
                 },
                 {
-                    "index": 160,
+                    "index": 136,
                     "char": "w",
                     "type": "replace"
                 },
                 {
-                    "index": 171,
+                    "index": 137,
                     "char": ".",
                     "type": "equal"
                 }
@@ -3580,7 +3650,8 @@
                     "annotated_end": 133,
                     "corrected_text": "winning against you repeatedly"
                 }
-            ]
+            ],
+            "container_length": 138
         },
         {
             "sentence_index": 10,
@@ -3751,207 +3822,217 @@
                     "type": "replace"
                 },
                 {
+                    "index": 33,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "char": " ",
+                    "type": "equal",
+                    "index": 42
+                },
+                {
+                    "char": " ",
+                    "type": "equal",
+                    "index": 42
+                },
+                {
+                    "char": " ",
+                    "type": "equal",
+                    "index": 42
+                },
+                {
+                    "char": " ",
+                    "type": "equal",
+                    "index": 42
+                },
+                {
+                    "char": " ",
+                    "type": "equal",
+                    "index": 42
+                },
+                {
+                    "char": " ",
+                    "type": "equal",
+                    "index": 42
+                },
+                {
+                    "char": " ",
+                    "type": "equal",
+                    "index": 42
+                },
+                {
+                    "char": " ",
+                    "type": "equal",
+                    "index": 42
+                },
+                {
+                    "char": " ",
+                    "type": "equal",
+                    "index": 42
+                },
+                {
+                    "index": 43,
+                    "char": "a",
+                    "type": "equal"
+                },
+                {
+                    "index": 44,
+                    "char": "b",
+                    "type": "equal"
+                },
+                {
+                    "index": 45,
+                    "char": "o",
+                    "type": "equal"
+                },
+                {
+                    "index": 46,
+                    "char": "u",
+                    "type": "equal"
+                },
+                {
+                    "index": 47,
+                    "char": "t",
+                    "type": "equal"
+                },
+                {
                     "index": 48,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
                     "index": 49,
-                    "char": "a",
+                    "char": "y",
                     "type": "equal"
                 },
                 {
                     "index": 50,
-                    "char": "b",
+                    "char": "o",
                     "type": "equal"
                 },
                 {
                     "index": 51,
-                    "char": "o",
+                    "char": "u",
                     "type": "equal"
                 },
                 {
                     "index": 52,
-                    "char": "u",
+                    "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 53,
-                    "char": "t",
-                    "type": "equal"
-                },
-                {
-                    "index": 54,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 55,
-                    "char": "y",
-                    "type": "equal"
-                },
-                {
-                    "index": 56,
-                    "char": "o",
-                    "type": "equal"
-                },
-                {
-                    "index": 57,
-                    "char": "u",
-                    "type": "equal"
-                },
-                {
-                    "index": 58,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 59,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 60,
+                    "index": 54,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 61,
+                    "index": 55,
                     "char": "d",
                     "type": "equal"
                 },
                 {
-                    "index": 62,
+                    "index": 56,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 63,
+                    "index": 57,
                     "char": "g",
                     "type": "replace"
                 },
                 {
-                    "index": 64,
+                    "index": 58,
                     "char": "e",
                     "type": "replace"
                 },
                 {
-                    "index": 65,
+                    "index": 59,
                     "char": "t",
                     "type": "replace"
                 },
                 {
-                    "index": 70,
+                    "index": 60,
                     "char": " ",
                     "type": "equal"
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 61
                 },
                 {
-                    "index": 71,
+                    "index": 62,
                     "char": "c",
                     "type": "equal"
                 },
                 {
-                    "index": 72,
+                    "index": 63,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 73,
+                    "index": 64,
                     "char": "o",
                     "type": "equal"
                 },
                 {
-                    "index": 74,
+                    "index": 65,
                     "char": "s",
                     "type": "equal"
                 },
                 {
-                    "index": 75,
+                    "index": 66,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 76,
+                    "index": 67,
                     "char": "r",
                     "type": "equal"
                 },
                 {
-                    "index": 77,
+                    "index": 68,
                     "char": " ",
                     "type": "insert"
                 },
                 {
-                    "index": 78,
+                    "index": 69,
                     "char": "t",
                     "type": "insert"
                 },
                 {
-                    "index": 79,
+                    "index": 70,
                     "char": "o",
                     "type": "insert"
                 },
                 {
-                    "index": 80,
+                    "index": 71,
                     "char": " ",
                     "type": "insert"
                 },
                 {
-                    "index": 81,
+                    "index": 72,
                     "char": "y",
                     "type": "insert"
                 },
                 {
-                    "index": 82,
+                    "index": 73,
                     "char": "o",
                     "type": "insert"
                 },
                 {
-                    "index": 83,
+                    "index": 74,
                     "char": "u",
                     "type": "insert"
                 },
                 {
-                    "index": 84,
+                    "index": 75,
                     "char": ".",
                     "type": "equal"
                 }
@@ -3975,7 +4056,8 @@
                     "annotated_end": 60,
                     "corrected_text": "feel"
                 }
-            ]
+            ],
+            "container_length": 76
         },
         {
             "sentence_index": 11,
@@ -4161,41 +4243,53 @@
                     "type": "replace"
                 },
                 {
-                    "index": 40,
+                    "index": 36,
                     "char": " ",
                     "type": "equal"
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 38
                 },
                 {
                     "char": " ",
-                    "type": "equal"
+                    "type": "equal",
+                    "index": 38
                 },
                 {
-                    "index": 41,
+                    "index": 39,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 42,
+                    "index": 40,
                     "char": "h",
                     "type": "equal"
                 },
                 {
-                    "index": 43,
+                    "index": 41,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 44,
+                    "index": 42,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 45,
+                    "index": 43,
                     "char": "s",
+                    "type": "equal"
+                },
+                {
+                    "index": 44,
+                    "char": "t",
+                    "type": "equal"
+                },
+                {
+                    "index": 45,
+                    "char": "a",
                     "type": "equal"
                 },
                 {
@@ -4205,12 +4299,12 @@
                 },
                 {
                     "index": 47,
-                    "char": "a",
+                    "char": "e",
                     "type": "equal"
                 },
                 {
                     "index": 48,
-                    "char": "t",
+                    "char": "m",
                     "type": "equal"
                 },
                 {
@@ -4220,67 +4314,67 @@
                 },
                 {
                     "index": 50,
-                    "char": "m",
+                    "char": "n",
                     "type": "equal"
                 },
                 {
                     "index": 51,
-                    "char": "e",
-                    "type": "equal"
-                },
-                {
-                    "index": 52,
-                    "char": "n",
-                    "type": "equal"
-                },
-                {
-                    "index": 53,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 54,
+                    "index": 52,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 55,
+                    "index": 53,
                     "char": "\"",
                     "type": "equal"
                 },
                 {
-                    "index": 56,
+                    "index": 54,
                     "char": "P",
                     "type": "equal"
                 },
                 {
-                    "index": 57,
+                    "index": 55,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 58,
+                    "index": 56,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 59,
+                    "index": 57,
                     "char": "y",
                     "type": "equal"
                 },
                 {
-                    "index": 60,
+                    "index": 58,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 61,
+                    "index": 59,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 62,
+                    "index": 60,
                     "char": "g",
+                    "type": "equal"
+                },
+                {
+                    "index": 61,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 62,
+                    "char": "a",
                     "type": "equal"
                 },
                 {
@@ -4290,161 +4384,151 @@
                 },
                 {
                     "index": 64,
-                    "char": "a",
-                    "type": "equal"
-                },
-                {
-                    "index": 65,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 66,
                     "char": "g",
                     "type": "equal"
                 },
                 {
-                    "index": 67,
+                    "index": 65,
                     "char": "a",
                     "type": "equal"
                 },
                 {
-                    "index": 68,
+                    "index": 66,
                     "char": "m",
                     "type": "equal"
                 },
                 {
-                    "index": 69,
+                    "index": 67,
                     "char": "e",
+                    "type": "equal"
+                },
+                {
+                    "index": 68,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 69,
+                    "char": "i",
                     "type": "equal"
                 },
                 {
                     "index": 70,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 71,
-                    "char": "i",
-                    "type": "equal"
-                },
-                {
-                    "index": 72,
                     "char": "s",
                     "type": "equal"
                 },
                 {
-                    "index": 73,
+                    "index": 71,
                     "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 72,
+                    "char": "o",
+                    "type": "equal"
+                },
+                {
+                    "index": 73,
+                    "char": "n",
                     "type": "equal"
                 },
                 {
                     "index": 74,
-                    "char": "o",
-                    "type": "equal"
-                },
-                {
-                    "index": 75,
-                    "char": "n",
-                    "type": "equal"
-                },
-                {
-                    "index": 76,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 77,
+                    "index": 75,
                     "char": "y",
                     "type": "equal"
                 },
                 {
-                    "index": 78,
+                    "index": 76,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 79,
+                    "index": 77,
                     "char": "f",
                     "type": "equal"
                 },
                 {
-                    "index": 80,
+                    "index": 78,
                     "char": "u",
+                    "type": "equal"
+                },
+                {
+                    "index": 79,
+                    "char": "n",
+                    "type": "equal"
+                },
+                {
+                    "index": 80,
+                    "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 81,
-                    "char": "n",
+                    "char": "w",
                     "type": "equal"
                 },
                 {
                     "index": 82,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 83,
-                    "char": "w",
-                    "type": "equal"
-                },
-                {
-                    "index": 84,
                     "char": "h",
                     "type": "equal"
                 },
                 {
-                    "index": 85,
+                    "index": 83,
                     "char": "e",
                     "type": "equal"
                 },
                 {
-                    "index": 86,
+                    "index": 84,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 87,
+                    "index": 85,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 88,
+                    "index": 86,
                     "char": "y",
                     "type": "equal"
                 },
                 {
-                    "index": 89,
+                    "index": 87,
                     "char": "o",
                     "type": "equal"
                 },
                 {
-                    "index": 90,
+                    "index": 88,
                     "char": "u",
                     "type": "equal"
                 },
                 {
-                    "index": 91,
+                    "index": 89,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 92,
+                    "index": 90,
                     "char": "w",
                     "type": "equal"
                 },
                 {
-                    "index": 93,
+                    "index": 91,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 94,
+                    "index": 92,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 95,
+                    "index": 93,
                     "char": ".",
                     "type": "equal"
                 }
@@ -4459,7 +4543,8 @@
                     "annotated_end": 37,
                     "corrected_text": "with"
                 }
-            ]
+            ],
+            "container_length": 94
         },
         {
             "sentence_index": 12,
@@ -4555,53 +4640,73 @@
                     "type": "replace"
                 },
                 {
-                    "index": 19,
+                    "index": 18,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 20,
+                    "index": 19,
                     "char": "t",
                     "type": "replace"
                 },
                 {
-                    "index": 21,
+                    "index": 20,
                     "char": "h",
                     "type": "replace"
                 },
                 {
-                    "index": 22,
+                    "index": 21,
                     "char": "i",
                     "type": "replace"
                 },
                 {
-                    "index": 23,
+                    "index": 22,
                     "char": "n",
                     "type": "replace"
                 },
                 {
-                    "index": 24,
+                    "index": 23,
                     "char": "g",
                     "type": "replace"
                 },
                 {
-                    "index": 25,
+                    "index": 24,
                     "char": "s",
                     "type": "replace"
                 },
                 {
-                    "index": 29,
+                    "index": 25,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 30,
+                    "index": 26,
                     "char": "f",
                     "type": "equal"
                 },
                 {
-                    "index": 31,
+                    "index": 27,
                     "char": "r",
+                    "type": "equal"
+                },
+                {
+                    "index": 28,
+                    "char": "o",
+                    "type": "equal"
+                },
+                {
+                    "index": 29,
+                    "char": "m",
+                    "type": "equal"
+                },
+                {
+                    "index": 30,
+                    "char": " ",
+                    "type": "equal"
+                },
+                {
+                    "index": 31,
+                    "char": "b",
                     "type": "equal"
                 },
                 {
@@ -4611,62 +4716,62 @@
                 },
                 {
                     "index": 33,
-                    "char": "m",
-                    "type": "equal"
-                },
-                {
-                    "index": 34,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 35,
-                    "char": "b",
-                    "type": "equal"
-                },
-                {
-                    "index": 36,
-                    "char": "o",
-                    "type": "equal"
-                },
-                {
-                    "index": 37,
                     "char": "t",
                     "type": "equal"
                 },
                 {
-                    "index": 38,
+                    "index": 34,
                     "char": "h",
                     "type": "equal"
                 },
                 {
-                    "index": 39,
+                    "index": 35,
                     "char": " ",
                     "type": "equal"
                 },
                 {
-                    "index": 40,
+                    "index": 36,
                     "char": "w",
                     "type": "equal"
                 },
                 {
-                    "index": 41,
+                    "index": 37,
                     "char": "i",
+                    "type": "equal"
+                },
+                {
+                    "index": 38,
+                    "char": "n",
+                    "type": "equal"
+                },
+                {
+                    "index": 39,
+                    "char": "n",
+                    "type": "equal"
+                },
+                {
+                    "index": 40,
+                    "char": "i",
+                    "type": "equal"
+                },
+                {
+                    "index": 41,
+                    "char": "n",
                     "type": "equal"
                 },
                 {
                     "index": 42,
-                    "char": "n",
+                    "char": "g",
                     "type": "equal"
                 },
                 {
                     "index": 43,
-                    "char": "n",
+                    "char": " ",
                     "type": "equal"
                 },
                 {
                     "index": 44,
-                    "char": "i",
+                    "char": "a",
                     "type": "equal"
                 },
                 {
@@ -4676,7 +4781,7 @@
                 },
                 {
                     "index": 46,
-                    "char": "g",
+                    "char": "d",
                     "type": "equal"
                 },
                 {
@@ -4686,56 +4791,36 @@
                 },
                 {
                     "index": 48,
-                    "char": "a",
-                    "type": "equal"
-                },
-                {
-                    "index": 49,
-                    "char": "n",
-                    "type": "equal"
-                },
-                {
-                    "index": 50,
-                    "char": "d",
-                    "type": "equal"
-                },
-                {
-                    "index": 51,
-                    "char": " ",
-                    "type": "equal"
-                },
-                {
-                    "index": 52,
                     "char": "l",
                     "type": "equal"
                 },
                 {
-                    "index": 53,
+                    "index": 49,
                     "char": "o",
                     "type": "equal"
                 },
                 {
-                    "index": 54,
+                    "index": 50,
                     "char": "s",
                     "type": "equal"
                 },
                 {
-                    "index": 55,
+                    "index": 51,
                     "char": "i",
                     "type": "equal"
                 },
                 {
-                    "index": 56,
+                    "index": 52,
                     "char": "n",
                     "type": "equal"
                 },
                 {
-                    "index": 57,
+                    "index": 53,
                     "char": "g",
                     "type": "equal"
                 },
                 {
-                    "index": 58,
+                    "index": 54,
                     "char": ".",
                     "type": "equal"
                 }
@@ -4750,7 +4835,8 @@
                     "annotated_end": 18,
                     "corrected_text": "a lot"
                 }
-            ]
+            ],
+            "container_length": 55
         }
     ]
 }
