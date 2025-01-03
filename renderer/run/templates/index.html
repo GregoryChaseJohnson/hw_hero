@@ -2,58 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <title>Block Bounding-Box Highlight (Character-Based Annotations)</title>
   <style>
     body {
       font-family: "Courier New", Courier, monospace;
       font-size: 16px;
       line-height: 1.2;
       margin: 20px;
-      overflow: visible; /* Ensure the body doesn't clip content */
+      overflow: visible; /* Keep visible overflow for highlights, etc. */
     }
 
+    /* Container for one sentence */
     .sentence-container {
       position: relative;
+      display: block; 
+      white-space: pre; /* We'll handle wrapping logic separately if needed */
       margin-bottom: 2rem;
-      display: inline-block; /* We'll explicitly set width via container_length */
-      width: auto;
-      /* Optional for debugging: background-color: rgba(255,0,0,0.1); */
+      width: auto; /* We'll override with container_length if present */
     }
 
+    /* Final line of text (the "bottom" layer) */
     .final-line {
-      display: inline-block;
-      white-space: nowrap; /* Keep final line on a single line */
+      display: block; /* A single line for tokens */
       position: relative;
       font-family: inherit;
       font-size: inherit;
       line-height: inherit;
+      white-space: pre; /* Keep spaces as-is */
     }
 
+    /* Annotated line (the "top" layer), aligned by index to final-line tokens */
     .annotated-line {
-      position: absolute;
-      top: -0.6rem;
-      left: 0;
-      white-space: nowrap; /* No wrapping for the annotated line */
+      display: block;
+      position: relative;
       font-family: inherit;
       font-size: inherit;
       line-height: inherit;
-      z-index: 10;
+      white-space: pre;
+      pointer-events: none; /* We don't click on these chars, but on .corrected-char if needed */
     }
 
+    /* Each token in the final line */
     .token {
-      white-space: normal;
-      margin-right: 0.1rem;
+      display: inline-block; 
+      white-space: pre;     
+      margin-right: 0.0rem;
       font-family: inherit;
       font-size: inherit;
       line-height: inherit;
     }
 
+    /* Each corrected char in the annotated line */
     .corrected-char {
-      position: absolute;
-      white-space: pre; /* Maintain exact spacing */
+      display: inline-block;
+      white-space: pre;
       color: #28ffa5;
       font-family: inherit;
       font-size: inherit;
       line-height: inherit;
+    }
+
+    /* The bounding box highlight for a clicked block */
+    .highlight-box {
+      position: absolute;
+      background-color: rgba(68, 61, 61, 0.411); 
+      pointer-events: none;
+      z-index: 1; 
+      transition: background-color 0.2s ease;
     }
   </style>
 </head>
@@ -61,14 +76,16 @@
   <div id="app"></div>
 
   <script>
+    /* Minimal theming logic (optional) */
     const themes = {
       theme1: {
-        bgColor: "hsl(43, 6%, 10%)",
-        textColor: "#d9e4ee",
-        equalColor: "#f4f7ffe0",
+        bgColor: "#1C1916",
+        textColor: "f4f7ffe0",
+        equalColor: "#cdeeffe0",
         replaceColor: "#f781fe",
         deleteColor: "#f781fe",
-        corrected: "#28ffa5"
+        insertColor: "#28ffa5",
+        corrected: "#f4f7ffe0"
       }
     };
 
@@ -78,85 +95,119 @@
       document.body.style.backgroundColor = theme.bgColor;
       document.body.style.color = theme.textColor;
 
-      // Color-coded classes
+      // Color-coded token classes
       document.querySelectorAll(".equal").forEach(el => el.style.color = theme.equalColor);
+      document.querySelectorAll(".insert").forEach(el => el.style.color = theme.insertColor);
       document.querySelectorAll(".replace, .delete").forEach(el => el.style.color = theme.replaceColor);
-      document.querySelectorAll(".corrected, .insert, .corrected-char")
-        .forEach(el => el.style.color = theme.corrected);
+      document.querySelectorAll(".corrected, .corrected-char").forEach(el => {
+        el.style.color = theme.corrected;
+      });
     }
 
     async function fetchData() {
-      // Fetch JSON from your backend
-      const response = await fetch("/data.json");
-      if (!response.ok) {
-        console.error("Failed to fetch /data.json");
+      try {
+        const response = await fetch("/data.json");
+        if (!response.ok) {
+          console.error("Failed to fetch /data.json");
+          return null;
+        }
+        return await response.json();
+      } catch (err) {
+        console.error("Error fetching data.json:", err);
         return null;
       }
-      return await response.json();
+    }
+
+    /**
+     * Renders the final line tokens
+     */
+    function renderFinalLine(sentence, container) {
+      const lineDiv = document.createElement("div");
+      lineDiv.className = "final-line";
+      container.appendChild(lineDiv);
+
+      const tokens = sentence.final_sentence_tokens || [];
+      tokens.forEach(token => {
+        const span = document.createElement("span");
+        span.className = `token ${token.type}`;
+        span.textContent = (token.char === " ") ? "\u00A0" : token.char;
+        span.dataset.index = token.index;
+
+        // Attach block info if in range
+        if (sentence.blocks) {
+          sentence.blocks.forEach(block => {
+            if (token.index >= block.final_start && token.index <= block.final_end) {
+              span.dataset.blockId = block.block_index;
+              span.dataset.sentenceIdx = sentence.sentence_index;
+            }
+          });
+        }
+        lineDiv.appendChild(span);
+      });
+    }
+
+    /**
+     * Builds a parallel string or array of corrected chars for each sentence index
+     * and renders them in .annotated-line
+     */
+    function renderAnnotatedLine(sentence, container) {
+      const annotatedLine = document.createElement("div");
+      annotatedLine.className = "annotated-line";
+      container.appendChild(annotatedLine);
+
+      // Create an array representing each token index => annotated char
+      const tokens = sentence.final_sentence_tokens || [];
+      const maxIndex = tokens.length > 0 ? tokens[tokens.length - 1].index : 0;
+
+      // We assume indices go from 0..maxIndex (continuous).
+      // We'll store a string or array of chars for the entire sentence length
+      // default to " " for no annotation
+      const annotationArray = new Array(maxIndex + 1).fill(" ");
+
+      // Mark which block index applies to each position, if any
+      const blockIdArray = new Array(maxIndex + 1).fill(null);
+
+      // For each block, fill the annotation array
+      (sentence.blocks || []).forEach(block => {
+        const correctedText = block.corrected_text || "";
+        const chars = correctedText.split("");
+        // fill the range final_start..final_end with corrected text
+        for (let i = 0; i < chars.length; i++) {
+          const pos = block.final_start + i;
+          if (pos >= 0 && pos < annotationArray.length) {
+            annotationArray[pos] = chars[i] === " " ? "\u00A0" : chars[i];
+            blockIdArray[pos] = block.block_index;
+          }
+        }
+      });
+
+      // Now build spans for each character in annotationArray
+      annotationArray.forEach((ch, idx) => {
+        const span = document.createElement("span");
+        span.className = "corrected-char";
+        span.textContent = ch;
+        if (blockIdArray[idx] !== null) {
+          span.dataset.blockId = blockIdArray[idx];
+          span.dataset.sentenceIdx = sentence.sentence_index;
+        }
+        annotatedLine.appendChild(span);
+      });
     }
 
     function renderSentence(sentence) {
-      // Create the container
+      // 1) Create the container
       const container = document.createElement("div");
       container.className = "sentence-container";
 
-      // 1) Enforce container_length from the backend
-      //    This ensures the container is wide enough for the annotated line,
-      //    even if it extends beyond the final line's last token.
       if (typeof sentence.container_length === "number") {
         container.style.width = sentence.container_length + "ch";
       }
 
-      // Build final & annotated lines
-      const finalLine = document.createElement("div");
-      finalLine.className = "final-line";
+      // 2) Render final line
+      renderFinalLine(sentence, container);
 
-      const annotatedLine = document.createElement("div");
-      annotatedLine.className = "annotated-line";
-
-      container.appendChild(finalLine);
-      container.appendChild(annotatedLine);
-
-      // 2) Render bottom line (final_line) tokens
-      sentence.final_sentence_tokens.forEach(token => {
-        const span = document.createElement("span");
-        span.className = `token ${token.type}`;
-        // Use non-breaking space if char === ' '
-        span.textContent = token.char === " " ? "\u00A0" : token.char;
-        span.dataset.index = token.index;
-        finalLine.appendChild(span);
-      });
-
-      // 3) Position corrected text:
-      //    We still measure bounding boxes for each final token to absolutely
-      //    overlay the corrected characters in .annotated-line. However, we do
-      //    NOT use these measurements to resize container width.
-      requestAnimationFrame(() => {
-        const tokenEls = finalLine.querySelectorAll(".token");
-        // Precompute each token's bounding box
-        const rects = Array.from(tokenEls).map(el => el.getBoundingClientRect());
-        const containerRect = container.getBoundingClientRect();
-
-        // For each block, overlay corrected characters at the right place
-        (sentence.blocks || []).forEach(block => {
-          const correctedStr = block.corrected_text || "";
-          const chars = correctedStr.split("");
-
-          chars.forEach((char, i) => {
-            const finalIdx = block.final_start + i;
-            if (!rects[finalIdx]) return; // Skip if out of range
-
-            const finalBox = rects[finalIdx];
-            const correctedSpan = document.createElement("span");
-            correctedSpan.className = "corrected-char";
-            correctedSpan.textContent = (char === " ") ? "\u00A0" : char;
-
-            correctedSpan.style.left = `${finalBox.left - containerRect.left}px`;
-            correctedSpan.style.top  = `${finalBox.top  - containerRect.top - 8}px`;
-            annotatedLine.appendChild(correctedSpan);
-          });
-        });
-      });
+      // 3) Render annotated line above it
+      renderAnnotatedLine(sentence, container);
 
       return container;
     }
@@ -167,21 +218,88 @@
 
       const data = await fetchData();
       if (!data) return;
+      if (!Array.isArray(data.sentences)) {
+        console.error("data.sentences is not an array");
+        return;
+      }
 
-      // For each sentence, we rely on "container_length" from the backend
       data.sentences.forEach(sentence => {
+        if (typeof sentence.sentence_index === "undefined") {
+          sentence.sentence_index = 0;
+        }
         const sentenceEl = renderSentence(sentence);
         app.appendChild(sentenceEl);
       });
 
-      // Apply a theme if desired
       applyTheme("theme1");
     }
 
+    // Initial render
     renderApp();
-    // If you want to re-measure token bounding boxes on resize,
-    // you can keep this. But note it won't recalc container width.
+
+    // Re-render on window resize if you want realignment logic,
+    // but if monospace is used, it's typically not needed
     window.addEventListener("resize", renderApp);
+
+    // ========== GLOBAL CLICK HANDLER ============
+    document.addEventListener("click", (e) => {
+      const clicked = e.target.closest(".token, .corrected-char");
+      if (!clicked || !clicked.dataset.blockId) return;
+
+      const blockId = clicked.dataset.blockId;
+      const sentenceIdx = clicked.dataset.sentenceIdx;
+      console.log("Clicked block:", { blockId, sentenceIdx });
+
+      // 1) Identify the container for this sentence
+      const container = clicked.closest(".sentence-container");
+      if (!container) return;
+
+      // 2) If a highlight for this block already exists, remove it (toggle)
+      const existingHighlight = container.querySelector(`.highlight-box[data-block-id='${blockId}']`);
+      if (existingHighlight) {
+        existingHighlight.remove();
+        return;
+      }
+
+      // 3) Gather bounding boxes for all tokens/corrected-chars in this block
+      const allEls = container.querySelectorAll(`[data-block-id='${blockId}']`);
+      if (!allEls.length) return;
+
+      let minLeft = Infinity;
+      let maxRight = -Infinity;
+      let minTop = Infinity;
+      let maxBottom = -Infinity;
+
+      const containerRect = container.getBoundingClientRect();
+
+      allEls.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        const left = rect.left - containerRect.left;
+        const right = rect.right - containerRect.left;
+        const top = rect.top - containerRect.top;
+        const bottom = rect.bottom - containerRect.top;
+
+        if (left < minLeft) minLeft = left;
+        if (right > maxRight) maxRight = right;
+        if (top < minTop) minTop = top;
+        if (bottom > maxBottom) maxBottom = bottom;
+      });
+
+      const width = maxRight - minLeft;
+      const height = maxBottom - minTop;
+
+      // 4) Create a highlight box
+      const highlightBox = document.createElement("div");
+      highlightBox.className = "highlight-box";
+      highlightBox.dataset.blockId = blockId;
+
+      highlightBox.style.left = `${minLeft}px`;
+      highlightBox.style.top = `${minTop}px`;
+      highlightBox.style.width = `${width}px`;
+      highlightBox.style.height = `${height}px`;
+
+      container.appendChild(highlightBox);
+    });
   </script>
 </body>
 </html>

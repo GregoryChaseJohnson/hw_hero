@@ -1,4 +1,5 @@
 import pickle
+import json
 from openai_api_call import perform_ocr, correct_text
 from seq_alignment_reverse import align_sentences
 from diff_lib_refactor import generate_report # type: ignore
@@ -7,7 +8,13 @@ from data_loader import DataLoader
 from renderer import process_sentences, save_renderer_output
 from annotated_line_space_cleanup import post_process
 from align_overhang import finalize_transformation
-use_test_data = False
+from prepare_tokenized_output import (
+    detect_blocks_by_type,
+    assign_block_indices,
+    prepare_json_output
+)
+
+use_test_data = True
 
 test_ocr_text = """Recently, there are many music and K-pop singer coming out. Also, many people including youth are enjoying and affected by it. As the world keeps affected by K-pop, some people are concerned about K-pop music's bad influence because it can have the bad effect. But, for my opinion, I strongly believe that K-pop has more positive effect than harm on the youth.
 
@@ -60,12 +67,10 @@ def main():
         final_tokens_by_sentence.append(sentence_tokens)
         blocks_by_sentence.append(blocks)
 
-    # Step 6: Render and CAPTURE the returned lines:
+    # Step 6: Render and capture the returned lines
     all_annotated_lines, all_final_sentences = process_sentences(
         final_tokens_by_sentence, blocks_by_sentence
     )
-
-    # Now 'all_annotated_lines' actually contains the annotated lines from the renderer
     annotated_lines = all_annotated_lines
     final_sentences = all_final_sentences
 
@@ -73,12 +78,54 @@ def main():
     annotated_lines, final_sentences, blocks_by_sentence = post_process(
         annotated_lines, final_sentences, blocks_by_sentence
     )
-
     save_renderer_output(annotated_lines, final_sentences, blocks_by_sentence)
 
     # Step 8: Final transformation
     print("\nRunning Final Transformation Stage...")
     annotated_lines, final_sentences = finalize_transformation(annotated_lines, final_sentences)
+
+    # --------------------------
+    # NEW: DETECT BLOCKS & CREATE output.json
+    # --------------------------
+
+    # Step 9: Detect blocks on annotated lines and final lines
+    annotated_blocks_all = []
+    for ann_line in annotated_lines:
+        ann_blocks = detect_blocks_by_type(ann_line, valid_types={"corrected"})
+        annotated_blocks_all.append(ann_blocks)
+
+    final_blocks_all = []
+    for fin_line in final_sentences:
+        fin_blocks = detect_blocks_by_type(fin_line, valid_types={"replace"})
+        final_blocks_all.append(fin_blocks)
+
+    # Step 10: Assign block indices
+    for ann_blocks, fin_blocks in zip(annotated_blocks_all, final_blocks_all):
+        assign_block_indices(ann_blocks, fin_blocks)
+
+    for ann_line in annotated_lines:
+        for i, token in enumerate(ann_line):
+            token["index"] = i
+
+    for fin_line in final_sentences:
+        for i, token in enumerate(fin_line):
+            token["index"] = i
+
+
+    # Step 11: Prepare final JSON
+    output_data = prepare_json_output(
+        annotated_blocks_all,
+        final_blocks_all,
+        final_sentences,
+        annotated_lines
+    )
+
+    # Step 12: Write output.json to the desired path
+    json_path = "/home/keithuncouth/hw_hero/renderer/run/app/output.json"
+    with open(json_path, "w") as f:
+        json.dump(output_data, f, indent=4)
+
+    print(f"\n[INFO] Wrote {json_path} successfully.")
 
 
 if __name__ == "__main__":
