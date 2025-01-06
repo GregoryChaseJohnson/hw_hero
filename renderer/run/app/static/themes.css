@@ -1,0 +1,63 @@
+/* Default theme (theme1) */
+:root {
+    --bg-color: #171413;
+    --text-color: #f4f7ffe0;
+    --equal-color: #cdeeff;
+    --replace-color: #f781fe;
+    --delete-color: #f781fe;
+    --insert-color: #64aafa;
+    --corrected-color: #e0f7fa;
+    --highlight-box-color: rgba(68, 61, 61, 0.411);
+}
+  
+/* Light theme */
+.theme-light {
+    --bg-color: #ffffff;
+    --text-color: #000000;
+    --equal-color: #cccccc;
+    --replace-color: #ff0000;
+    --delete-color: #ff0000;
+    --insert-color: #0077ff;
+    --corrected-color: #0000ff;
+    --highlight-box-color: rgb(228, 204, 204); /* Lighter bounding box */
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+.equal {
+    color: var(--equal-color);
+}
+
+.replace, .delete {
+    color: var(--replace-color);
+    text-decoration: line-through;
+}
+
+.insert {
+    color: var(--insert-color);
+}
+
+.corrected-char {
+    color: var(--corrected-color);
+}
+
+/* The bounding box highlight for a clicked block */
+.highlight-box {
+    position: absolute;
+    background-color: var(--highlight-box-color); /* Use variable for consistency */
+    pointer-events: none;
+    z-index: 0; /* Ensure highlight is behind text */
+    isolation: isolate;
+    transition: background-color 0.2s ease;
+}
+
+/* Text layers above the highlight box */
+.final-line,
+.annotated-line {
+    position: relative; /* Ensure proper stacking context */
+    z-index: 1; /* Ensure text is above the highlight box */
+    mix-blend-mode: normal
+}

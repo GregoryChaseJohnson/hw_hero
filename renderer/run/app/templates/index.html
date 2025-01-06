@@ -2,8 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Block Bounding-Box Highlight (Character-Based Annotations)</title>
+  <title>Block Bounding-Box Highlight (Character-Based Annotations + Strike-Through)</title>
+
+  <!-- Link to your external themes.css for all colors + bounding box styling -->
+  <link rel="stylesheet" href="/static/themes.css" />
+
+
   <style>
+    /* Minimal structural CSS, no color references here */
+
     body {
       font-family: "Courier New", Courier, monospace;
       font-size: 16px;
@@ -15,60 +22,36 @@
     /* Container for one sentence */
     .sentence-container {
       position: relative;
-      display: block; 
+      display: block;
       white-space: pre; /* We'll handle wrapping logic separately if needed */
       margin-bottom: 2rem;
       width: auto; /* We'll override with container_length if present */
     }
 
-    /* Final line of text (the "bottom" layer) */
+    /* Final line of text */
     .final-line {
-      display: block; /* A single line for tokens */
-      position: relative;
-      font-family: inherit;
-      font-size: inherit;
-      line-height: inherit;
-      white-space: pre; /* Keep spaces as-is */
+      display: block;
+      white-space: pre; /* preserve spacing */
     }
 
-    /* Annotated line (the "top" layer), aligned by index to final-line tokens */
+    /* Annotated line above final line */
     .annotated-line {
       display: block;
-      position: relative;
-      font-family: inherit;
-      font-size: inherit;
-      line-height: inherit;
       white-space: pre;
-      pointer-events: none; /* We don't click on these chars, but on .corrected-char if needed */
+      pointer-events: none; 
     }
 
     /* Each token in the final line */
     .token {
-      display: inline-block; 
-      white-space: pre;     
+      display: inline-block;
+      white-space: pre;
       margin-right: 0.0rem;
-      font-family: inherit;
-      font-size: inherit;
-      line-height: inherit;
     }
 
-    /* Each corrected char in the annotated line */
+    /* Each corrected char in annotated line */
     .corrected-char {
       display: inline-block;
       white-space: pre;
-      color: #28ffa5;
-      font-family: inherit;
-      font-size: inherit;
-      line-height: inherit;
-    }
-
-    /* The bounding box highlight for a clicked block */
-    .highlight-box {
-      position: absolute;
-      background-color: rgba(68, 61, 61, 0.411); 
-      pointer-events: none;
-      z-index: 1; 
-      transition: background-color 0.2s ease;
     }
   </style>
 </head>
@@ -76,33 +59,10 @@
   <div id="app"></div>
 
   <script>
-    /* Minimal theming logic (optional) */
-    const themes = {
-      theme1: {
-        bgColor: "#1C1916",
-        textColor: "f4f7ffe0",
-        equalColor: "#cdeeffe0",
-        replaceColor: "#f781fe",
-        deleteColor: "#f781fe",
-        insertColor: "#28ffa5",
-        corrected: "#f4f7ffe0"
-      }
-    };
-
-    function applyTheme(themeName) {
-      const theme = themes[themeName];
-      if (!theme) return;
-      document.body.style.backgroundColor = theme.bgColor;
-      document.body.style.color = theme.textColor;
-
-      // Color-coded token classes
-      document.querySelectorAll(".equal").forEach(el => el.style.color = theme.equalColor);
-      document.querySelectorAll(".insert").forEach(el => el.style.color = theme.insertColor);
-      document.querySelectorAll(".replace, .delete").forEach(el => el.style.color = theme.replaceColor);
-      document.querySelectorAll(".corrected, .corrected-char").forEach(el => {
-        el.style.color = theme.corrected;
-      });
-    }
+    /**
+     * 1) No color or theming logic here; rely on themes.css + class usage.
+     * 2) We'll simply build the tokens and annotation layers.
+     */
 
     async function fetchData() {
       try {
@@ -119,7 +79,7 @@
     }
 
     /**
-     * Renders the final line tokens
+     * Renders bottom (final) line of tokens
      */
     function renderFinalLine(sentence, container) {
       const lineDiv = document.createElement("div");
@@ -129,62 +89,52 @@
       const tokens = sentence.final_sentence_tokens || [];
       tokens.forEach(token => {
         const span = document.createElement("span");
+        // Example: "token replace" => triggers the .replace CSS in themes.css
         span.className = `token ${token.type}`;
         span.textContent = (token.char === " ") ? "\u00A0" : token.char;
         span.dataset.index = token.index;
 
-        // Attach block info if in range
-        if (sentence.blocks) {
-          sentence.blocks.forEach(block => {
-            if (token.index >= block.final_start && token.index <= block.final_end) {
-              span.dataset.blockId = block.block_index;
-              span.dataset.sentenceIdx = sentence.sentence_index;
-            }
-          });
-        }
+        // Identify block membership
+        (sentence.blocks || []).forEach(block => {
+          if (token.index >= block.final_start && token.index <= block.final_end) {
+            span.dataset.blockId = block.block_index;
+            span.dataset.sentenceIdx = sentence.sentence_index;
+          }
+        });
         lineDiv.appendChild(span);
       });
     }
 
     /**
-     * Builds a parallel string or array of corrected chars for each sentence index
-     * and renders them in .annotated-line
+     * Renders top (annotated) line of corrected chars
      */
     function renderAnnotatedLine(sentence, container) {
       const annotatedLine = document.createElement("div");
       annotatedLine.className = "annotated-line";
       container.appendChild(annotatedLine);
 
-      // Create an array representing each token index => annotated char
       const tokens = sentence.final_sentence_tokens || [];
       const maxIndex = tokens.length > 0 ? tokens[tokens.length - 1].index : 0;
-
-      // We assume indices go from 0..maxIndex (continuous).
-      // We'll store a string or array of chars for the entire sentence length
-      // default to " " for no annotation
       const annotationArray = new Array(maxIndex + 1).fill(" ");
-
-      // Mark which block index applies to each position, if any
       const blockIdArray = new Array(maxIndex + 1).fill(null);
 
-      // For each block, fill the annotation array
+      // Fill annotation array from blocks
       (sentence.blocks || []).forEach(block => {
         const correctedText = block.corrected_text || "";
         const chars = correctedText.split("");
-        // fill the range final_start..final_end with corrected text
         for (let i = 0; i < chars.length; i++) {
           const pos = block.final_start + i;
           if (pos >= 0 && pos < annotationArray.length) {
-            annotationArray[pos] = chars[i] === " " ? "\u00A0" : chars[i];
+            annotationArray[pos] = (chars[i] === " ") ? "\u00A0" : chars[i];
             blockIdArray[pos] = block.block_index;
           }
         }
       });
 
-      // Now build spans for each character in annotationArray
+      // Build spans from annotationArray
       annotationArray.forEach((ch, idx) => {
         const span = document.createElement("span");
-        span.className = "corrected-char";
+        span.className = "corrected-char"; 
         span.textContent = ch;
         if (blockIdArray[idx] !== null) {
           span.dataset.blockId = blockIdArray[idx];
@@ -195,7 +145,7 @@
     }
 
     function renderSentence(sentence) {
-      // 1) Create the container
+      // Container for both final + annotated lines
       const container = document.createElement("div");
       container.className = "sentence-container";
 
@@ -203,12 +153,8 @@
         container.style.width = sentence.container_length + "ch";
       }
 
-      // 2) Render final line
       renderFinalLine(sentence, container);
-
-      // 3) Render annotated line above it
       renderAnnotatedLine(sentence, container);
-
       return container;
     }
 
@@ -230,18 +176,13 @@
         const sentenceEl = renderSentence(sentence);
         app.appendChild(sentenceEl);
       });
-
-      applyTheme("theme1");
     }
 
     // Initial render
     renderApp();
-
-    // Re-render on window resize if you want realignment logic,
-    // but if monospace is used, it's typically not needed
     window.addEventListener("resize", renderApp);
 
-    // ========== GLOBAL CLICK HANDLER ============
+    // Global Click => highlight bounding box behind text
     document.addEventListener("click", (e) => {
       const clicked = e.target.closest(".token, .corrected-char");
       if (!clicked || !clicked.dataset.blockId) return;
@@ -250,28 +191,24 @@
       const sentenceIdx = clicked.dataset.sentenceIdx;
       console.log("Clicked block:", { blockId, sentenceIdx });
 
-      // 1) Identify the container for this sentence
       const container = clicked.closest(".sentence-container");
       if (!container) return;
 
-      // 2) If a highlight for this block already exists, remove it (toggle)
+      // Toggle highlight
       const existingHighlight = container.querySelector(`.highlight-box[data-block-id='${blockId}']`);
       if (existingHighlight) {
         existingHighlight.remove();
         return;
       }
 
-      // 3) Gather bounding boxes for all tokens/corrected-chars in this block
+      // Gather bounding boxes
       const allEls = container.querySelectorAll(`[data-block-id='${blockId}']`);
       if (!allEls.length) return;
 
-      let minLeft = Infinity;
-      let maxRight = -Infinity;
-      let minTop = Infinity;
-      let maxBottom = -Infinity;
+      let minLeft = Infinity, maxRight = -Infinity;
+      let minTop = Infinity, maxBottom = -Infinity;
 
       const containerRect = container.getBoundingClientRect();
-
       allEls.forEach(el => {
         const rect = el.getBoundingClientRect();
         const left = rect.left - containerRect.left;
@@ -288,11 +225,10 @@
       const width = maxRight - minLeft;
       const height = maxBottom - minTop;
 
-      // 4) Create a highlight box
+      // Create bounding box at z-index: 0 behind text
       const highlightBox = document.createElement("div");
-      highlightBox.className = "highlight-box";
-      highlightBox.dataset.blockId = blockId;
-
+      highlightBox.className = "highlight-box"; 
+      highlightBox.dataset.blockId = blockId; 
       highlightBox.style.left = `${minLeft}px`;
       highlightBox.style.top = `${minTop}px`;
       highlightBox.style.width = `${width}px`;
