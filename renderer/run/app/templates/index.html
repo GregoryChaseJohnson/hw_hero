@@ -2,68 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Block Bounding-Box Highlight (Character-Based Annotations + Strike-Through)</title>
+  <title>Two-Box Highlight (Final & Annotated), Toggled on Click</title>
 
-  <!-- Link to your external themes.css for all colors + bounding box styling -->
+  <!-- Link your existing themes.css for styling/colors -->
   <link rel="stylesheet" href="/static/themes.css" />
 
-
   <style>
-    /* Minimal structural CSS, no color references here */
-
     body {
       font-family: "Courier New", Courier, monospace;
       font-size: 16px;
       line-height: 1.2;
       margin: 20px;
-      overflow: visible; /* Keep visible overflow for highlights, etc. */
+      overflow: visible;
     }
 
-    /* Container for one sentence */
     .sentence-container {
       position: relative;
       display: block;
-      white-space: pre; /* We'll handle wrapping logic separately if needed */
-      margin-bottom: 2rem;
-      width: auto; /* We'll override with container_length if present */
+      white-space: pre;
+      margin-bottom: 4rem;
+      width: auto;
     }
 
     /* Final line of text */
     .final-line {
       display: block;
-      white-space: pre; /* preserve spacing */
+      white-space: pre;
     }
 
     /* Annotated line above final line */
     .annotated-line {
       display: block;
       white-space: pre;
-      pointer-events: none; 
+      pointer-events: none; /* so only .corrected-char is clickable */
     }
 
-    /* Each token in the final line */
-    .token {
-      display: inline-block;
-      white-space: pre;
-      margin-right: 0.0rem;
-    }
-
-    /* Each corrected char in annotated line */
+    .token,
     .corrected-char {
       display: inline-block;
       white-space: pre;
+      cursor: pointer; /* text remains clickable */
     }
+
+    /* highlight-box behind text, toggled on click */
+    .highlight-box {
+      position: absolute;
+      background-color: var(--highlight-box-color, rgba(255, 0, 0, 0.25));
+      z-index: 0; 
+      pointer-events: auto;
+      transition: background-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .highlight-box.active {
+      background-color: rgba(0, 255, 0, 0.25);
+    }
+    
+    /* OPTIONAL: If you want to fix the top bar, you can do so in themes.css:
+       #theme-bar {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 50px;
+         ...
+       }
+       #app { padding-top: 50px; } 
+    */
   </style>
 </head>
 <body>
+  <!-- Top bar with a theme toggle button -->
+  <div id="theme-bar">
+    <button id="theme-toggle-button">Switch Theme</button>
+  </div>
+
   <div id="app"></div>
 
   <script>
-    /**
-     * 1) No color or theming logic here; rely on themes.css + class usage.
-     * 2) We'll simply build the tokens and annotation layers.
-     */
-
+    /***********************
+     * 1) Fetch data
+     ***********************/
     async function fetchData() {
       try {
         const response = await fetch("/data.json");
@@ -78,19 +97,18 @@
       }
     }
 
-    /**
-     * Renders bottom (final) line of tokens
-     */
+    /***********************
+     * 2) Render final line
+     ***********************/
     function renderFinalLine(sentence, container) {
-      const lineDiv = document.createElement("div");
-      lineDiv.className = "final-line";
-      container.appendChild(lineDiv);
+      const finalLine = document.createElement("div");
+      finalLine.className = "final-line";
+      container.appendChild(finalLine);
 
       const tokens = sentence.final_sentence_tokens || [];
       tokens.forEach(token => {
         const span = document.createElement("span");
-        // Example: "token replace" => triggers the .replace CSS in themes.css
-        span.className = `token ${token.type}`;
+        span.className = `token ${token.type || ""}`;
         span.textContent = (token.char === " ") ? "\u00A0" : token.char;
         span.dataset.index = token.index;
 
@@ -101,13 +119,13 @@
             span.dataset.sentenceIdx = sentence.sentence_index;
           }
         });
-        lineDiv.appendChild(span);
+        finalLine.appendChild(span);
       });
     }
 
-    /**
-     * Renders top (annotated) line of corrected chars
-     */
+    /***********************
+     * 3) Render annotated line
+     ***********************/
     function renderAnnotatedLine(sentence, container) {
       const annotatedLine = document.createElement("div");
       annotatedLine.className = "annotated-line";
@@ -118,12 +136,11 @@
       const annotationArray = new Array(maxIndex + 1).fill(" ");
       const blockIdArray = new Array(maxIndex + 1).fill(null);
 
-      // Fill annotation array from blocks
       (sentence.blocks || []).forEach(block => {
         const correctedText = block.corrected_text || "";
         const chars = correctedText.split("");
         for (let i = 0; i < chars.length; i++) {
-          const pos = block.final_start + i;
+          const pos = block.annotated_start + i;
           if (pos >= 0 && pos < annotationArray.length) {
             annotationArray[pos] = (chars[i] === " ") ? "\u00A0" : chars[i];
             blockIdArray[pos] = block.block_index;
@@ -131,7 +148,6 @@
         }
       });
 
-      // Build spans from annotationArray
       annotationArray.forEach((ch, idx) => {
         const span = document.createElement("span");
         span.className = "corrected-char"; 
@@ -144,8 +160,10 @@
       });
     }
 
+    /***********************
+     * 4) Render a sentence container
+     ***********************/
     function renderSentence(sentence) {
-      // Container for both final + annotated lines
       const container = document.createElement("div");
       container.className = "sentence-container";
 
@@ -158,22 +176,31 @@
       return container;
     }
 
+    /***********************
+     * 5) Create a separator line
+     ***********************/
+    function createSeparatorLine() {
+      const sep = document.createElement("div");
+      sep.className = "separator-line"; 
+      return sep;
+    }
+
+    /***********************
+     * 6) Main rendering logic with separators
+     ***********************/
     async function renderApp() {
       const app = document.getElementById("app");
       app.innerHTML = "";
 
       const data = await fetchData();
-      if (!data) return;
-      if (!Array.isArray(data.sentences)) {
-        console.error("data.sentences is not an array");
-        return;
-      }
+      if (!data || !Array.isArray(data.sentences)) return;
 
-      data.sentences.forEach(sentence => {
-        if (typeof sentence.sentence_index === "undefined") {
-          sentence.sentence_index = 0;
-        }
+      data.sentences.forEach((sentence, index) => {
         const sentenceEl = renderSentence(sentence);
+
+        const sepLine = createSeparatorLine();
+        sentenceEl.appendChild(sepLine);
+        
         app.appendChild(sentenceEl);
       });
     }
@@ -182,33 +209,37 @@
     renderApp();
     window.addEventListener("resize", renderApp);
 
-    // Global Click => highlight bounding box behind text
+    /***********************
+     * 7) Two-Box toggling logic
+     ***********************/
     document.addEventListener("click", (e) => {
       const clicked = e.target.closest(".token, .corrected-char");
       if (!clicked || !clicked.dataset.blockId) return;
 
       const blockId = clicked.dataset.blockId;
-      const sentenceIdx = clicked.dataset.sentenceIdx;
-      console.log("Clicked block:", { blockId, sentenceIdx });
-
       const container = clicked.closest(".sentence-container");
       if (!container) return;
 
-      // Toggle highlight
-      const existingHighlight = container.querySelector(`.highlight-box[data-block-id='${blockId}']`);
-      if (existingHighlight) {
-        existingHighlight.remove();
+      // Check if boxes exist => remove them
+      const existingBoxes = container.querySelectorAll(`.highlight-box[data-block-id='${blockId}']`);
+      if (existingBoxes.length) {
+        existingBoxes.forEach(box => box.remove());
         return;
       }
 
-      // Gather bounding boxes
-      const allEls = container.querySelectorAll(`[data-block-id='${blockId}']`);
+      // Otherwise create two bounding boxes: final & annotated
+      createBoxForLine(container, blockId, ".final-line .token");
+      createBoxForLine(container, blockId, ".annotated-line .corrected-char");
+    });
+
+    function createBoxForLine(container, blockId, lineSelector) {
+      const allEls = container.querySelectorAll(`${lineSelector}[data-block-id='${blockId}']`);
       if (!allEls.length) return;
 
+      const containerRect = container.getBoundingClientRect();
       let minLeft = Infinity, maxRight = -Infinity;
       let minTop = Infinity, maxBottom = -Infinity;
 
-      const containerRect = container.getBoundingClientRect();
       allEls.forEach(el => {
         const rect = el.getBoundingClientRect();
         const left = rect.left - containerRect.left;
@@ -224,18 +255,44 @@
 
       const width = maxRight - minLeft;
       const height = maxBottom - minTop;
+      if (width <= 0 || height <= 0) return;
 
-      // Create bounding box at z-index: 0 behind text
       const highlightBox = document.createElement("div");
-      highlightBox.className = "highlight-box"; 
-      highlightBox.dataset.blockId = blockId; 
+      highlightBox.className = "highlight-box";
+      highlightBox.dataset.blockId = blockId;
       highlightBox.style.left = `${minLeft}px`;
       highlightBox.style.top = `${minTop}px`;
       highlightBox.style.width = `${width}px`;
       highlightBox.style.height = `${height}px`;
 
       container.appendChild(highlightBox);
-    });
+    }
+
+    /***********************
+     * 8) Theme Toggle Logic
+     ***********************/
+    let isLightTheme = false;
+
+    function toggleTheme() {
+      const body = document.body;
+      const themeToggleButton = document.getElementById("theme-toggle-button");
+
+      if (isLightTheme) {
+        // Switch back to Default theme
+        body.classList.remove("theme-light");
+        themeToggleButton.textContent = "Switch Theme";
+      } else {
+        // Switch to Light theme
+        body.classList.add("theme-light");
+        themeToggleButton.textContent = "Switch Theme";
+      }
+
+      isLightTheme = !isLightTheme;
+    }
+
+    document
+      .getElementById("theme-toggle-button")
+      .addEventListener("click", toggleTheme);
   </script>
 </body>
 </html>

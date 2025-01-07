@@ -1,25 +1,120 @@
 /* Default theme (theme1) */
 :root {
-    --bg-color: #171413;
-    --text-color: #f4f7ffe0;
-    --equal-color: #cdeeff;
-    --replace-color: #f781fe;
-    --delete-color: #f781fe;
-    --insert-color: #64aafa;
-    --corrected-color: #e0f7fa;
-    --highlight-box-color: rgba(68, 61, 61, 0.411);
+    --bg-color: #1b1a1a;
+    --text-color: #dee0f3e0;
+    --equal-color: #d6dbe9;
+    --replace-color: #7d6ce0;
+    --delete-color: #f856f0;
+    --insert-color: #74f5bf;
+    --corrected-color: #c3c9ee;
+    --highlight-box-color: rgb(42, 42, 43);
+
+    /* NEW variables for strike-through customization */
+    --delete-strike-color: #ee4141bd;   /* Separate color for the strike */
+    --delete-strike-thickness: 0.8px;   
+
+   
+    --sep-line-color: #9696b86c;         
+    --sep-line-thickness: 0.08px;        
+    --sep-line-margin: 0.6px; 
+
+    --theme-box-color: #1e1d20;
+    --theme-bar-border-color: #2524297c;
+    --theme-bar-button-bg-color: #2b2b2e;
+    --theme-bar-button-hover-bg-color: #3d3d41;
+    
+    --theme-bar-bg: var(--theme-box-color); /* Background color for the top bar */
+    --theme-bar-text: var(--text-color); /* Text color for the top bar */
+    --theme-bar-border: var(--theme-bar-border-color); /* Border color */
+    --theme-bar-button-bg: var(--theme-bar-button-bg-color); /* Button background color */
+    --theme-bar-button-hover-bg: var(--theme-bar-button-hover-bg-color); /* Button hover background */
+    --theme-bar-button-text: var(--text-color); /* Button text color */
+    --theme-bar-padding: 10px; /* Padding for the bar */
+    --theme-bar-border-radius: 4px; /* Rounded corners for the button */
 }
-  
+
 /* Light theme */
 .theme-light {
-    --bg-color: #ffffff;
-    --text-color: #000000;
-    --equal-color: #cccccc;
-    --replace-color: #ff0000;
-    --delete-color: #ff0000;
-    --insert-color: #0077ff;
-    --corrected-color: #0000ff;
-    --highlight-box-color: rgb(228, 204, 204); /* Lighter bounding box */
+    --bg-color: #252627;
+    --text-color: #f4f7ffe0;
+    --equal-color: #e1eaee;
+    --replace-color: #8967e6;
+    --delete-color: #f856f0;
+    --insert-color: #74f5bf;
+    --corrected-color: #d6dbfd;
+    --highlight-box-color: #1d1d20;/* Lighter bounding box */
+
+    /* Example override for strike-through in light theme (optional) */
+    --delete-strike-color: rgba(255, 0, 0, 0.7);
+    --delete-strike-thickness: 0.4 px;
+
+    --sep-line-color: #a9aaac71;         
+
+    --sep-line-thickness: 0.06px;   
+    --sep-line-margin: 0.06px;  
+
+    --theme-box-color: #232324;
+    --theme-bar-border-color: #1f1f20;
+
+    --theme-bar-bg: var(--theme-box-color); 
+    --theme-bar-text: var(--text-color); 
+    --theme-bar-border: var(--theme-bar-border-color); 
+    --theme-bar-button-bg: var(--replace-color);
+    --theme-bar-button-hover-bg: var(--delete-color);
+    --theme-bar-button-text: var(--text-color);
+
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0; /* remove default body margin */
+}
+
+/* Main application container offset for the fixed theme bar */
+#app {
+    padding-top: 50px; /* Offsets content below the fixed top bar */
+}
+
+/* Top bar styles */
+#theme-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background-color: var(--theme-bar-bg);
+    color: var(--theme-bar-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    z-index: 1000;
+    border-bottom: 1px solid var(--theme-bar-border);
+}
+
+/* The button inside the top bar */
+#theme-toggle-button {
+    background-color: var(--theme-bar-button-bg);
+    color: var(--theme-bar-button-text);
+    border: none;
+    border-radius: var(--theme-bar-border-radius);
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#theme-toggle-button:hover {
+    background-color: var(--theme-bar-button-hover-bg);
+}
+
+/* The text showing the current theme */
+#theme-name-display {
+    margin-left: 15px;
+    font-size: 14px;
+    font-weight: bold;
+
 }
 
 body {
@@ -31,9 +126,20 @@ body {
     color: var(--equal-color);
 }
 
-.replace, .delete {
+
+.replace {
     color: var(--replace-color);
+    /*text-decoration: line-through;*/
+    /*text-decoration-color: var(--replace-strike-color, var(--replace-color));*/
+    /*text-decoration-thickness: var(--replace-strike-thickness, 2px);*/
+}
+
+.delete {
+    color: var(--delete-color);
     text-decoration: line-through;
+    text-decoration-color: var(--delete-strike-color, var(--replace-color));
+    text-decoration-thickness: var(--delete-strike-thickness, 0.0.8px);
+
 }
 
 .insert {
@@ -48,9 +154,10 @@ body {
 .highlight-box {
     position: absolute;
     background-color: var(--highlight-box-color); /* Use variable for consistency */
-    pointer-events: none;
+    pointer-events: auto;
     z-index: 0; /* Ensure highlight is behind text */
     isolation: isolate;
+    border-radius: 6px; 
     transition: background-color 0.2s ease;
 }
 
@@ -58,6 +165,16 @@ body {
 .final-line,
 .annotated-line {
     position: relative; /* Ensure proper stacking context */
-    z-index: 1; /* Ensure text is above the highlight box */
-    mix-blend-mode: normal
+    z-index: 1;         /* Ensure text is above the highlight box */
+    mix-blend-mode: normal;
+}
+
+/* NEW: horizontal separator line for sentence separation */
+.separator-line {
+    height: var(--sep-line-thickness, 2px);
+    background-color: var(--sep-line-color, #fff);
+    margin-bottom: var(--sep-line-margin, 100px);
+    margin-top: 6px;
+    margin-left: 20px;
+    width: 95%;
 }
