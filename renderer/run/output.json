@@ -374,7 +374,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 14,
@@ -385,6 +385,8 @@
                     "corrected_text": "with"
                 }
             ],
+            "insert_blocks": [],
+            "delete_blocks": [],
             "container_length": 74
         },
         {
@@ -776,7 +778,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 16,
@@ -803,6 +805,15 @@
                     "annotated_start": 58,
                     "annotated_end": 76,
                     "corrected_text": "either win or lose."
+                }
+            ],
+            "insert_blocks": [],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 2,
+                    "final_end": 5,
+                    "delete_text": " our"
                 }
             ],
             "container_length": 77
@@ -1136,7 +1147,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 2,
@@ -1154,6 +1165,22 @@
                     "annotated_start": 49,
                     "annotated_end": 51,
                     "corrected_text": "can"
+                }
+            ],
+            "insert_blocks": [
+                {
+                    "insert_block_index": 0,
+                    "final_start": 58,
+                    "final_end": 60,
+                    "insert_text": "be "
+                }
+            ],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 21,
+                    "final_end": 26,
+                    "delete_text": " about"
                 }
             ],
             "container_length": 65
@@ -1332,7 +1359,9 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [],
+            "replacement_blocks": [],
+            "insert_blocks": [],
+            "delete_blocks": [],
             "container_length": 34
         },
         {
@@ -1599,7 +1628,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 0,
@@ -1617,6 +1646,21 @@
                     "annotated_start": 30,
                     "annotated_end": 33,
                     "corrected_text": "time"
+                }
+            ],
+            "insert_blocks": [],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 21,
+                    "final_end": 23,
+                    "delete_text": "in "
+                },
+                {
+                    "delete_block_index": 1,
+                    "final_start": 41,
+                    "final_end": 46,
+                    "delete_text": "their "
                 }
             ],
             "container_length": 52
@@ -1965,7 +2009,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 11,
@@ -1983,6 +2027,21 @@
                     "annotated_start": 61,
                     "annotated_end": 66,
                     "corrected_text": "people"
+                }
+            ],
+            "insert_blocks": [],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 37,
+                    "final_end": 46,
+                    "delete_text": "ourselves "
+                },
+                {
+                    "delete_block_index": 1,
+                    "final_start": 51,
+                    "final_end": 52,
+                    "delete_text": " a"
                 }
             ],
             "container_length": 68
@@ -2376,7 +2435,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 7,
@@ -2405,6 +2464,15 @@
                     "corrected_text": "valuable"
                 }
             ],
+            "insert_blocks": [
+                {
+                    "insert_block_index": 0,
+                    "final_start": 2,
+                    "final_end": 2,
+                    "insert_text": ","
+                }
+            ],
+            "delete_blocks": [],
             "container_length": 77
         },
         {
@@ -2631,7 +2699,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 17,
@@ -2642,6 +2710,8 @@
                     "corrected_text": "build"
                 }
             ],
+            "insert_blocks": [],
+            "delete_blocks": [],
             "container_length": 44
         },
         {
@@ -2888,7 +2958,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 7,
@@ -2917,6 +2987,8 @@
                     "corrected_text": "annoying."
                 }
             ],
+            "insert_blocks": [],
+            "delete_blocks": [],
             "container_length": 48
         },
         {
@@ -3613,7 +3685,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 58,
@@ -3640,6 +3712,15 @@
                     "annotated_start": 104,
                     "annotated_end": 133,
                     "corrected_text": "winning against you repeatedly"
+                }
+            ],
+            "insert_blocks": [],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 42,
+                    "final_end": 52,
+                    "delete_text": "you get to "
                 }
             ],
             "container_length": 138
@@ -4028,7 +4109,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 27,
@@ -4048,6 +4129,21 @@
                     "corrected_text": "feel"
                 }
             ],
+            "insert_blocks": [
+                {
+                    "insert_block_index": 0,
+                    "final_start": 10,
+                    "final_end": 10,
+                    "insert_text": ","
+                },
+                {
+                    "insert_block_index": 1,
+                    "final_start": 68,
+                    "final_end": 75,
+                    "insert_text": " to you."
+                }
+            ],
+            "delete_blocks": [],
             "container_length": 76
         },
         {
@@ -4524,7 +4620,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 34,
@@ -4535,6 +4631,8 @@
                     "corrected_text": "with"
                 }
             ],
+            "insert_blocks": [],
+            "delete_blocks": [],
             "container_length": 94
         },
         {
@@ -4816,7 +4914,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 14,
@@ -4827,6 +4925,8 @@
                     "corrected_text": "a lot"
                 }
             ],
+            "insert_blocks": [],
+            "delete_blocks": [],
             "container_length": 55
         }
     ]

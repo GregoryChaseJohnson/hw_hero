@@ -354,7 +354,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 16,
@@ -374,6 +374,15 @@
                     "corrected_text": "singers"
                 }
             ],
+            "insert_blocks": [
+                {
+                    "insert_block_index": 0,
+                    "final_start": 30,
+                    "final_end": 33,
+                    "insert_text": " new"
+                }
+            ],
+            "delete_blocks": [],
             "container_length": 70
         },
         {
@@ -830,7 +839,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 6,
@@ -859,6 +868,21 @@
                     "corrected_text": "being influenced"
                 }
             ],
+            "insert_blocks": [
+                {
+                    "insert_block_index": 0,
+                    "final_start": 21,
+                    "final_end": 21,
+                    "insert_text": ","
+                },
+                {
+                    "insert_block_index": 1,
+                    "final_start": 60,
+                    "final_end": 62,
+                    "insert_text": "it "
+                }
+            ],
+            "delete_blocks": [],
             "container_length": 90
         },
         {
@@ -1585,7 +1609,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 13,
@@ -1612,6 +1636,15 @@
                     "annotated_start": 136,
                     "annotated_end": 143,
                     "corrected_text": "effects."
+                }
+            ],
+            "insert_blocks": [],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 128,
+                    "final_end": 131,
+                    "delete_text": "the "
                 }
             ],
             "container_length": 144
@@ -2125,7 +2158,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 5,
@@ -2143,6 +2176,28 @@
                     "annotated_start": 71,
                     "annotated_end": 76,
                     "corrected_text": "impact"
+                }
+            ],
+            "insert_blocks": [
+                {
+                    "insert_block_index": 0,
+                    "final_start": 55,
+                    "final_end": 56,
+                    "insert_text": "a "
+                }
+            ],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 3,
+                    "final_end": 3,
+                    "delete_text": ","
+                },
+                {
+                    "delete_block_index": 1,
+                    "final_start": 91,
+                    "final_end": 94,
+                    "delete_text": "the "
                 }
             ],
             "container_length": 101
@@ -2371,7 +2426,9 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [],
+            "replacement_blocks": [],
+            "insert_blocks": [],
+            "delete_blocks": [],
             "container_length": 44
         },
         {
@@ -2738,7 +2795,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 35,
@@ -2758,6 +2815,15 @@
                     "corrected_text": "tests."
                 }
             ],
+            "insert_blocks": [
+                {
+                    "insert_block_index": 0,
+                    "final_start": 23,
+                    "final_end": 24,
+                    "insert_text": "a "
+                }
+            ],
+            "delete_blocks": [],
             "container_length": 72
         },
         {
@@ -3224,7 +3290,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 17,
@@ -3242,6 +3308,15 @@
                     "annotated_start": 62,
                     "annotated_end": 87,
                     "corrected_text": "feeling hopeful because of"
+                }
+            ],
+            "insert_blocks": [],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 3,
+                    "final_end": 3,
+                    "delete_text": ","
                 }
             ],
             "container_length": 92
@@ -3635,7 +3710,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 38,
@@ -3646,6 +3721,15 @@
                     "corrected_text": "struggled with the restrictions"
                 }
             ],
+            "insert_blocks": [
+                {
+                    "insert_block_index": 0,
+                    "final_start": 12,
+                    "final_end": 15,
+                    "insert_text": " the"
+                }
+            ],
+            "delete_blocks": [],
             "container_length": 77
         },
         {
@@ -4167,7 +4251,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 60,
@@ -4176,6 +4260,34 @@
                     "annotated_start": 60,
                     "annotated_end": 88,
                     "corrected_text": "felt hopeful about the end of"
+                }
+            ],
+            "insert_blocks": [
+                {
+                    "insert_block_index": 0,
+                    "final_start": 8,
+                    "final_end": 15,
+                    "insert_text": " I heard"
+                },
+                {
+                    "insert_block_index": 1,
+                    "final_start": 54,
+                    "final_end": 54,
+                    "insert_text": ","
+                }
+            ],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 28,
+                    "final_end": 33,
+                    "delete_text": "named "
+                },
+                {
+                    "delete_block_index": 1,
+                    "final_start": 56,
+                    "final_end": 56,
+                    "delete_text": ","
                 }
             ],
             "container_length": 103
@@ -4549,7 +4661,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 45,
@@ -4560,6 +4672,8 @@
                     "corrected_text": "interesting to young people."
                 }
             ],
+            "insert_blocks": [],
+            "delete_blocks": [],
             "container_length": 73
         },
         {
@@ -5161,7 +5275,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 23,
@@ -5179,6 +5293,15 @@
                     "annotated_start": 102,
                     "annotated_end": 108,
                     "corrected_text": "singers"
+                }
+            ],
+            "insert_blocks": [],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 14,
+                    "final_end": 17,
+                    "delete_text": "how "
                 }
             ],
             "container_length": 119
@@ -5647,7 +5770,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 0,
@@ -5674,6 +5797,15 @@
                     "annotated_start": 64,
                     "annotated_end": 91,
                     "corrected_text": "from their favorite artists."
+                }
+            ],
+            "insert_blocks": [],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 31,
+                    "final_end": 36,
+                    "delete_text": "or go "
                 }
             ],
             "container_length": 92
@@ -6362,7 +6494,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 9,
@@ -6400,6 +6532,8 @@
                     "corrected_text": "for their future careers."
                 }
             ],
+            "insert_blocks": [],
+            "delete_blocks": [],
             "container_length": 136
         },
         {
@@ -6961,7 +7095,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 0,
@@ -6981,6 +7115,21 @@
                     "corrected_text": "rethink"
                 }
             ],
+            "insert_blocks": [
+                {
+                    "insert_block_index": 0,
+                    "final_start": 94,
+                    "final_end": 98,
+                    "insert_text": "feel "
+                },
+                {
+                    "insert_block_index": 1,
+                    "final_start": 107,
+                    "final_end": 110,
+                    "insert_text": " it."
+                }
+            ],
+            "delete_blocks": [],
             "container_length": 111
         },
         {
@@ -7217,7 +7366,7 @@
                     "type": "equal"
                 }
             ],
-            "blocks": [
+            "replacement_blocks": [
                 {
                     "block_index": 0,
                     "final_start": 0,
@@ -7235,6 +7384,22 @@
                     "annotated_start": 23,
                     "annotated_end": 27,
                     "corrected_text": "a lot"
+                }
+            ],
+            "insert_blocks": [
+                {
+                    "insert_block_index": 0,
+                    "final_start": 13,
+                    "final_end": 15,
+                    "insert_text": "\"ve"
+                }
+            ],
+            "delete_blocks": [
+                {
+                    "delete_block_index": 0,
+                    "final_start": 35,
+                    "final_end": 38,
+                    "delete_text": "the "
                 }
             ],
             "container_length": 46

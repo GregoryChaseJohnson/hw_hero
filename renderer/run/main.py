@@ -9,8 +9,12 @@ from renderer import process_sentences, save_renderer_output
 from annotated_line_space_cleanup import post_process
 from align_overhang import finalize_transformation
 from prepare_tokenized_output import (
-    detect_blocks_by_type,
     assign_block_indices,
+    detect_blocks_by_type,
+    detect_replacement_blocks,
+    detect_insert_blocks,
+    detect_delete_blocks,
+    print_sentence_debug,
     prepare_json_output
 )
 
@@ -84,11 +88,7 @@ def main():
     print("\nRunning Final Transformation Stage...")
     annotated_lines, final_sentences = finalize_transformation(annotated_lines, final_sentences)
 
-    # --------------------------
-    # NEW: DETECT BLOCKS & CREATE output.json
-    # --------------------------
 
-    # Step 9: Detect blocks on annotated lines and final lines
     annotated_blocks_all = []
     for ann_line in annotated_lines:
         ann_blocks = detect_blocks_by_type(ann_line, valid_types={"corrected"})
@@ -111,22 +111,50 @@ def main():
         for i, token in enumerate(fin_line):
             token["index"] = i
 
+    # 2) Detect replacement blocks
+    replacement_ann_blocks_all = []
+    replacement_fin_blocks_all = []
+    for ann_line, fin_line in zip(annotated_lines, final_sentences):
+        ann_blocks, fin_blocks = detect_replacement_blocks(ann_line, fin_line)
+        replacement_ann_blocks_all.append(ann_blocks)
+        replacement_fin_blocks_all.append(fin_blocks)
 
-    # Step 11: Prepare final JSON
+    # 3) Detect insert + delete blocks
+    insert_blocks_all = []
+    delete_blocks_all = []
+    for fin_line in final_sentences:
+        ins_blks = detect_insert_blocks(fin_line)
+        del_blks = detect_delete_blocks(fin_line)
+        insert_blocks_all.append(ins_blks)
+        delete_blocks_all.append(del_blks)
+
+    # 4) Optional debug of replacement blocks
+    for idx, (ann_blocks, fin_blocks, final_line, annotated_line) in enumerate(
+        zip(
+            replacement_ann_blocks_all,
+            replacement_fin_blocks_all,
+            final_sentences,
+            annotated_lines
+        )
+    ):
+        print_sentence_debug(idx, final_line, ann_blocks, fin_blocks, annotated_line)
+
+    # 5) Prepare final JSON
     output_data = prepare_json_output(
-        annotated_blocks_all,
-        final_blocks_all,
+        replacement_ann_blocks_all,
+        replacement_fin_blocks_all,
+        insert_blocks_all,
+        delete_blocks_all,
         final_sentences,
         annotated_lines
     )
 
-    # Step 12: Write output.json to the desired path
+    # 6) Write output.json
     json_path = "/home/keithuncouth/hw_hero/renderer/run/app/output.json"
     with open(json_path, "w") as f:
         json.dump(output_data, f, indent=4)
 
     print(f"\n[INFO] Wrote {json_path} successfully.")
-
 
 if __name__ == "__main__":
     main()
