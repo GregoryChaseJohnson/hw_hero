@@ -1,5 +1,16 @@
 import json
 import pickle
+import re
+
+def replace_double_quotes_in_tokens(tokens):
+    """
+    Replace double quotes used as apostrophes with single quotes in a list of tokens.
+    Tokens are modified in place.
+    """
+    for token in tokens:
+        token["char"] = re.sub(r'\b(\w+)"(\w+)\b', r"\1'\2", token["char"])
+    return tokens
+
 
 def compute_container_length(annotated_line, final_line):
     """
@@ -277,11 +288,15 @@ def prepare_json_output(
     return {"sentences": sentences_data}
 
 if __name__ == "__main__":
-    # 1) Load final_output.pkl
+    # Load final_output.pkl
     with open("final_output.pkl", "rb") as f:
         data = pickle.load(f)
         annotated_lines = data["annotated_lines"]
         final_sentences = data["final_sentences"]
+
+    # Apply the double quote replacement to all tokens in annotated lines and final sentences
+    annotated_lines = [replace_double_quotes_in_tokens(line) for line in annotated_lines]
+    final_sentences = [replace_double_quotes_in_tokens(sentence) for sentence in final_sentences]
 
     # Assign indexes to final_sentences
     for sentence in final_sentences:
@@ -293,7 +308,7 @@ if __name__ == "__main__":
         for i, token in enumerate(ann_line):
             token["index"] = i
 
-    # 2) Detect replacement blocks for each sentence
+    # Detect replacement blocks for each sentence
     replacement_ann_blocks_all = []
     replacement_fin_blocks_all = []
     for ann_line, fin_line in zip(annotated_lines, final_sentences):
@@ -301,7 +316,7 @@ if __name__ == "__main__":
         replacement_ann_blocks_all.append(ann_blocks)
         replacement_fin_blocks_all.append(fin_blocks)
 
-    # 3) Detect insert + delete blocks for each final line
+    # Detect insert + delete blocks for each final line
     insert_blocks_all = []
     delete_blocks_all = []
     for fin_line in final_sentences:
@@ -310,15 +325,14 @@ if __name__ == "__main__":
         insert_blocks_all.append(ins_blks)
         delete_blocks_all.append(del_blks)
 
-    # 4) Debug printing for replacement blocks only
-    #    (If you want insert/delete debug, do something similar.)
+    # Debug printing for replacement blocks only
     for idx, (ann_blocks, fin_blocks, final_line, annotated_line) in enumerate(
         zip(replacement_ann_blocks_all, replacement_fin_blocks_all,
             final_sentences, annotated_lines)
     ):
         print_sentence_debug(idx, final_line, ann_blocks, fin_blocks, annotated_line)
 
-    # 5) Prepare final JSON with separate block categories
+    # Prepare final JSON with separate block categories
     output_data = prepare_json_output(
         replacement_ann_blocks_all,
         replacement_fin_blocks_all,
@@ -328,7 +342,7 @@ if __name__ == "__main__":
         annotated_lines
     )
 
-    # 6) Write to output
+    # Write to output
     with open("output.json", "w") as f:
         json.dump(output_data, f, indent=4)
 

@@ -34,19 +34,28 @@
     }
 
     .token,
-    .corrected-char {
+    .corrected-char { 
       display: inline-block;
       white-space: pre;
       cursor: pointer;
     }
 
-    /* Removed any .highlight-box styling here to rely on themes.css */
+    /*
+      REMOVE or COMMENT OUT the old .large-view block
+      if it exists. We no longer need it. 
+      .large-view {
+        font-size: 20px;
+        line-height: 1.4;
+      }
+    */
   </style>
 </head>
 <body>
   <!-- Top bar with a theme toggle button -->
   <div id="theme-bar">
     <button id="theme-toggle-button">Switch to Light</button>
+    <!-- Renamed the button text to reflect "Compact" view -->
+    <button id="compact-toggle-button">Toggle Compact View</button>
   </div>
 
   <div id="app"></div>
@@ -279,10 +288,8 @@
     /********************************
      * 4) Theme Toggle Logic (Refactored)
      *******************************/
-    // 1) Keep track of theme in a variable:
     let isLightTheme = false;
 
-    // 2) Attempt to load previous theme preference from localStorage:
     (function initTheme() {
       const storedTheme = localStorage.getItem("preferredTheme"); 
       if (storedTheme === "light") {
@@ -292,7 +299,6 @@
       }
     })();
 
-    // 3) Toggle function
     function toggleTheme() {
       isLightTheme = !isLightTheme;
       if (isLightTheme) {
@@ -305,17 +311,31 @@
       updateThemeButtonText();
     }
 
-    // 4) Update button text based on the current theme
     function updateThemeButtonText() {
+      // Example: reflect current theme in button text
       const themeToggleButton = document.getElementById("theme-toggle-button");
-      themeToggleButton.textContent = isLightTheme 
-        ? "Switch to Dark" 
+      themeToggleButton.textContent = isLightTheme
+        ? "Switch to Dark"
         : "Switch to Light";
     }
 
-    // 5) Attach event listener for the button
     const themeToggleButton = document.getElementById("theme-toggle-button");
     themeToggleButton.addEventListener("click", toggleTheme);
+
+    /********************************
+     * 5) Compact View Toggle Logic
+     *******************************/
+    let isCompactView = false;
+    function toggleCompactView() {
+      isCompactView = !isCompactView;
+      document.body.classList.toggle("compact-view", isCompactView);
+
+      // Remove existing highlight boxes so they're not misaligned
+      document.querySelectorAll('.highlight-box').forEach(box => box.remove());
+    }
+
+    const compactToggleButton = document.getElementById("compact-toggle-button");
+    compactToggleButton.addEventListener("click", toggleCompactView);
   </script>
 </body>
 </html>

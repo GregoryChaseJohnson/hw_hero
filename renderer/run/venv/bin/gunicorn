@@ -1,4 +1,4 @@
-#!/home/keithuncouth/hw_hero/renderer/run/venv/bin/python
+#!/home/keithuncouth/hw_hero/renderer/run/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

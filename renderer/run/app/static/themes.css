@@ -1,30 +1,30 @@
 /* Default theme (theme1) */
 :root {
-    --bg-color: #1b1b1a;
-    --text-color: #dee0f3e0;
-    --equal-color: #d6dbe9;
-    --replace-color: #7d6ce0;
+    --bg-color: #1b1a19;
+    --text-color: #ffffff;
+    --equal-color: #ffffff;
+    --replace-color: #7962fc;
     --delete-color: #f856f0;
-    --insert-color: #28da78;
-    --corrected-color: #c3c9ee;
-    --highlight-box-color: rgb(44, 44, 46);
+    --insert-color: #2fff8d;
+    --corrected-color: #ffffff;
+    --highlight-box-color: rgba(54, 52, 52, 0.692);
+    --highlight-border-color: rgba(44, 43, 43, 0.212);
 
     /* NEW variables for strike-through customization */
     --delete-strike-color: #ee4141bd;   /* Separate color for the strike */
     --delete-strike-thickness: 0.8px;   
 
-   
-    --sep-line-color: #9696b86c;         
-    --sep-line-thickness: 0.08px;        
+    --sep-line-color: #9696b84f;         
+    --sep-line-thickness: 1.0px;        
     --sep-line-margin: 0.6px; 
 
-    --theme-box-color: #1e1d20;
-    --theme-bar-border-color: #2524297c;
+    --theme-box-color: #2d2931a9;
+    --theme-bar-border-color: #2524293b;
     --theme-bar-button-bg-color: #121214;
     --theme-bar-button-hover-bg-color: rgb(44, 44, 46);
     
     --theme-bar-bg: var(--theme-box-color); /* Background color for the top bar */
-    --theme-bar-text: var(--text-color); /* Text color for the top bar */
+    --theme-bar-text: var(--text-color);    /* Text color for the top bar */
     --theme-bar-border: var(--theme-bar-border-color); /* Border color */
     --theme-bar-button-bg: var(--theme-bar-button-bg-color); /* Button background color */
     --theme-bar-button-hover-bg: var(--theme-bar-button-hover-bg-color); /* Button hover background */
@@ -35,26 +35,27 @@
 
 /* Light theme */
 .theme-light {
-    --bg-color: #28292b;
-    --text-color: #f4f7ffe0;
-    --equal-color: #e1eaee;
+    --bg-color: #424144;
+    --text-color: #f4f7ff;
+    --equal-color: #ffffff;
     --replace-color: #8967e6;
     --delete-color: #f856f0;
     --insert-color: #24ec99;
     --corrected-color: #d6dbfd;
-    --highlight-box-color: #1d1d20;/* Lighter bounding box */
+    --highlight-box-color: #1d1d20b2;
+    --highlight-border-color: #3f3f416c;
 
     /* Example override for strike-through in light theme (optional) */
     --delete-strike-color: rgba(255, 0, 0, 0.7);
-    --delete-strike-thickness: 0.4 px;
+    --delete-strike-thickness: 0.4px;
 
-    --sep-line-color: #a9aaac71;         
+    --sep-line-color: #1d1b1b;         
 
-    --sep-line-thickness: 0.06px;   
-    --sep-line-margin: 0.06px;  
+    --sep-line-thickness: 1.0px;   
+    --sep-line-margin: 0.6px;  
 
-    --theme-box-color: #232324;
-    --theme-bar-border-color: #1f1f20;
+    --theme-box-color: #343438;
+    --theme-bar-border-color: #353538;
     --theme-bar-button-hover-bg-color: #1b1a1a;
     --theme-bar-button-bg-color: #484852;
 
@@ -64,7 +65,6 @@
     --theme-bar-button-bg: var(--theme-bar-button-bg-color);
     --theme-bar-button-hover-bg: var(--theme-bar-button-hover-bg-color);
     --theme-bar-button-text: var(--text-color);
-
 }
 
 body {
@@ -118,32 +118,24 @@ body {
     margin-left: 15px;
     font-size: 14px;
     font-weight: bold;
-
-}
-
-body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
 }
 
 .equal {
     color: var(--equal-color);
 }
 
-
 .replace {
     color: var(--replace-color);
-    /*text-decoration: line-through;*/
-    /*text-decoration-color: var(--replace-strike-color, var(--replace-color));*/
-    /*text-decoration-thickness: var(--replace-strike-thickness, 2px);*/
+    /* text-decoration: line-through; */
+    /* text-decoration-color: var(--replace-strike-color, var(--replace-color)); */
+    /* text-decoration-thickness: var(--replace-strike-thickness, 2px); */
 }
 
 .delete {
     color: var(--delete-color);
     text-decoration: line-through;
     text-decoration-color: var(--delete-strike-color, var(--replace-color));
-    text-decoration-thickness: var(--delete-strike-thickness, 0.0.8px);
-
+    text-decoration-thickness: var(--delete-strike-thickness, 0.8px);
 }
 
 .insert {
@@ -154,44 +146,19 @@ body {
     color: var(--corrected-color);
 }
 
-/* Insert blocks */
-.highlight-box[data-insert-block-id] {
-    position: absolute;
-    background-color: var(--highlight-box-color); /* Default variable */
-    pointer-events: auto;
-    z-index: 0; /* Ensure highlight is behind text */
-    isolation: isolate;
-    border-radius: 7px; 
-    transition: background-color 0.2s ease;
-}
-
-/* Custom highlight color for a specific type */
-.highlight-box[data-type="custom"] {
-    background-color: #000000;Replace with your specific color */
-}
-
-/* Delete blocks */
-.highlight-box[data-delete-block-id] {
-    position: absolute;
-    background-color: var(--highlight-box-color); /* Use variable for consistency */
-    pointer-events: auto;
-    z-index: 0; /* Ensure highlight is behind text */
-    isolation: isolate;
-    border-radius: 7px; 
-    transition: background-color 0.2s ease;
-}
-
-/* Replacement blocks */
+/* Highlight box styles */
+.highlight-box[data-insert-block-id],
+.highlight-box[data-delete-block-id],
 .highlight-box[data-replacement-block-id] {
     position: absolute;
-    background-color: var(--highlight-box-color); /* Use variable for consistency */
-    pointer-events: auto;
-    z-index: 0; /* Ensure highlight is behind text */
+    background-color: var(--highlight-box-color); /* From constants */
+    pointer-events: none;
+    z-index: 0;
     isolation: isolate;
-    border-radius: 9px; 
-    transition: background-color 0.2s ease;
+    border-radius: 7px; 
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    border: 1.8px solid var(--highlight-border-color); /* From constants */
 }
-
 
 /* Text layers above the highlight box */
 .final-line,
@@ -203,10 +170,20 @@ body {
 
 /* NEW: horizontal separator line for sentence separation */
 .separator-line {
-    height: var(--sep-line-thickness, 2px);
+    height: var(--sep-line-thickness, 1.8px);
     background-color: var(--sep-line-color, #fff);
     margin-bottom: var(--sep-line-margin, 100px);
     margin-top: 6px;
     margin-left: 20px;
     width: 95%;
+}
+
+/* ------------------------------------------------------ */
+/* ADD these rules for COMPACT VIEW (tighter vertical spacing) */
+.compact-view body {
+    line-height: 1.0; /* or 1.1, if you want to keep it readable */
+}
+
+.compact-view .sentence-container {
+    margin-bottom: 2rem; /* less than the default 4rem */
 }
