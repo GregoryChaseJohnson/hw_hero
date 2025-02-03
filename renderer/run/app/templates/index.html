@@ -3,63 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <title>Three-Box Highlight: Replacement, Insert, Delete</title>
-  <!-- Link your updated themes.css with new highlight box selectors -->
   <link rel="stylesheet" href="/static/themes.css" />
-  <style>
-    body {
-      font-family: "Courier New", Courier, monospace;
-      font-size: 16px;
-      line-height: 1.2;
-      margin: 20px;
-      overflow: visible;
-    }
-
-    .sentence-container {
-      position: relative;
-      display: block;
-      white-space: pre;
-      margin-bottom: 4rem;
-      width: auto;
-    }
-
-    .final-line {
-      display: block;
-      white-space: pre;
-    }
-
-    .annotated-line {
-      display: block;
-      white-space: pre;
-      pointer-events: none; /* so only .corrected-char is clickable */
-    }
-
-    .token,
-    .corrected-char { 
-      display: inline-block;
-      white-space: pre;
-      cursor: pointer;
-    }
-
-    /*
-      REMOVE or COMMENT OUT the old .large-view block
-      if it exists. We no longer need it. 
-      .large-view {
-        font-size: 20px;
-        line-height: 1.4;
-      }
-    */
-  </style>
 </head>
 <body>
-  <!-- Top bar with a theme toggle button -->
+  <!-- Top bar (outside #app) -->
   <div id="theme-bar">
     <button id="theme-toggle-button">Switch to Light</button>
-    <!-- Renamed the button text to reflect "Compact" view -->
     <button id="compact-toggle-button">Toggle Compact View</button>
   </div>
-
   <div id="app"></div>
-
   <script>
     async function fetchData() {
       try {
@@ -76,87 +28,46 @@
     }
 
     /********************************
-     * 1) Render Final Line
-     *******************************/
+     * Render Final and Annotated Lines
+     ********************************/
     function renderFinalLine(sentence, container) {
       const finalLine = document.createElement("div");
       finalLine.className = "final-line";
       container.appendChild(finalLine);
-
       const tokens = sentence.final_sentence_tokens || [];
       tokens.forEach(token => {
         const span = document.createElement("span");
         span.className = `token ${token.type || ""}`;
-        // Use a non-breaking space for " " so it displays visually
-        span.textContent = (token.char === " ") ? "\u00A0" : token.char;
+        span.textContent = token.char === " " ? "\u00A0" : token.char;
         span.dataset.index = token.index;
         span.dataset.sentenceIdx = sentence.sentence_index;
-
-        // Replacement blocks
-        (sentence.replacement_blocks || []).forEach(block => {
-          if (token.index >= block.final_start && token.index <= block.final_end) {
-            span.dataset.replacementBlockId = block.block_index;
-          }
-        });
-
-        // Insert blocks
-        (sentence.insert_blocks || []).forEach(block => {
-          if (token.index >= block.final_start && token.index <= block.final_end) {
-            span.dataset.insertBlockId = block.insert_block_index;
-          }
-        });
-
-        // Delete blocks
-        (sentence.delete_blocks || []).forEach(block => {
-          if (token.index >= block.final_start && token.index <= block.final_end) {
-            span.dataset.deleteBlockId = block.delete_block_index;
-          }
-        });
-
+        if (token.replacementBlockId !== undefined) {
+          span.dataset.replacementBlockId = token.replacementBlockId;
+        }
+        if (token.insertBlockId !== undefined) {
+          span.dataset.insertBlockId = token.insertBlockId;
+        }
+        if (token.deleteBlockId !== undefined) {
+          span.dataset.deleteBlockId = token.deleteBlockId;
+        }
         finalLine.appendChild(span);
       });
     }
 
-    /********************************
-     * 2) Render Annotated Line
-     *******************************/
     function renderAnnotatedLine(sentence, container) {
       const annotatedLine = document.createElement("div");
       annotatedLine.className = "annotated-line";
       container.appendChild(annotatedLine);
-
-      const tokens = sentence.final_sentence_tokens || [];
-      const maxIndex = tokens.length > 0 ? tokens[tokens.length - 1].index : 0;
-
-      // Prepare arrays to store the "corrected" text
-      const annotationArray = new Array(maxIndex + 1).fill(" ");
-      const blockIdArray = new Array(maxIndex + 1).fill(null);
-
-      // Fill annotationArray with corrected text for "replacement" blocks
-      (sentence.replacement_blocks || []).forEach(block => {
-        const correctedText = block.corrected_text || "";
-        const chars = correctedText.split("");
-
-        for (let i = 0; i < chars.length; i++) {
-          const pos = block.annotated_start + i;
-          if (pos >= 0 && pos < annotationArray.length) {
-            annotationArray[pos] = (chars[i] === " ") ? "\u00A0" : chars[i];
-            blockIdArray[pos] = block.block_index;
-          }
-        }
-      });
-
-      // Render corrected text as .corrected-char spans
-      annotationArray.forEach((ch, idx) => {
+      const tokens = sentence.annotated_tokens || [];
+      tokens.forEach(token => {
         const span = document.createElement("span");
         span.className = "corrected-char";
-        span.textContent = ch;
-
-        if (blockIdArray[idx] !== null) {
-          span.dataset.replacementBlockId = blockIdArray[idx];
-        }
-
+        span.textContent = token.char === " " ? "\u00A0" : token.char;
+        span.dataset.index = token.index;
         span.dataset.sentenceIdx = sentence.sentence_index;
+        if (token.replacementBlockId !== undefined) {
+          span.dataset.replacementBlockId = token.replacementBlockId;
+        }
         annotatedLine.appendChild(span);
       });
     }
@@ -164,14 +75,14 @@
     function renderSentence(sentence) {
       const container = document.createElement("div");
       container.className = "sentence-container";
-
-      // If container_length is given, apply it as the width in "ch"
       if (typeof sentence.container_length === "number") {
         container.style.width = sentence.container_length + "ch";
       }
-
+      container.dataset.sentenceIndex = sentence.sentence_index;
       renderFinalLine(sentence, container);
       renderAnnotatedLine(sentence, container);
+      attachContainerClickHandler(container);
+      attachContainerHoverHandler(container);
       return container;
     }
 
@@ -181,117 +92,195 @@
       return sep;
     }
 
-    async function renderApp() {
-      const app = document.getElementById("app");
-      app.innerHTML = "";
-
-      const data = await fetchData();
-      if (!data || !Array.isArray(data.sentences)) return;
-
-      data.sentences.forEach((sentence) => {
-        const sentenceEl = renderSentence(sentence);
-        const sepLine = createSeparatorLine();
-        sentenceEl.appendChild(sepLine);
-
-        app.appendChild(sentenceEl);
-      });
-    }
-
-    // Initial render
-    renderApp();
-    // Rerun on window resize if you want to recalc highlight or layout
-    window.addEventListener("resize", renderApp);
-
     /********************************
-     * 3) Box Highlight Logic
-     *******************************/
-    document.addEventListener("click", (e) => {
-      const clicked = e.target.closest(".token, .corrected-char");
-      if (!clicked) return;
-
-      const container = clicked.closest(".sentence-container");
-      if (!container) return;
-
-      let blockType = null;
-      let blockId = null;
-
-      if (clicked.dataset.replacementBlockId !== undefined) {
-        blockType = "replacement";
-        blockId = clicked.dataset.replacementBlockId;
-      } else if (clicked.dataset.insertBlockId !== undefined) {
-        blockType = "insert";
-        blockId = clicked.dataset.insertBlockId;
-      } else if (clicked.dataset.deleteBlockId !== undefined) {
-        blockType = "delete";
-        blockId = clicked.dataset.deleteBlockId;
-      }
-
-      if (!blockType || blockId === null) return;
-
-      // Remove existing boxes for this block if present
-      const existingBoxes = container.querySelectorAll(
-        `.highlight-box[data-${blockType}-block-id='${blockId}']`
-      );
-      if (existingBoxes.length) {
-        existingBoxes.forEach(box => box.remove());
-        return;
-      }
-
-      // Otherwise, create new highlight boxes
-      if (blockType === "replacement") {
-        createBoxForLine(container, blockId, blockType, ".final-line .token");
-        createBoxForLine(container, blockId, blockType, ".annotated-line .corrected-char");
-      } else {
-        // insert or delete => final line only
-        createBoxForLine(container, blockId, blockType, ".final-line .token");
-      }
-    });
-
+     * Create Highlight Boxes (for replacement blocks)
+     ********************************/
     function createBoxForLine(container, blockId, blockType, lineSelector) {
       const allEls = container.querySelectorAll(
         `${lineSelector}[data-${blockType}-block-id='${blockId}']`
       );
       if (!allEls.length) return;
-
+      
       const containerRect = container.getBoundingClientRect();
       let minLeft = Infinity, maxRight = -Infinity;
       let minTop = Infinity, maxBottom = -Infinity;
-
+      
       allEls.forEach(el => {
         const rect = el.getBoundingClientRect();
         const left = rect.left - containerRect.left;
         const right = rect.right - containerRect.left;
         const top = rect.top - containerRect.top;
         const bottom = rect.bottom - containerRect.top;
-
-        if (left < minLeft) minLeft = left;
-        if (right > maxRight) maxRight = right;
-        if (top < minTop) minTop = top;
-        if (bottom > maxBottom) maxBottom = bottom;
+        minLeft = Math.min(minLeft, left);
+        maxRight = Math.max(maxRight, right);
+        minTop = Math.min(minTop, top);
+        maxBottom = Math.max(maxBottom, bottom);
       });
-
-      const width = maxRight - minLeft;
-      const height = maxBottom - minTop;
-      if (width <= 0 || height <= 0) return;
-
+      
+      // Increase margin expansion from 6px to 10px so the rounded corners are more visible.
+      const margin = .8;
+      const boxLeft = minLeft - margin;
+      const boxTop = minTop - margin;
+      const boxWidth = (maxRight - minLeft) + margin * 2;
+      const boxHeight = (maxBottom - minTop) + margin * 2;
+      if (boxWidth <= 0 || boxHeight <= 0) return;
+      
       const highlightBox = document.createElement("div");
       highlightBox.className = "highlight-box";
       highlightBox.dataset[`${blockType}BlockId`] = blockId;
-      highlightBox.style.left = `${minLeft}px`;
-      highlightBox.style.top = `${minTop}px`;
-      highlightBox.style.width = `${width}px`;
-      highlightBox.style.height = `${height}px`;
-
+      highlightBox.dataset.blockType = blockType;
+      highlightBox.dataset.blockIndex = blockId;
+      highlightBox.dataset.sentenceIndex = container.dataset.sentenceIndex;
+      highlightBox.style.left = `${boxLeft}px`;
+      highlightBox.style.top = `${boxTop}px`;
+      highlightBox.style.width = `${boxWidth}px`;
+      highlightBox.style.height = `${boxHeight}px`;
+      // Explicitly set border-radius inline.
+      highlightBox.style.borderRadius = "12px";
+      // Set a high z-index so that the highlight box overlays tokens.
+      highlightBox.style.zIndex = "1";
+      
+      // Append directly to the container (which is already a .sentence-container)
       container.appendChild(highlightBox);
     }
 
-    /********************************
-     * 4) Theme Toggle Logic (Refactored)
-     *******************************/
-    let isLightTheme = false;
+    function createHighlightBoxesForContainer(container) {
+      const blockTypes = ["replacement", "insert", "delete"];
+      blockTypes.forEach(blockType => {
+        const tokens = container.querySelectorAll(`.final-line [data-${blockType}-block-id]`);
+        const blockIds = new Set();
+        tokens.forEach(token => {
+          blockIds.add(token.dataset[`${blockType}BlockId`]);
+        });
+        blockIds.forEach(blockId => {
+          if (blockType === "replacement") {
+            createBoxForLine(container, blockId, blockType, ".final-line .token");
+            createBoxForLine(container, blockId, blockType, ".annotated-line .corrected-char");
+          } else {
+            createBoxForLine(container, blockId, blockType, ".final-line .token");
+          }
+        });
+      });
+    }
 
+    /********************************
+     * Unified Click Handling via Event Delegation
+     ********************************/
+    function attachContainerClickHandler(container) {
+      container.addEventListener("click", function(e) {
+        let target = e.target;
+        while (target && target !== container) {
+          if (target.dataset.replacementBlockId !== undefined) {
+            handleHighlightClick({
+              blockType: "replacement",
+              blockIndex: target.dataset.replacementBlockId,
+              sentenceIndex: container.dataset.sentenceIndex
+            });
+            return;
+          }
+          if (target.dataset.insertBlockId !== undefined) {
+            handleHighlightClick({
+              blockType: "insert",
+              blockIndex: target.dataset.insertBlockId,
+              sentenceIndex: container.dataset.sentenceIndex
+            });
+            return;
+          }
+          if (target.dataset.deleteBlockId !== undefined) {
+            handleHighlightClick({
+              blockType: "delete",
+              blockIndex: target.dataset.deleteBlockId,
+              sentenceIndex: container.dataset.sentenceIndex
+            });
+            return;
+          }
+          target = target.parentNode;
+        }
+      });
+    }
+
+    /********************************
+     * Unified Hover Handling for Replacement Blocks
+     ********************************/
+     function attachContainerHoverHandler(container) {
+      container.addEventListener("mouseover", function (e) {
+        let target = e.target;
+        while (target && target !== container) {
+          // Check for a replacement block
+          if (target.dataset.replacementBlockId !== undefined) {
+            const blockId = target.dataset.replacementBlockId;
+            const relatedBoxes = container.querySelectorAll(`.highlight-box[data-replacement-block-id='${blockId}']`);
+            relatedBoxes.forEach(box => box.classList.add("hovered"));
+            break;
+          }
+          // Check for an insert block
+          if (target.dataset.insertBlockId !== undefined) {
+            const blockId = target.dataset.insertBlockId;
+            const relatedBoxes = container.querySelectorAll(`.highlight-box[data-insert-block-id='${blockId}']`);
+            relatedBoxes.forEach(box => box.classList.add("hovered"));
+            break;
+          }
+          // Check for a delete block
+          if (target.dataset.deleteBlockId !== undefined) {
+            const blockId = target.dataset.deleteBlockId;
+            const relatedBoxes = container.querySelectorAll(`.highlight-box[data-delete-block-id='${blockId}']`);
+            relatedBoxes.forEach(box => box.classList.add("hovered"));
+            break;
+          }
+          target = target.parentNode;
+        }
+      });
+      
+      container.addEventListener("mouseout", function (e) {
+        const hoveredBoxes = container.querySelectorAll(".highlight-box.hovered");
+        hoveredBoxes.forEach(box => box.classList.remove("hovered"));
+      });
+    }
+
+
+
+    function handleHighlightClick(payload) {
+      console.log("Highlight clicked:", payload);
+      fetch('/highlight_click', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(res => res.json())
+      .then(response => console.log('Highlight click response:', response))
+      .catch(err => console.error('Error in highlight click:', err));
+    }
+
+    /********************************
+     * Render Application
+     ********************************/
+    async function renderApp() {
+      console.log("Rendering app...");
+      const app = document.getElementById("app");
+      app.innerHTML = "";
+      const data = await fetchData();
+      if (!data || !Array.isArray(data.sentences)) {
+        console.error("No valid sentences found.");
+        return;
+      }
+      data.sentences.forEach(sentence => {
+        const sentenceEl = renderSentence(sentence);
+        const sepLine = createSeparatorLine();
+        sentenceEl.appendChild(sepLine);
+        app.appendChild(sentenceEl);
+        createHighlightBoxesForContainer(sentenceEl);
+      });
+    }
+
+    renderApp();
+    window.addEventListener("resize", renderApp);
+
+    /********************************
+     * Theme and Compact View Toggle Logic
+     ********************************/
+    let isLightTheme = false;
     (function initTheme() {
-      const storedTheme = localStorage.getItem("preferredTheme"); 
+      const storedTheme = localStorage.getItem("preferredTheme");
       if (storedTheme === "light") {
         document.body.classList.add("theme-light");
         isLightTheme = true;
@@ -312,28 +301,19 @@
     }
 
     function updateThemeButtonText() {
-      // Example: reflect current theme in button text
       const themeToggleButton = document.getElementById("theme-toggle-button");
-      themeToggleButton.textContent = isLightTheme
-        ? "Switch to Dark"
-        : "Switch to Light";
+      themeToggleButton.textContent = isLightTheme ? "Switch to Dark" : "Switch to Light";
     }
-
     const themeToggleButton = document.getElementById("theme-toggle-button");
     themeToggleButton.addEventListener("click", toggleTheme);
 
-    /********************************
-     * 5) Compact View Toggle Logic
-     *******************************/
     let isCompactView = false;
     function toggleCompactView() {
       isCompactView = !isCompactView;
       document.body.classList.toggle("compact-view", isCompactView);
-
-      // Remove existing highlight boxes so they're not misaligned
       document.querySelectorAll('.highlight-box').forEach(box => box.remove());
+      renderApp();
     }
-
     const compactToggleButton = document.getElementById("compact-toggle-button");
     compactToggleButton.addEventListener("click", toggleCompactView);
   </script>
