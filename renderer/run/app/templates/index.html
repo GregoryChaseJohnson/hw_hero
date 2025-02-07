@@ -6,13 +6,21 @@
   <link rel="stylesheet" href="/static/themes.css" />
 </head>
 <body>
-  <!-- Top bar (outside #app) -->
+  <!-- Top bar -->
   <div id="theme-bar">
     <button id="theme-toggle-button">Switch to Light</button>
     <button id="compact-toggle-button">Toggle Compact View</button>
   </div>
-  <div id="app"></div>
+  <!-- App containers -->
+  <div id="app">
+    <div id="upper-container"></div>
+    <div id="central-container"></div>
+    <div id="lower-container"></div>
+  </div>
   <script>
+    /********************************
+     * Data fetching
+     ********************************/
     async function fetchData() {
       try {
         const response = await fetch("/data.json");
@@ -26,9 +34,9 @@
         return null;
       }
     }
-
+    
     /********************************
-     * Render Final and Annotated Lines
+     * Rendering Functions for Sentence Lines
      ********************************/
     function renderFinalLine(sentence, container) {
       const finalLine = document.createElement("div");
@@ -37,7 +45,7 @@
       const tokens = sentence.final_sentence_tokens || [];
       tokens.forEach(token => {
         const span = document.createElement("span");
-        span.className = `token ${token.type || ""}`;
+        span.className = "token " + (token.type || "");
         span.textContent = token.char === " " ? "\u00A0" : token.char;
         span.dataset.index = token.index;
         span.dataset.sentenceIdx = sentence.sentence_index;
@@ -53,7 +61,7 @@
         finalLine.appendChild(span);
       });
     }
-
+    
     function renderAnnotatedLine(sentence, container) {
       const annotatedLine = document.createElement("div");
       annotatedLine.className = "annotated-line";
@@ -71,7 +79,8 @@
         annotatedLine.appendChild(span);
       });
     }
-
+    
+    // Renders a sentence into a container element.
     function renderSentence(sentence) {
       const container = document.createElement("div");
       container.className = "sentence-container";
@@ -85,26 +94,24 @@
       attachContainerHoverHandler(container);
       return container;
     }
-
+    
     function createSeparatorLine() {
       const sep = document.createElement("div");
       sep.className = "separator-line";
       return sep;
     }
-
+    
     /********************************
-     * Create Highlight Boxes (for replacement blocks)
+     * Highlight Box Functions
      ********************************/
     function createBoxForLine(container, blockId, blockType, lineSelector) {
       const allEls = container.querySelectorAll(
         `${lineSelector}[data-${blockType}-block-id='${blockId}']`
       );
       if (!allEls.length) return;
-      
       const containerRect = container.getBoundingClientRect();
       let minLeft = Infinity, maxRight = -Infinity;
       let minTop = Infinity, maxBottom = -Infinity;
-      
       allEls.forEach(el => {
         const rect = el.getBoundingClientRect();
         const left = rect.left - containerRect.left;
@@ -116,15 +123,12 @@
         minTop = Math.min(minTop, top);
         maxBottom = Math.max(maxBottom, bottom);
       });
-      
-      // Increase margin expansion from 6px to 10px so the rounded corners are more visible.
-      const margin = .8;
+      const margin = 0.8;
       const boxLeft = minLeft - margin;
       const boxTop = minTop - margin;
       const boxWidth = (maxRight - minLeft) + margin * 2;
       const boxHeight = (maxBottom - minTop) + margin * 2;
       if (boxWidth <= 0 || boxHeight <= 0) return;
-      
       const highlightBox = document.createElement("div");
       highlightBox.className = "highlight-box";
       highlightBox.dataset[`${blockType}BlockId`] = blockId;
@@ -135,15 +139,10 @@
       highlightBox.style.top = `${boxTop}px`;
       highlightBox.style.width = `${boxWidth}px`;
       highlightBox.style.height = `${boxHeight}px`;
-      // Explicitly set border-radius inline.
-      highlightBox.style.borderRadius = "12px";
-      // Set a high z-index so that the highlight box overlays tokens.
       highlightBox.style.zIndex = "1";
-      
-      // Append directly to the container (which is already a .sentence-container)
       container.appendChild(highlightBox);
     }
-
+    
     function createHighlightBoxesForContainer(container) {
       const blockTypes = ["replacement", "insert", "delete"];
       blockTypes.forEach(blockType => {
@@ -162,9 +161,9 @@
         });
       });
     }
-
+    
     /********************************
-     * Unified Click Handling via Event Delegation
+     * Event Delegation for Clicks and Hovers
      ********************************/
     function attachContainerClickHandler(container) {
       container.addEventListener("click", function(e) {
@@ -198,29 +197,23 @@
         }
       });
     }
-
-    /********************************
-     * Unified Hover Handling for Replacement Blocks
-     ********************************/
-     function attachContainerHoverHandler(container) {
-      container.addEventListener("mouseover", function (e) {
+    
+    function attachContainerHoverHandler(container) {
+      container.addEventListener("mouseover", function(e) {
         let target = e.target;
         while (target && target !== container) {
-          // Check for a replacement block
           if (target.dataset.replacementBlockId !== undefined) {
             const blockId = target.dataset.replacementBlockId;
             const relatedBoxes = container.querySelectorAll(`.highlight-box[data-replacement-block-id='${blockId}']`);
             relatedBoxes.forEach(box => box.classList.add("hovered"));
             break;
           }
-          // Check for an insert block
           if (target.dataset.insertBlockId !== undefined) {
             const blockId = target.dataset.insertBlockId;
             const relatedBoxes = container.querySelectorAll(`.highlight-box[data-insert-block-id='${blockId}']`);
             relatedBoxes.forEach(box => box.classList.add("hovered"));
             break;
           }
-          // Check for a delete block
           if (target.dataset.deleteBlockId !== undefined) {
             const blockId = target.dataset.deleteBlockId;
             const relatedBoxes = container.querySelectorAll(`.highlight-box[data-delete-block-id='${blockId}']`);
@@ -231,14 +224,12 @@
         }
       });
       
-      container.addEventListener("mouseout", function (e) {
+      container.addEventListener("mouseout", function() {
         const hoveredBoxes = container.querySelectorAll(".highlight-box.hovered");
         hoveredBoxes.forEach(box => box.classList.remove("hovered"));
       });
     }
-
-
-
+    
     function handleHighlightClick(payload) {
       console.log("Highlight clicked:", payload);
       fetch('/highlight_click', {
@@ -250,33 +241,83 @@
       .then(response => console.log('Highlight click response:', response))
       .catch(err => console.error('Error in highlight click:', err));
     }
-
+    
+    let sentenceDataArray = [];
+    
     /********************************
-     * Render Application
+     * Update Central Container with Selected Sentence
      ********************************/
+     function updateCentralContainer(sentence) {
+        const centralContainer = document.getElementById("central-container");
+        centralContainer.innerHTML = "";
+
+        // Render the sentence element and add basic styling.
+        let sentenceEl = renderSentence(sentence);
+        sentenceEl.classList.add("sentence-container-central-box");
+
+        // Append separator line (if needed).
+        sentenceEl.appendChild(createSeparatorLine());
+        centralContainer.appendChild(sentenceEl);
+
+        // First, measure the content and set the width.
+        requestAnimationFrame(() => {
+            const finalLine = sentenceEl.querySelector(".final-line");
+            const annotatedLine = sentenceEl.querySelector(".annotated-line");
+
+            if (finalLine && annotatedLine) {
+                const maxWidth = Math.max(finalLine.scrollWidth, annotatedLine.scrollWidth);
+                const extraMargin = 20; // Adjust this as needed (total extra pixels)
+                sentenceEl.style.width = `${maxWidth + extraMargin}px`;
+            }
+            // Remove any existing highlight boxes (if they were added before).
+            const existingBoxes = sentenceEl.querySelectorAll(".highlight-box");
+            existingBoxes.forEach(box => box.remove());
+
+            // Now that the width is set, create the highlight boxes.
+            createHighlightBoxesForContainer(sentenceEl);
+        });
+
+        centralContainer.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
+    }
+
+
+    
+    /********************************
+     * Render Lower Container (Selectable Sentences)
+     ********************************/
+    function renderLowerContainer() {
+      const lowerContainer = document.getElementById("lower-container");
+      lowerContainer.innerHTML = "";
+      sentenceDataArray.forEach(sentence => {
+        let sentenceEl = renderSentence(sentence);
+        sentenceEl.addEventListener("click", function(e) {
+          e.stopPropagation();
+          updateCentralContainer(sentence);
+        });
+        sentenceEl.appendChild(createSeparatorLine());
+        lowerContainer.appendChild(sentenceEl);
+        createHighlightBoxesForContainer(sentenceEl);
+      });
+    }
+    
     async function renderApp() {
-      console.log("Rendering app...");
-      const app = document.getElementById("app");
-      app.innerHTML = "";
       const data = await fetchData();
       if (!data || !Array.isArray(data.sentences)) {
         console.error("No valid sentences found.");
         return;
       }
-      data.sentences.forEach(sentence => {
-        const sentenceEl = renderSentence(sentence);
-        const sepLine = createSeparatorLine();
-        sentenceEl.appendChild(sepLine);
-        app.appendChild(sentenceEl);
-        createHighlightBoxesForContainer(sentenceEl);
-      });
+      sentenceDataArray = data.sentences;
+      if (sentenceDataArray.length > 0) {
+        updateCentralContainer(sentenceDataArray[0]);
+      }
+      renderLowerContainer();
     }
-
+    
     renderApp();
     window.addEventListener("resize", renderApp);
-
+    
     /********************************
-     * Theme and Compact View Toggle Logic
+     * Theme and Compact View Toggles
      ********************************/
     let isLightTheme = false;
     (function initTheme() {
@@ -287,7 +328,7 @@
         updateThemeButtonText();
       }
     })();
-
+    
     function toggleTheme() {
       isLightTheme = !isLightTheme;
       if (isLightTheme) {
@@ -299,14 +340,15 @@
       }
       updateThemeButtonText();
     }
-
+    
     function updateThemeButtonText() {
       const themeToggleButton = document.getElementById("theme-toggle-button");
       themeToggleButton.textContent = isLightTheme ? "Switch to Dark" : "Switch to Light";
     }
+    
     const themeToggleButton = document.getElementById("theme-toggle-button");
     themeToggleButton.addEventListener("click", toggleTheme);
-
+    
     let isCompactView = false;
     function toggleCompactView() {
       isCompactView = !isCompactView;

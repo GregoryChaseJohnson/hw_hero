@@ -1,85 +1,52 @@
-/* Default theme (theme1) */
-:root {
-    --bg-color: #262726;
+/* -------------------------
+   Theme Variables & Base Styles
+   ------------------------- */
+   :root {
+    --bg-color: #212120;
     --text-color: #ffffff;
-    --equal-color: #ffffff;
     --replace-color: #806aff;
     --delete-color: #f856f0;
     --insert-color: #2fff8d;
-    --corrected-color: #ffffff;
-    --highlight-box-color: #38393b;  
-    --highlight-box-hover-color: rgb(77, 77, 78); /* Dark theme hover */
-
-    /* NEW variables for strike-through customization */
-    --delete-strike-color: #ee4141bd;
-    --delete-strike-thickness: 0.8px;
-
+    --sentence-highlight-bg: rgb(63, 65, 68);
     --sep-line-color: #9696b84f;
-    --sep-line-thickness: 2.0px;
+
+    --central-sep-line-offset: 5px;
+    --central-sep-line-color: #515466e5;
+    --central-sep-line-thickness: 1px; 
+    --sep-line-thickness: 1px;
     --sep-line-margin: 0.6px;
-
-    --theme-box-color: #2d2931a9;
-    --theme-bar-border-color: #2524293b;
-    --theme-bar-button-bg-color: #121214;
-    --theme-bar-button-hover-bg-color: rgb(44, 44, 46);
     
-    --theme-bar-bg: var(--theme-box-color);
-    --theme-bar-text: var(--text-color);
-    --theme-bar-border: var(--theme-bar-border-color);
-    --theme-bar-button-bg: var(--theme-bar-button-bg-color);
-    --theme-bar-button-hover-bg: var(--theme-bar-button-hover-bg-color);
-    --theme-bar-button-text: var(--text-color);
-    --theme-bar-padding: 10px;
-    --theme-bar-border-radius: 4px;
-}
+    /* Top bar variables */
+    --theme-bar-bg: #2b2c31;
+    --theme-bar-text: #ffffff;
+    --theme-bar-border: #2524293b;
+    --theme-bar-button-bg: #121214;
+    --theme-bar-button-hover-bg: rgb(44, 44, 46);
+    --theme-bar-button-text: #ffffff;
+    
+    /* Highlight box colors */
+    --highlight-box-color: #38393b;
+    --highlight-box-hover-color: rgb(77, 77, 78);
 
-/* Light theme */
-.theme-light {
-    --bg-color: #353638;
-    --text-color: #ffffff;
-    --equal-color: #ffffff;
-    --replace-color: #9e7aff;
-    --delete-color: #f856f0;
-    --insert-color: #24ec99;
-    --corrected-color: #d6dbfd;
-    --highlight-box-color: #262627;  /* Default: transparent */
-    --highlight-box-hover-color: rgb(68, 66, 66); /* Light theme hover */
-
-    --delete-strike-color: rgba(255, 0, 0, 0.7);
-    --delete-strike-thickness: 0.4px;
-
-    --sep-line-color: #2e2b2bb0;
-    --sep-line-thickness: 2.0px;
-    --sep-line-margin: 0.9px;
-
-    --theme-box-color: #343438;
-    --theme-bar-border-color: #353538;
-    --theme-bar-button-hover-bg-color: #1b1a1a;
-    --theme-bar-button-bg-color: #484852;
-
-    --theme-bar-bg: var(--theme-box-color);
-    --theme-bar-text: var(--text-color);
-    --theme-bar-border: var(--theme-bar-border-color);
-    --theme-bar-button-bg: var(--theme-bar-button-bg-color);
-    --theme-bar-button-hover-bg: var(--theme-bar-button-hover-bg-color);
-    --theme-bar-button-text: var(--text-color);
-}
-
-/* Restore original font */
-body {
+    --sep-left-margin: 20px;          /* Fixed left/right margin */
+    --sep-width-percentage: 95%;
+  }
+  
+  /* -------------------------
+     Global Styles
+     ------------------------- */
+  body {
     font-family: "Courier New", Courier, monospace;
     font-size: 19px;
     background-color: var(--bg-color);
     color: var(--text-color);
     margin: 0;
-}
-
-#app {
-    padding-top: 50px;
-}
-
-/* Top bar styles */
-#theme-bar {
+  }
+  
+  /* -------------------------
+     Top Bar
+     ------------------------- */
+  #theme-bar {
     position: fixed;
     top: 0;
     left: 0;
@@ -89,16 +56,15 @@ body {
     color: var(--theme-bar-text);
     display: flex;
     align-items: center;
-    justify-content: flex-start;
     padding: 0 10px;
     z-index: 1000;
     border-bottom: 1px solid var(--theme-bar-border);
-}
-
-#theme-toggle-button {
+  }
+  
+  #theme-toggle-button {
     background-color: var(--theme-bar-button-bg);
     color: var(--theme-bar-button-text);
-    border: 0.09px solid #454647c5;
+    border: 1px solid rgba(69, 70, 71, 0.8);
     border-radius: 15px;
     padding: 3px 6px;
     font-size: 11px;
@@ -106,91 +72,119 @@ body {
     transition: background-color 0.3s ease;
     margin-top: -9px;
     margin-left: -3px;
-}
-
-#theme-toggle-button:hover {
+  }
+  
+  #theme-toggle-button:hover {
     background-color: var(--theme-bar-button-hover-bg);
+  }
+  
+  /* -------------------------
+     Three-Section Layout
+     ------------------------- */
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    padding-top: 50px; /* account for fixed top bar */
+  }
+  
+  #upper-container {
+    flex: 0 0 auto;
+    background-color: var(--bg-color);
+    flex: 0 0 33vh;
+  }
+  
+  #central-container {
+    flex: 0 0 auto;
+    padding: 5px;  /* Reduced padding on all sides */
+    /*border-top: 1px solid var(--sep-line-color);
+    border-bottom: none; /* Remove the solid border */
+    position: relative; /* Ensure the pseudo-element is positioned relative to this container */
+    background-color: var(--bg-color);
+    text-align: left;
+    background: linear-gradient(to top, rgba(89, 88, 90, 0.112) 1%, transparent 40%);
+    
 }
 
-#theme-name-display {
-    margin-left: 15px;
-    font-size: 14px;
-    font-weight: bold;
+
+  #lower-container {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: var(--bg-color);
+  }
+  
+  /* -------------------------
+     Sentence & Token Styles
+     ------------------------- */
+  .sentence-container {
+    position: relative;
+    padding-top: 5px;
+  }
+  
+  .sentence-container .final-line,
+  .sentence-container .annotated-line {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin: 0;
+    padding: 0.15rem 1rem;
+    white-space: nowrap;
+    overflow-wrap: break-word;
+  }
+  
+  .sentence-container-central-box {
+    background-color: var(--sentence-highlight-bg);
+    transition: background-color 0.3s ease;
+    border-radius: 40px;
+    padding-top: 0.5rem;
+    padding-right: 1ch;
+    padding-bottom: 0.1rem !important;  /* Force the bottom padding */
+    padding-left: 1ch;
+    box-sizing: border-box;
+    text-align: left;
+    display: inline-block;
+    white-space: nowrap;
+    width: max-content;
 }
 
-.equal {
-    color: var(--equal-color);
+#lower-container .sentence-container:hover::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: var(--sep-left-margin);  
+    width: calc(100% - (2 * var(--sep-left-margin)));
+    width: 95%;                 
+    height: 11px;                
+    background: linear-gradient(to top, rgba(153, 153, 153, 0.2) 1%, transparent);
+    pointer-events: none;
+    z-index: 0;
 }
 
-.replace {
+
+
+.token[data-replacement-block-id] {
     color: var(--replace-color);
 }
 
-.delete {
+.token[data-delete-block-id] {
     color: var(--delete-color);
-    text-decoration: line-through;
-    text-decoration-color: var(--delete-strike-color, var(--replace-color));
-    text-decoration-thickness: var(--delete-strike-thickness, 0.8px);
+    text-decoration: line-through; /* Optional, for strike-through effect */
+    text-decoration-color: var(--delete-color);
 }
 
-.insert {
+.token[data-insert-block-id] {
     color: var(--insert-color);
 }
 
 .corrected-char {
-    color: var(--corrected-color);
+    color: var(--text-color); /* Change this if corrected text should have a different color */
 }
 
-/* Highlight box styles */
-.highlight-box[data-insert-block-id],
-.highlight-box[data-delete-block-id],
-.highlight-box[data-replacement-block-id] {
-    position: absolute;
-    background-color: var(--highlight-box-color);
-    pointer-events: none;
-    z-index: 1; /* Now above tokens */
-    isolation: isolate;
-    border-radius: 4px 3px 4px 4px !important;
-    overflow: hidden;
-    box-sizing: border-box;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-    
-}
-
-.highlight-box.hovered {
-    background-color: var(--highlight-box-hover-color);
-    border-radius: 4px 3px 4px 4px !important;
-  }
   
-/* Text layers */
-.final-line,
-.annotated-line {
-    position: relative;
-    z-index: 2;  /* tokens remain above base layers, but below highlight box now */
-    mix-blend-mode: normal;
-}
-
-.separator-line {
-    height: var(--sep-line-thickness, 2.0px);
-    background-color: var(--sep-line-color, #fff);
-    margin-bottom: var(--sep-line-margin, 100px);
-    margin-top: 6px;
-    margin-left: 20px;
-    width: 95%;
-    transform: scaleY(1.0);
-}
-
-body.compact-view {
-    line-height: 1.0;
-}
-body.compact-view .sentence-container {
-    margin-bottom: 2rem;
-}
-
-/* Ensure tokens are measurable with fixed width */
-.token,
-.corrected-char {
-    
+  .token,
+  .corrected-char {
     display: inline-block;
     width: 1ch;
     min-width: 1ch;
@@ -199,17 +193,51 @@ body.compact-view .sentence-container {
     position: relative;
     z-index: 5;
     cursor: pointer;
-}
-
-/* Hover state for tokens when a replacement block is hovered */
-.token.hovered,
-.corrected-char.hovered {
-    background-color: rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-}
-
-.sentence-container {
-    position: relative;
-    padding-top: 5px;
-        
+    vertical-align: top;
   }
+  
+  .token.hovered,
+  .corrected-char.hovered {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .separator-line {
+    height: var(--sep-line-thickness);
+    background-color: var(--sep-line-color);
+    margin: 6px var(--sep-left-margin) var(--sep-line-margin); 
+    width: var(--sep-width-percentage);
+  }
+  
+  /* -------------------------
+     Highlight Box for Tokens
+     ------------------------- */
+  .highlight-box[data-insert-block-id],
+  .highlight-box[data-delete-block-id],
+  .highlight-box[data-replacement-block-id] {
+    position: absolute;
+    background-color: var(--highlight-box-color);
+    pointer-events: none;
+    z-index: 1;
+    isolation: isolate;
+    border-radius: 4px 3px 4px 4px;
+    overflow: hidden;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  
+  .highlight-box.hovered {
+    background-color: var(--highlight-box-hover-color);
+  }
+  
+  /* -------------------------
+     Compact View (if needed)
+     ------------------------- */
+  body.compact-view {
+    line-height: 1.0;
+  }
+  
+  .sentence-container-central-box .separator-line {
+    background-color: var(--central-sep-line-color);
+    height: var(--central-sep-line-thickness);
+    margin-bottom: var(--central-sep-line-offset); /* Adjust vertical positioning */
+}
