@@ -2,12 +2,14 @@
    Theme Variables & Base Styles
    ------------------------- */
    :root {
-    --bg-color: #212120;
+    --bg-color: #232321;
     --text-color: #ffffff;
-    --replace-color: #806aff;
-    --delete-color: #f856f0;
-    --insert-color: #2fff8d;
-    --sentence-highlight-bg: rgb(63, 65, 68);
+    --correct-color: #8bc9f9;
+    --replace-color: #f9f2f2;
+    --replace-strike-thru-color: #a268ff;
+    --delete-color: #cb4a55;
+    --insert-color: #94caf3;
+    --sentence-highlight-bg: rgb(56, 58, 61);
     --sep-line-color: #9696b84f;
 
     --central-sep-line-offset: 5px;
@@ -25,7 +27,7 @@
     --theme-bar-button-text: #ffffff;
     
     /* Highlight box colors */
-    --highlight-box-color: #38393b;
+    --highlight-box-color: #272828;
     --highlight-box-hover-color: rgb(77, 77, 78);
 
     --sep-left-margin: 20px;          /* Fixed left/right margin */
@@ -129,7 +131,7 @@
     width: 100%;
     text-align: left;
     margin: 0;
-    padding: 0.15rem 1rem;
+    padding: 0.01rem 1rem;
     white-space: nowrap;
     overflow-wrap: break-word;
   }
@@ -147,6 +149,7 @@
     display: inline-block;
     white-space: nowrap;
     width: max-content;
+    height: 60px; 
 }
 
 #lower-container .sentence-container:hover::after {
@@ -166,6 +169,9 @@
 
 .token[data-replacement-block-id] {
     color: var(--replace-color);
+    text-decoration: line-through;
+    text-decoration-color: var(--replace-strike-thru-color); 
+    
 }
 
 .token[data-delete-block-id] {
@@ -179,7 +185,7 @@
 }
 
 .corrected-char {
-    color: var(--text-color); /* Change this if corrected text should have a different color */
+    color: var(--correct-color); /* Change this if corrected text should have a different color */
 }
 
   
@@ -219,7 +225,7 @@
     pointer-events: none;
     z-index: 1;
     isolation: isolate;
-    border-radius: 4px 3px 4px 4px;
+    border-radius: 6px 6px 6px 6px;
     overflow: hidden;
     box-sizing: border-box;
     transition: background-color 0.2s ease, border-color 0.2s ease;
@@ -236,8 +242,4 @@
     line-height: 1.0;
   }
   
-  .sentence-container-central-box .separator-line {
-    background-color: var(--central-sep-line-color);
-    height: var(--central-sep-line-thickness);
-    margin-bottom: var(--central-sep-line-offset); /* Adjust vertical positioning */
-}
+ 
