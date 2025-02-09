@@ -129,15 +129,15 @@ def main():
         delete_blocks_all.append(del_blks)
 
     # 4) Optional debug of replacement blocks
-    for idx, (ann_blocks, fin_blocks, final_line, annotated_line) in enumerate(
-        zip(
-            replacement_ann_blocks_all,
-            replacement_fin_blocks_all,
-            final_sentences,
-            annotated_lines
-        )
-    ):
-        print_sentence_debug(idx, final_line, ann_blocks, fin_blocks, annotated_line)
+    #for idx, (ann_blocks, fin_blocks, final_line, annotated_line) in enumerate(
+        #zip(
+            #replacement_ann_blocks_all,
+            #replacement_fin_blocks_all,
+            #final_sentences,
+            #annotated_lines
+        #)
+    #):
+        #print_sentence_debug(idx, final_line, ann_blocks, fin_blocks, annotated_line)
 
     # 5) Prepare final JSON
     output_data = prepare_json_output(

@@ -15,8 +15,12 @@
   <div id="app">
     <div id="upper-container"></div>
     <div id="central-container"></div>
-    <div id="lower-container"></div>
-  </div>
+    <div id="lower-container">
+        <div id="lower-header"></div>  <!-- Small narrow container at the top -->
+        <div id="lower-content"></div> <!-- The rest of the lower container -->
+    </div>
+</div>
+
   <script>
     /********************************
      * Data fetching
@@ -285,20 +289,21 @@
     /********************************
      * Render Lower Container (Selectable Sentences)
      ********************************/
-    function renderLowerContainer() {
-      const lowerContainer = document.getElementById("lower-container");
-      lowerContainer.innerHTML = "";
+     function renderLowerContainer() {
+      const lowerContent = document.getElementById("lower-content");
+      lowerContent.innerHTML = "";
       sentenceDataArray.forEach(sentence => {
-        let sentenceEl = renderSentence(sentence);
-        sentenceEl.addEventListener("click", function(e) {
-          e.stopPropagation();
-          updateCentralContainer(sentence);
-        });
-        sentenceEl.appendChild(createSeparatorLine());
-        lowerContainer.appendChild(sentenceEl);
-        createHighlightBoxesForContainer(sentenceEl);
+          let sentenceEl = renderSentence(sentence);
+          sentenceEl.addEventListener("click", function(e) {
+              e.stopPropagation();
+              updateCentralContainer(sentence);
+          });
+          sentenceEl.appendChild(createSeparatorLine());
+          lowerContent.appendChild(sentenceEl);
+          createHighlightBoxesForContainer(sentenceEl);
       });
-    }
+  }
+
     
     async function renderApp() {
       const data = await fetchData();
