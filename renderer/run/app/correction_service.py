@@ -7,9 +7,8 @@ OUTPUT_JSON_PATH = "/home/keithuncouth/hw_hero/renderer/run/output.json"
 
 def get_correction_explanation(data):
     print("DEBUG: Function get_correction_explanation() was called")
-    print("DEBUG: Received data:", data) 
     print("DEBUG: Received data:", data)
-    sys.stdout.flush() 
+    sys.stdout.flush()
 
     try:
         block_type = data['blockType']
@@ -36,18 +35,7 @@ def get_correction_explanation(data):
             output_data = json.load(f)
 
         print(f"DEBUG: Loaded {len(sentence_mapping.get('sentences', []))} sentences")
-        # Note: output_data is expected to be a dictionary with key "sentences"
         print(f"DEBUG: Loaded {len(output_data.get('sentences', []))} corrections")
-
-        # **NEW: Print the first few entries to inspect**
-        print(f"DEBUG: Type of output_data: {type(output_data)}")
-        if isinstance(output_data, dict):
-            sentences_list = output_data.get("sentences", [])
-            if sentences_list:
-                print(f"DEBUG: First entry type: {type(sentences_list[0])}")
-        else:
-            print("DEBUG: Output data is NOT a dict! Investigate format.")
-            print(f"DEBUG: Full output_data content: {output_data}")
 
     except Exception as e:
         print("DEBUG: Error loading JSON files:", e)
@@ -63,9 +51,9 @@ def get_correction_explanation(data):
 
     print(f"DEBUG: Found sentence {sentence_entry.get('ocr_sentence')}")
 
-    # Retrieve correction entry (assuming output_data is a dict with key "sentences")
+    # Retrieve correction entry
     correction_entry = next((c for c in output_data.get("sentences", [])
-                         if c.get("sentence_index") == sentence_index), None)
+                             if c.get("sentence_index") == sentence_index), None)
 
     if not correction_entry:
         print(f"DEBUG: No correction found for index {sentence_index}")
@@ -76,7 +64,6 @@ def get_correction_explanation(data):
         print(f"DEBUG: Block type '{block_type}' not found")
         return {"error": "Invalid block type", "block_type": block_type}
 
-    # Find the correct block using special keys for delete and insert
     try:
         if block_type == "delete":
             correction_block = next((b for b in correction_entry[block_key]
@@ -103,8 +90,62 @@ def get_correction_explanation(data):
         "correction_block": correction_block
     }
 
+def generate_custom_sentence_for_block(corrected_sentence, correction_block, block_type):
+    """
+    Generate a custom sentence for API context by reverting only the clicked correction.
+    
+    For each correction type:
+      - Replacement: Replace the first occurrence of the corrected text with the original text.
+      - Insert: Remove the inserted text.
+      - Delete: Insert the deleted text back into the sentence.
+    
+    Parameters:
+        corrected_sentence (str): The fully corrected sentence.
+        correction_block (dict): The block details for the clicked correction.
+        block_type (str): One of "replacement", "insert", or "delete".
+    
+    Returns:
+        str: The custom sentence with the specific correction reverted.
+    """
+    if block_type == "replacement":
+        # Instead of using final_start/final_end (which seem inconsistent),
+        # locate the corrected text in the sentence and replace it with the original text.
+        corrected_text = correction_block.get("corrected_text", "")
+        replaced_text = correction_block.get("replaced_text", "")
+        # Replace the first occurrence only.
+        custom_sentence = corrected_sentence.replace(corrected_text, replaced_text, 1)
+        return custom_sentence
+
+    elif block_type == "insert":
+        start = correction_block.get("final_start")
+        end = correction_block.get("final_end")
+        custom_sentence = corrected_sentence[:start] + corrected_sentence[end:]
+        return custom_sentence
+
+    elif block_type == "delete":
+        start = correction_block.get("final_start")
+        deleted_text = correction_block.get("delete_text", "")
+        custom_sentence = corrected_sentence[:start] + deleted_text + corrected_sentence[start:]
+        return custom_sentence
+
+    else:
+        return corrected_sentence
+
+
 # If you run this file directly, test manually
 if __name__ == "__main__":
     test_data = {"blockType": "replacement", "blockIndex": 0, "sentenceIndex": 14}
     print("DEBUG: Running manual test")
-    print(get_correction_explanation(test_data))
+
+    result = get_correction_explanation(test_data)
+    print(result)  # Print correction info
+
+    if "error" not in result:
+        corrected_sentence = result["corrected_sentence"]
+        correction_block = result["correction_block"]
+        block_type = test_data["blockType"]
+
+        # Generate and print the custom sentence
+        custom_sentence = generate_custom_sentence_for_block(corrected_sentence, correction_block, block_type)
+        print("\n--- Custom Sentence (Correction Reverted) ---")
+        print(custom_sentence)
