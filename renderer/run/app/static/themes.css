@@ -204,8 +204,8 @@
     left: var(--sep-left-margin);
     /* Instead of right: 10px, compute the width */
     width: calc(100% - var(--sep-left-margin) - 10px);
-    height: 16px;
-    background: linear-gradient(to top, rgba(150,150,150,0.2) 1%, transparent);
+    height: 19px;
+    background: linear-gradient(to top, rgba(148,148,148,0.2) 1%, transparent);
     pointer-events: none;
     z-index: 0;
   }

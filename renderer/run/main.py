@@ -1,7 +1,7 @@
 import pickle
 import json
 from openai_api_call import perform_ocr, correct_text
-from seq_alignment_reverse import align_sentences
+from seq_alignment_reverse import align_sentences, clean_aligned_pairs, create_sentence_mapping
 from diff_lib_refactor import generate_report # type: ignore
 from block_creation import create_blocks
 from data_loader import DataLoader
@@ -14,7 +14,7 @@ from prepare_tokenized_output import (
     detect_replacement_blocks,
     detect_insert_blocks,
     detect_delete_blocks,
-    print_sentence_debug,
+    #print_sentence_debug,
     prepare_json_output
 )
 
@@ -57,6 +57,13 @@ def main():
     for ocr_sentence, corrected_sentence in matches:
         print(f"OCR Sentence: {ocr_sentence}")
         print(f"Corrected Sentence: {corrected_sentence}")
+    
+    cleaned_pairs = clean_aligned_pairs(matches)
+    sentence_mapping = create_sentence_mapping(cleaned_pairs)
+    sentence_mapping_path = "sentence_mapping.json"
+    with open(sentence_mapping_path, "w", encoding="utf-8") as f:
+        json.dump(sentence_mapping, f, indent=4, ensure_ascii=False)
+    print(f"Sentence mapping saved to {sentence_mapping_path}")
 
     # Step 4: Generate a report
     report, tokenized_output = generate_report(matches)

@@ -213,29 +213,12 @@ def finalize_transformation(annotated_lines, final_sentences):
     Perform the final transformation for each sentence.
     """
     for i, (annotated_line, final_sentence) in enumerate(zip(annotated_lines, final_sentences)):
-        print(f"\n--- Sentence {i + 1} ---")
-
-        # Print initial tokens
-        print("Initial Final Sentence Tokens:")
-        for idx, tok in enumerate(final_sentence):
-            print(f"  {idx}: {tok}")
 
         # Define blocks and associate replacement text
         blocks = define_blocks(annotated_line, final_sentence)
 
         # Insert spaces based on overhang
         final_sentence = insert_spaces(final_sentence, blocks)
-
-        # Print final sentence after spaces insertion
-        print("\nFinal Sentence After Spaces Insertion:")
-        for idx, tok in enumerate(final_sentence):
-            print(f"  {idx}: {tok}")
-
-        # Print updated blocks
-        print("\nUpdated Blocks and Overhang:")
-        for block in blocks:
-            print(block)
-            print("Overhang:", block.compute_overhang())
 
         # Place replacement text after adjusting positions
         annotated_line = place_replacement_text(blocks, final_sentence)
@@ -256,16 +239,6 @@ if __name__ == "__main__":
         data = pickle.load(f)
         annotated_lines = data["annotated_lines"]
         final_sentences = data["final_sentences"]
-
-    # 2. Print s
-    for i, (annotated_line, final_sentence) in enumerate(zip(annotated_lines, final_sentences)):
-        print(f"\n=== RAW TOKENS BEFORE TRANSFORMATION - Sentence {i+1} ===")
-        print("Annotated Line (Raw Tokens):")
-        for idx, token in enumerate(annotated_line):
-            print(f"  {idx}: {token}")
-        print("\nFinal Sentence (Raw Tokens):")
-        for idx, token in enumerate(final_sentence):
-            print(f"  {idx}: {token}")
 
     # 3. Run the finalize transformation, which also prints colorized output
     updated_annotated_lines, updated_final_sentences = finalize_transformation(

@@ -179,15 +179,7 @@ def post_process(annotated_lines, final_sentences, blocks_by_sentence):
     Post-process each sentence using the described approach.
     """
     for i, (annotated_line, final_sentence, blocks) in enumerate(zip(annotated_lines, final_sentences, blocks_by_sentence)):
-        print(f"\n--- Sentence {i + 1} ---")
-
-        # Print final sentence tokens before processing
-        print("Final Sentence Tokens:")
-        for idx, t in enumerate(final_sentence):
-            print(f"  {idx}: char='{t['char']}', type='{t['type']}'")
-
-        # Print annotated line tokens before transformations
-        print("Annotated Tokens Before:")
+        
         for idx, t in enumerate(annotated_line):
             print(f"  {idx}: char='{t['char']}', type='{t['type']}'")
 
@@ -211,18 +203,6 @@ if __name__ == "__main__":
         final_sentences = data["final_sentences"]
         blocks_by_sentence = data["blocks_by_sentence"]
 
-    # Print tokens for inspection before processing
-    print("=== Annotated Lines Tokens ===")
-    for i, line in enumerate(annotated_lines):
-        print(f"\nAnnotated line {i}:")
-        for idx, token in enumerate(line):
-            print(f"  {idx}: {token}")
-
-    print("=== Final Sentences Tokens ===")
-    for i, sentence in enumerate(final_sentences):
-        print(f"\nFinal sentence {i}:")
-        for idx, token in enumerate(sentence):
-            print(f"  {idx}: {token}")
 
     updated_annotated_lines, updated_final_sentences, updated_blocks = post_process(
     annotated_lines, final_sentences, blocks_by_sentence
@@ -234,19 +214,6 @@ if __name__ == "__main__":
        "blocks_by_sentence": updated_blocks
     }
 
-
-    # Debug print: Show the final tokens before writing to pickle
-    print("\n[DEBUG] Tokens about to be saved to annotated_line_space_cleanup_output.pkl:")
-
-    for i, line in enumerate(updated_data["annotated_lines"]):
-        print(f"\n--- Annotated Line {i} ---")
-        for idx, token in enumerate(line):
-            print(f"  {idx}: char='{token['char']}', type='{token['type']}'")
-
-    for i, sentence in enumerate(updated_data["final_sentences"]):
-        print(f"\n--- Final Sentence {i} ---")
-        for idx, token in enumerate(sentence):
-            print(f"  {idx}: char='{token['char']}', type='{token['type']}'")
 
     # Now actually write to disk
     with open("annotated_line_space_cleanup_output.pkl", "wb") as f:

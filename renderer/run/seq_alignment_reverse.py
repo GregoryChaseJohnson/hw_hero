@@ -1,24 +1,15 @@
 import re
+import json
 from fuzzywuzzy import fuzz
 
 def number_ocr_sentences(ocr_sentences):
     """
     Assigns a numerical index to each OCR sentence.
-
-    Args:
-        ocr_sentences (list[str]): A list of OCR sentences.
-
-    Returns:
-        list[tuple[int, str]]: A list of tuples, where each tuple contains:
-            - An index representing the order of the sentence.
-            - The sentence itself.
     """
     return [(index, sentence) for index, sentence in enumerate(ocr_sentences)]
 
 # Define a unique marker to indicate sentence combinations
 COMBINATION_MARKER = "^**^"
-
-import re
 
 def split_into_sentences(raw_text):
     def normalize_apostrophes(text):
@@ -38,30 +29,21 @@ def split_into_sentences(raw_text):
     text = normalize_apostrophes(raw_text)
     text = normalize_quotes(text)
     text = re.sub(r'\s+', ' ', text)
-
     abbreviations = r'\b(?:etc|e\.g|i\.e|vs|Dr|Mr|Mrs|Ms|Prof|Jr|Sr|P\.E)'
-    # Replacing only the trailing period, not within the abbreviation
+    # Replace only the trailing period, not within the abbreviation
     text = re.sub(fr'({abbreviations})\.', r'\1<PERIOD>', text)
-
     # Preprocessing "P.E." if followed by capital letter
     text = re.sub(r'(P\.E<PERIOD>)\s+(?=[A-Z])', r'\1\n', text)
-
     sentence_split_pattern = r'(?<=[.!?])["\'“”‘’]?\s+(?=[A-Z])'
-
-
     text = text.replace('\n', '. ')
     sentences = re.split(sentence_split_pattern, text)
-
     # Restore <PERIOD> to '.'
     sentences = [s.replace('<PERIOD>', '.').strip() for s in sentences]
-
-    # Final cleanup step to remove unintended double periods
     cleaned_sentences = []
     for s in sentences:
         # Replace multiple consecutive periods with a single period
         s = re.sub(r'\.(\s*\.)+', '.', s)
         cleaned_sentences.append(s)
-
     return cleaned_sentences
 
 def insert_marker_in_combination(first_sentence, marker=COMBINATION_MARKER):
@@ -134,9 +116,58 @@ def align_sentences(ocr_text, corrected_text):
     ocr_sentences = split_into_sentences(ocr_text)
     corrected_sentences = split_into_sentences(corrected_text)
     print("Corrected Text Sentences:", corrected_sentences)
-
     matches = find_best_matches_simplified(ocr_sentences, corrected_sentences, min_score=50)
     return matches
+
+# --- New Function 1: Remove Combination Marker ---
+def clean_aligned_pairs(aligned_pairs, marker=COMBINATION_MARKER):
+    """
+    Removes the combination marker from both OCR and corrected sentences in the aligned pairs.
+
+    Reasoning:
+    - The combination marker is inserted when two sentences are merged.
+    - Downstream processing requires clean sentences without markers.
+    - Removing the marker ensures that JSON mapping and API calls receive clean text.
+
+    Args:
+        aligned_pairs (list[tuple[str, str]]): List of tuples (ocr_sentence, corrected_sentence).
+        marker (str): The marker string to remove.
+
+    Returns:
+        list[tuple[str, str]]: Cleaned aligned pairs.
+    """
+    cleaned_pairs = []
+    for ocr_sentence, corrected_sentence in aligned_pairs:
+        cleaned_ocr = ocr_sentence.replace(marker, "").strip()
+        cleaned_corrected = corrected_sentence.replace(marker, "").strip()
+        cleaned_pairs.append((cleaned_ocr, cleaned_corrected))
+    return cleaned_pairs
+
+# --- New Function 2: Create Sentence Mapping ---
+def create_sentence_mapping(aligned_pairs):
+    """
+    Creates a mapping of sentence indexes to OCR and corrected sentences.
+    
+    Args:
+        aligned_pairs (list[tuple[str, str]]): List of tuples (ocr_sentence, corrected_sentence).
+    
+    Returns:
+        dict: Mapping dictionary in the form:
+              {
+                "sentences": [
+                  {"sentence_index": 0, "ocr_sentence": ..., "corrected_sentence": ...},
+                  ...
+                ]
+              }
+    """
+    mapping = {"sentences": []}
+    for idx, (ocr_sentence, corrected_sentence) in enumerate(aligned_pairs):
+        mapping["sentences"].append({
+            "sentence_index": idx,
+            "ocr_sentence": ocr_sentence,
+            "corrected_sentence": corrected_sentence
+        })
+    return mapping
 
 if __name__ == "__main__":
     example_ocr_text = """
@@ -153,13 +184,32 @@ First, we should respect students' opinions. Some students want sports time, but
 Second, sports can bring up bad memories for some students. When we play sports, we sometimes make mistakes. But many students criticize those who mess up, and some even bully them. When I was in first grade in middle school, I was playing soccer with my classmates. I was the goalkeeper, but I made a mistake and we let in a goal. Then, one of my classmates, who was a bully, said, "Are you out of your mind? Saving...
 """
 
+    # Get aligned pairs from the alignment function
     aligned_pairs = align_sentences(example_ocr_text, example_corrected_text)
-
+    
+    # Clean the aligned pairs by removing any combination markers
+    cleaned_pairs = clean_aligned_pairs(aligned_pairs)
+    
+    # Create sentence mapping from the cleaned pairs
+    sentence_mapping = create_sentence_mapping(cleaned_pairs)
+    
+    # Optionally, save the mapping to a JSON file
+    json_output_path = "sentence_mapping.json"
+    with open(json_output_path, "w", encoding="utf-8") as f:
+        json.dump(sentence_mapping, f, indent=4, ensure_ascii=False)
+    
+    print(f"Sentence mapping saved to {json_output_path}")
+    
+    # Debug: Print mapped sentences
+    for entry in sentence_mapping["sentences"]:
+        print(f"Index: {entry['sentence_index']}, OCR: {entry['ocr_sentence']}, Corrected: {entry['corrected_sentence']}")
+    
+    # Also, print the listed OCR sentences for reference
     split_sentences = split_into_sentences(example_ocr_text)
     list_ocr_sentences = number_ocr_sentences(split_sentences)
     for sentence in list_ocr_sentences:
         print(f"listed sentences: {sentence}")
-
+    
     for ocr_sentence, corrected_sentence in aligned_pairs:
         print(f"OCR Sentence: {ocr_sentence}")
         print(f"Corrected Sentence: {corrected_sentence}")

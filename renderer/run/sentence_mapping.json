@@ -1,0 +1,79 @@
+{
+    "sentences": [
+        {
+            "sentence_index": 0,
+            "ocr_sentence": "Recently, there are many music and K-pop singer coming out.",
+            "corrected_sentence": "Recently, there have been many new music and K-pop singers coming out."
+        },
+        {
+            "sentence_index": 1,
+            "ocr_sentence": "Also, many people including youth are enjoying and affected by it.",
+            "corrected_sentence": "Also, a lot of people, including young people, are enjoying it and being influenced by it."
+        },
+        {
+            "sentence_index": 2,
+            "ocr_sentence": "As the world keeps affected by K-pop, some people are concerned about K-pop music\"s bad influence because it can have the bad effect.",
+            "corrected_sentence": "As the world continues to be affected by K-pop, some people are concerned about its negative influence because it can have bad effects."
+        },
+        {
+            "sentence_index": 3,
+            "ocr_sentence": "But, for my opinion, I strongly believe that K-pop has more positive effect than harm on the youth.",
+            "corrected_sentence": "But in my opinion, I strongly believe that K-pop has a more positive impact than harm on youth."
+        },
+        {
+            "sentence_index": 4,
+            "ocr_sentence": "Firstly, it can inspire confidence and hope.",
+            "corrected_sentence": "Firstly, it can inspire confidence and hope."
+        },
+        {
+            "sentence_index": 5,
+            "ocr_sentence": "In my life, I\"m having hard time due to the homework and school test.",
+            "corrected_sentence": "In my life, I\"m having a hard time with homework and school tests."
+        },
+        {
+            "sentence_index": 6,
+            "ocr_sentence": "But, I sometimes get rested by hearing K-pop music and getting hope by it.",
+            "corrected_sentence": "But I sometimes find comfort in listening to K-pop music and feeling hopeful because of it."
+        },
+        {
+            "sentence_index": 7,
+            "ocr_sentence": "Also, during COVID-19 pandemic, I was having hard time by its regulation.",
+            "corrected_sentence": "Also, during the COVID-19 pandemic, I struggled with the restrictions."
+        },
+        {
+            "sentence_index": 8,
+            "ocr_sentence": "But when BTS\"s song named \"Permission to Dance\", I can feel the hope to end the pandemic.",
+            "corrected_sentence": "But when I heard BTS\"s song \"Permission to Dance,\" I felt hopeful about the end of the pandemic."
+        },
+        {
+            "sentence_index": 9,
+            "ocr_sentence": "Secondly, it can make the whole culture more interest to youths.",
+            "corrected_sentence": "Secondly, it can make the whole culture more interesting to young people."
+        },
+        {
+            "sentence_index": 10,
+            "ocr_sentence": "In my school, how many girl classmates gather and hang out to talk about their favorite K-pop singer or songs.",
+            "corrected_sentence": "In my school, many of my female classmates gather and hang out to talk about their favorite K-pop singers or songs."
+        },
+        {
+            "sentence_index": 11,
+            "ocr_sentence": "Also, they collect their money or go to other place merchandise product of singer.",
+            "corrected_sentence": "They also save up their money to buy merchandise from their favorite artists."
+        },
+        {
+            "sentence_index": 12,
+            "ocr_sentence": "This can trigger youths to make more friends and making them to be more socialized, which is important to later on the work.",
+            "corrected_sentence": "This can encourage young people to make more friends and become more social, which is important for their future careers."
+        },
+        {
+            "sentence_index": 13,
+            "ocr_sentence": "Third and lastly, it can make Korean youth to think again about their traditional culture and proud of.",
+            "corrected_sentence": "Lastly, it can make Korean youth rethink their traditional culture and feel proud of it."
+        },
+        {
+            "sentence_index": 14,
+            "ocr_sentence": "Like recent I heard many about the Pusion.",
+            "corrected_sentence": "Recently, I\"ve heard a lot about Pusion."
+        }
+    ]
+}
