@@ -51,15 +51,18 @@ def highlight_click():
             return jsonify(correction_info), 400
 
         # 4) Extract fields for the explanation function
+        # 4) Extract fields for the explanation function
         block_type = data.get("blockType")
         ocr_sentence = correction_info.get("ocr_sentence")
         corrected_sentence = correction_info.get("corrected_sentence")
         correction_block = correction_info.get("correction_block")
+        correction_entry = correction_info.get("correction_entry")  # THIS IS MISSING!
 
         # 5) Generate explanation using the multi-step approach
         explanation = generate_correction_explanation_single(
-            block_type, ocr_sentence, corrected_sentence, correction_block
+            block_type, ocr_sentence, corrected_sentence, correction_block, correction_entry
         )
+
         result = {"explanation": explanation}
         
 
