@@ -33,7 +33,7 @@
           return null;
         }
         return await response.json();
-      } catch (err) {
+      } catch (err) {c
         console.error("Error fetching data.json:", err);
         return null;
       }
@@ -236,13 +236,21 @@
     
     function handleHighlightClick(payload) {
       console.log("Highlight clicked:", payload);
+      // Clear previous explanation immediately
+      const upperContainer = document.getElementById("upper-container");
+      upperContainer.innerHTML = "";
+      
       fetch('/highlight_click', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       })
       .then(res => res.json())
-      .then(response => console.log('Highlight click response:', response))
+      .then(response => {
+        console.log('Highlight click response:', response);
+        // Update with the new explanation
+        upperContainer.textContent = response.explanation || "No explanation provided.";
+      })
       .catch(err => console.error('Error in highlight click:', err));
     }
     

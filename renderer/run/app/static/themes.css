@@ -291,4 +291,9 @@
     line-height: 1.0;
   }
   
- 
+  #upper-container {
+    font-size: 20px;       /* Bigger font size */
+    margin-left: 26px;     /* Left margin */
+    line-height: 1.5;
+    padding-top: 26px;   
+  }

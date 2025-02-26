@@ -11,17 +11,18 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def build_replacement_prompt(before_text, after_text, custom_sentence, corrected_sentence):
     base_prompt = (
-        f"Incorrect sentence: \"{custom_sentence}\"\n\n"
-        f"Correct sentence: \"{corrected_sentence}\"\n\n"
-        f"Original text: \"{before_text}\"\n"
-        f"Corrected text: \"{after_text}\"\n\n"
+        f"Correction explanation:\n\n"
+        f"Before:\nSentence: \"{custom_sentence}\"\nWord/Phrase: \"{before_text}\"\n\n"
+        f"After:\nSentence: \"{corrected_sentence}\"\nWord/Phrase: \"{after_text}\"\n\n"
     )
     instructions = (
-        "In as few words as possible explain why replacing the original text with the corrected text in the written sentence is consistent with the indented meaning of the sentence. "
-        "If it is a simple trivial mistake, be a bit more brief. Focus only on how this affects the sentence's meaning, without using technical grammar terminology. "
-        "If it's a trivial change or in casual language either is acceptable then explain that too."
-    )
+        "Briegly Explain to an ESL student in simple english why replacing '{before_text}' with '{after_text}' was needed here. "
+        "Show how they may restructure the sentence to use '{before_text}' if such a case can be made. Avoid generic phrases like 'improves clarity. "
+    )   
     return base_prompt + instructions
+
+
+
 
 def build_deletion_prompt(original_snippet, custom_sentence, corrected_sentence):
     base_prompt = (
@@ -41,7 +42,7 @@ def build_insertion_prompt(inserted_text, custom_sentence, corrected_sentence):
         f"Inserted text: \"{inserted_text}\"\n\n"
     )
     instructions = (
-        "In one or two sentences, tell the learner why you needed to add the inserted text to make the sentence correct, using plain English and minimal grammar jargon."
+        "You are talking to beginner ESL student. In one or two sentences, tell the learner why you needed to add the inserted text to make the sentence correct, using plain English but be specific."
     )
     return base_prompt + instructions
 
@@ -70,7 +71,7 @@ def generate_correction_explanation_single(block_type, ocr_sentence, corrected_s
             custom_sentence = corrected_sentence[:start] + deleted_text + corrected_sentence[start:]
             print("DEBUG: Resulting sentence:", custom_sentence)
     elif block_type in ("replacement", "insert"):
-        custom_sentence = generate_custom_sentence_for_block(corrected_sentence, correction_block, block_type)
+        custom_sentence = generate_custom_sentence_for_block(correction_entry, correction_block, block_type)
     else:
         raise ValueError(f"Unsupported block type: {block_type}")
 
@@ -91,7 +92,7 @@ def generate_correction_explanation_single(block_type, ocr_sentence, corrected_s
     print(final_prompt)
 
     response = openai.ChatCompletion.create(
-        model="gpt-4o",
+        model="gpt-4o-mini",
         messages=[{"role": "user", "content": final_prompt}],
         temperature=0,
         max_tokens=200
