@@ -251,7 +251,7 @@ def rebuild_sentence_for_delete(correction_entry, clicked_delete_block_id):
 # --- Main Entry for Standalone Testing ---
 if __name__ == "__main__":
     # Adjust test_data as needed for deletion, insertion, or replacement blocks.
-    test_data = {"blockType": "insert", "blockIndex": 0, "sentenceIndex": 13}
+    test_data = {"blockType": "replacement", "blockIndex": 0, "sentenceIndex": 0}
     print("DEBUG: Running manual test")
     result = get_correction_explanation(test_data)
     print("DEBUG: Correction Info:", result)

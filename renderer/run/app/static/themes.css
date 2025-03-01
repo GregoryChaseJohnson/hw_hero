@@ -181,6 +181,10 @@
     overflow-wrap: break-word;
   }
   
+  .central-box-wrapper {
+    text-align: center;
+}
+
   .sentence-container-central-box {
     background-color: var(--sentence-highlight-bg);
     transition: background-color 0.3s ease;
@@ -195,6 +199,7 @@
     white-space: nowrap;
     width: max-content;
     height: 60px; 
+    
 }
 
 #lower-container .sentence-container:hover::after {
@@ -209,7 +214,10 @@
     pointer-events: none;
     z-index: 0;
   }
-
+  #lower-container {
+    font-size: 18px; /* Adjust this value as needed */
+  }
+  
 
 
 .token[data-replacement-block-id] {
@@ -292,8 +300,18 @@
   }
   
   #upper-container {
-    font-size: 20px;       /* Bigger font size */
-    margin-left: 26px;     /* Left margin */
+    font-size: 22px;       /* Bigger font size */
+    /*margin-left: 26px;     /* Left margin */
+    margin: 0 auto;
     line-height: 1.5;
-    padding-top: 26px;   
+    padding-top: 26px;
+    white-space: pre-line; 
+    color: rgb(211, 209, 209); 
+    max-width: 1000px;
+  }
+
+  .highlighted-word {
+    /* Specific styling for quoted content */
+    color: rgb(132, 180, 226); /* or any color you choose */
+    font-weight: bold;
   }

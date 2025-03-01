@@ -18,7 +18,7 @@ from prepare_tokenized_output import (
     prepare_json_output
 )
 
-use_test_data = True
+use_test_data = False
 
 test_ocr_text = """Recently, there are many music and K-pop singer coming out. Also, many people including youth are enjoying and affected by it. As the world keeps affected by K-pop, some people are concerned about K-pop music's bad influence because it can have the bad effect. But, for my opinion, I strongly believe that K-pop has more positive effect than harm on the youth.
 
@@ -36,7 +36,7 @@ Secondly, it can make the whole culture more interesting to young people. In my 
 
 Lastly, it can make Korean youth rethink their traditional culture and feel proud of it. Recently, I've heard a lot about Pusion.
 """
-image_path = "/home/keithuncouth/Downloads/hwt_1.jpeg"
+image_path = "/home/keithuncouth/Downloads/IMG_1819.jpg"
 
 def main():
     # Steps 1 & 2: OCR and correct

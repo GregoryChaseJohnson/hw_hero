@@ -249,7 +249,11 @@
       .then(response => {
         console.log('Highlight click response:', response);
         // Update with the new explanation
-        upperContainer.textContent = response.explanation || "No explanation provided.";
+        let explanation = response.explanation || "No explanation provided.";
+        explanation = explanation.replace(/["']([^"']+)["']/g, '<span class="highlighted-word">"$1"</span>');
+
+        upperContainer.innerHTML = explanation;
+
       })
       .catch(err => console.error('Error in highlight click:', err));
     }
@@ -263,19 +267,23 @@
         const centralContainer = document.getElementById("central-container");
         centralContainer.innerHTML = "";
 
+        // Create a wrapper to center the sentence container.
+        const wrapper = document.createElement("div");
+        wrapper.className = "central-box-wrapper";
+
         // Render the sentence element and add basic styling.
         let sentenceEl = renderSentence(sentence);
         sentenceEl.classList.add("sentence-container-central-box");
 
         // Append separator line (if needed).
         sentenceEl.appendChild(createSeparatorLine());
-        centralContainer.appendChild(sentenceEl);
+        wrapper.appendChild(sentenceEl);
+        centralContainer.appendChild(wrapper);
 
         // First, measure the content and set the width.
         requestAnimationFrame(() => {
             const finalLine = sentenceEl.querySelector(".final-line");
             const annotatedLine = sentenceEl.querySelector(".annotated-line");
-
             if (finalLine && annotatedLine) {
                 const maxWidth = Math.max(finalLine.scrollWidth, annotatedLine.scrollWidth);
                 const extraMargin = 20; // Adjust this as needed (total extra pixels)
@@ -284,11 +292,9 @@
             // Remove any existing highlight boxes (if they were added before).
             const existingBoxes = sentenceEl.querySelectorAll(".highlight-box");
             existingBoxes.forEach(box => box.remove());
-
             // Now that the width is set, create the highlight boxes.
             createHighlightBoxesForContainer(sentenceEl);
         });
-
         centralContainer.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
     }
 

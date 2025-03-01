@@ -1,5 +1,9 @@
 import base64
 import openai
+import os
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 
 # Function to encode the image
 def encode_image(image_path):
@@ -14,7 +18,7 @@ def perform_ocr(image_path):
     base64_image = encode_image(image_path)
 
     response = openai.ChatCompletion.create(
-        model="gpt-4-vision",  # Use the correct vision model
+        model="gpt-4o",  # Use the correct vision model
         messages=[
             {
                 "role": "user",
@@ -38,7 +42,7 @@ def correct_text(ocr_text):
     )
 
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-4o",
         messages=[
             {
                 "role": "user",

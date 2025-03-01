@@ -2,78 +2,103 @@
     "sentences": [
         {
             "sentence_index": 0,
-            "ocr_sentence": "Recently, there are many music and K-pop singer coming out.",
-            "corrected_sentence": "Recently, there have been many new music and K-pop singers coming out."
+            "ocr_sentence": "I want to be a math teacher because teaching my friend makes me feel great.",
+            "corrected_sentence": "I want to be a math teacher because teaching my friends makes me feel great."
         },
         {
             "sentence_index": 1,
-            "ocr_sentence": "Also, many people including youth are enjoying and affected by it.",
-            "corrected_sentence": "Also, a lot of people, including young people, are enjoying it and being influenced by it."
+            "ocr_sentence": "Since I was in 6th grade, I have heard that I am good at solving math problem and teaching well, so I have dreamed becoming math teacher since then.",
+            "corrected_sentence": "Since I was in 6th grade, I\"ve been told that I\"m good at solving math problems and teaching others, so I\"ve dreamed of becoming a math teacher since then."
         },
         {
             "sentence_index": 2,
-            "ocr_sentence": "As the world keeps affected by K-pop, some people are concerned about K-pop music\"s bad influence because it can have the bad effect.",
-            "corrected_sentence": "As the world continues to be affected by K-pop, some people are concerned about its negative influence because it can have bad effects."
+            "ocr_sentence": "When my friend understands well, I feel accomplishment.",
+            "corrected_sentence": "When my friends understand the material well, I feel a sense of accomplishment."
         },
         {
             "sentence_index": 3,
-            "ocr_sentence": "But, for my opinion, I strongly believe that K-pop has more positive effect than harm on the youth.",
-            "corrected_sentence": "But in my opinion, I strongly believe that K-pop has a more positive impact than harm on youth."
+            "ocr_sentence": "I am proud of my teaching technique, and my friends and teacher love it.",
+            "corrected_sentence": "I am proud of my teaching techniques, and both my friends and teachers appreciate them."
         },
         {
             "sentence_index": 4,
-            "ocr_sentence": "Firstly, it can inspire confidence and hope.",
-            "corrected_sentence": "Firstly, it can inspire confidence and hope."
+            "ocr_sentence": "As I make it main job, I want to have some positive effects on students.",
+            "corrected_sentence": "As I pursue this as my main career, I want to have a positive impact on my students."
         },
         {
             "sentence_index": 5,
-            "ocr_sentence": "In my life, I\"m having hard time due to the homework and school test.",
-            "corrected_sentence": "In my life, I\"m having a hard time with homework and school tests."
+            "ocr_sentence": "My role model is my homeroom teacher who greets me kindly every morning.",
+            "corrected_sentence": "My role model is my homeroom teacher, who greets me kindly every morning."
         },
         {
             "sentence_index": 6,
-            "ocr_sentence": "But, I sometimes get rested by hearing K-pop music and getting hope by it.",
-            "corrected_sentence": "But I sometimes find comfort in listening to K-pop music and feeling hopeful because of it."
+            "ocr_sentence": "At the class time, she teaches students to understand well.",
+            "corrected_sentence": "During class, she teaches in a way that helps students understand the material well."
         },
         {
             "sentence_index": 7,
-            "ocr_sentence": "Also, during COVID-19 pandemic, I was having hard time by its regulation.",
-            "corrected_sentence": "Also, during the COVID-19 pandemic, I struggled with the restrictions."
+            "ocr_sentence": "When I have concern, she listens to me seriously and give helpful advice.",
+            "corrected_sentence": "When I have concerns, she listens to me seriously and gives helpful advice."
         },
         {
             "sentence_index": 8,
-            "ocr_sentence": "But when BTS\"s song named \"Permission to Dance\", I can feel the hope to end the pandemic.",
-            "corrected_sentence": "But when I heard BTS\"s song \"Permission to Dance,\" I felt hopeful about the end of the pandemic."
+            "ocr_sentence": "She also gives a lot of good influence.",
+            "corrected_sentence": "She also has a lot of positive influence."
         },
         {
             "sentence_index": 9,
-            "ocr_sentence": "Secondly, it can make the whole culture more interest to youths.",
-            "corrected_sentence": "Secondly, it can make the whole culture more interesting to young people."
+            "ocr_sentence": "One of the influence that I respect most is her passion of education.",
+            "corrected_sentence": "One of the qualities I respect most is her passion for education."
         },
         {
             "sentence_index": 10,
-            "ocr_sentence": "In my school, how many girl classmates gather and hang out to talk about their favorite K-pop singer or songs.",
-            "corrected_sentence": "In my school, many of my female classmates gather and hang out to talk about their favorite K-pop singers or songs."
+            "ocr_sentence": "My teacher goes to English school and she memorizes English words every morning in spite of her busy life.",
+            "corrected_sentence": "Despite her busy life, my teacher attends English classes and memorizes English words every morning."
         },
         {
             "sentence_index": 11,
-            "ocr_sentence": "Also, they collect their money or go to other place merchandise product of singer.",
-            "corrected_sentence": "They also save up their money to buy merchandise from their favorite artists."
+            "ocr_sentence": "It seems very great to me to make the time to do what she wants to do.",
+            "corrected_sentence": "I admire her ability to make time for what she wants to do."
         },
         {
             "sentence_index": 12,
-            "ocr_sentence": "This can trigger youths to make more friends and making them to be more socialized, which is important to later on the work.",
-            "corrected_sentence": "This can encourage young people to make more friends and become more social, which is important for their future careers."
+            "ocr_sentence": "She also reads books a lot.",
+            "corrected_sentence": "She also reads a lot of books."
         },
         {
             "sentence_index": 13,
-            "ocr_sentence": "Third and lastly, it can make Korean youth to think again about their traditional culture and proud of.",
-            "corrected_sentence": "Lastly, it can make Korean youth rethink their traditional culture and feel proud of it."
+            "ocr_sentence": "When I grow up, I want to be a teacher like her.",
+            "corrected_sentence": "When I grow up, I want to be a teacher like her."
         },
         {
             "sentence_index": 14,
-            "ocr_sentence": "Like recent I heard many about the Pusion.",
-            "corrected_sentence": "Recently, I\"ve heard a lot about Pusion."
+            "ocr_sentence": "I will make a habit of reading books.",
+            "corrected_sentence": "I will make a habit of reading books."
+        },
+        {
+            "sentence_index": 15,
+            "ocr_sentence": "I will read books not only mathematics but also other subjects, and I also read comforted book.",
+            "corrected_sentence": "I will read not only mathematics books but also those on other subjects, and I will also read comforting books."
+        },
+        {
+            "sentence_index": 16,
+            "ocr_sentence": "I may have some challenging times to me, but I don\"t want to waste the time.",
+            "corrected_sentence": "I may face some challenging times, but I don\"t want to waste any time."
+        },
+        {
+            "sentence_index": 17,
+            "ocr_sentence": "As I read a book, I want to control my mind.",
+            "corrected_sentence": "As I read, I want to learn to control my mind."
+        },
+        {
+            "sentence_index": 18,
+            "ocr_sentence": "Second: I will explain about math problems.",
+            "corrected_sentence": "Secondly, I will focus on explaining math problems."
+        },
+        {
+            "sentence_index": 19,
+            "ocr_sentence": "It is important for math teachers to teach students understanding",
+            "corrected_sentence": "It is"
         }
     ]
 }
