@@ -7,8 +7,8 @@
         },
         {
             "sentence_index": 1,
-            "ocr_sentence": "Since I was in 6th grade, I have heard that I am good at solving math problem and teaching well, so I have dreamed becoming math teacher since then.",
-            "corrected_sentence": "Since I was in 6th grade, I\"ve been told that I\"m good at solving math problems and teaching others, so I\"ve dreamed of becoming a math teacher since then."
+            "ocr_sentence": "Since I was in 6th grade, I have heard that I am good at solving math problems and teaching well, so I have dreamed of becoming a math teacher since then.",
+            "corrected_sentence": "Since I was in 6th grade, I\"ve been told that I\"m good at solving math problems and teaching others, so I\"ve dreamed of becoming a math teacher ever since."
         },
         {
             "sentence_index": 2,
@@ -22,8 +22,8 @@
         },
         {
             "sentence_index": 4,
-            "ocr_sentence": "As I make it main job, I want to have some positive effects on students.",
-            "corrected_sentence": "As I pursue this as my main career, I want to have a positive impact on my students."
+            "ocr_sentence": "As I make it my main job, I want to have some positive effects on students.",
+            "corrected_sentence": "As I pursue this as my main career, I hope to have a positive impact on my students."
         },
         {
             "sentence_index": 5,
@@ -33,32 +33,32 @@
         {
             "sentence_index": 6,
             "ocr_sentence": "At the class time, she teaches students to understand well.",
-            "corrected_sentence": "During class, she teaches in a way that helps students understand the material well."
+            "corrected_sentence": "During class, she ensures that students understand the material thoroughly."
         },
         {
             "sentence_index": 7,
-            "ocr_sentence": "When I have concern, she listens to me seriously and give helpful advice.",
-            "corrected_sentence": "When I have concerns, she listens to me seriously and gives helpful advice."
+            "ocr_sentence": "When I have concerns, she listens to me seriously and gives helpful advice.",
+            "corrected_sentence": "When I have concerns, she listens to me attentively and offers helpful advice."
         },
         {
             "sentence_index": 8,
             "ocr_sentence": "She also gives a lot of good influence.",
-            "corrected_sentence": "She also has a lot of positive influence."
+            "corrected_sentence": "She also has a significant positive influence on us."
         },
         {
             "sentence_index": 9,
-            "ocr_sentence": "One of the influence that I respect most is her passion of education.",
-            "corrected_sentence": "One of the qualities I respect most is her passion for education."
+            "ocr_sentence": "One of this influence that I respect most is her passion for education.",
+            "corrected_sentence": "One aspect I admire most is her passion for education."
         },
         {
             "sentence_index": 10,
             "ocr_sentence": "My teacher goes to English school and she memorizes English words every morning in spite of her busy life.",
-            "corrected_sentence": "Despite her busy life, my teacher attends English classes and memorizes English words every morning."
+            "corrected_sentence": "Despite her busy life, she attends English classes and memorizes English words every morning."
         },
         {
             "sentence_index": 11,
-            "ocr_sentence": "It seems very great to me to make the time to do what she wants to do.",
-            "corrected_sentence": "I admire her ability to make time for what she wants to do."
+            "ocr_sentence": "It seems truly great to me to make the time to do what she wants to do.",
+            "corrected_sentence": "I find it truly inspiring that she makes time to pursue what she wants to do."
         },
         {
             "sentence_index": 12,
@@ -67,8 +67,8 @@
         },
         {
             "sentence_index": 13,
-            "ocr_sentence": "When I grow up, I want to be a teacher like her.",
-            "corrected_sentence": "When I grow up, I want to be a teacher like her."
+            "ocr_sentence": "When I grow up, I want to be a teacher like her. \"What can I do to reach my dreams?",
+            "corrected_sentence": "When I grow up, I want to be a teacher like her. \"What can I do to reach my dreams?"
         },
         {
             "sentence_index": 14,
@@ -77,28 +77,18 @@
         },
         {
             "sentence_index": 15,
-            "ocr_sentence": "I will read books not only mathematics but also other subjects, and I also read comforted book.",
-            "corrected_sentence": "I will read not only mathematics books but also those on other subjects, and I will also read comforting books."
+            "ocr_sentence": "I will read books not only mathematics, but also other subjects, and I also read comforted books.",
+            "corrected_sentence": "I will read not only mathematics books but also those on other subjects, as well as comforting books."
         },
         {
             "sentence_index": 16,
-            "ocr_sentence": "I may have some challenging times to me, but I don\"t want to waste the time.",
-            "corrected_sentence": "I may face some challenging times, but I don\"t want to waste any time."
+            "ocr_sentence": "I may have some challenging times to me, but I don\"t want to waste the time as I read a book. I want to control my mind.",
+            "corrected_sentence": "I may face some challenging times, but I don\"t want to waste time; instead, I want to use it to read and expand my mind."
         },
         {
             "sentence_index": 17,
-            "ocr_sentence": "As I read a book, I want to control my mind.",
-            "corrected_sentence": "As I read, I want to learn to control my mind."
-        },
-        {
-            "sentence_index": 18,
-            "ocr_sentence": "Second: I will explain about math problems.",
-            "corrected_sentence": "Secondly, I will focus on explaining math problems."
-        },
-        {
-            "sentence_index": 19,
-            "ocr_sentence": "It is important for math teachers to teach students understanding",
-            "corrected_sentence": "It is"
+            "ocr_sentence": "Second: I will explain about",
+            "corrected_sentence": "Secondly, I will explain about."
         }
     ]
 }
